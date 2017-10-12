@@ -3,24 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "phaser": "^2.6.2",
-    "ramda": "^0.24.1"
-  },
   "devDependencies": {
     "@types/ramda": "github:types/npm-ramda#dist",
+    "copy": "^0.3.1",
     "css-loader": "^0.28.7",
     "expose-loader": "^0.7.3",
+    "fork-ts-checker-webpack-plugin": "^0.2.8",
+    "happypack": "^4.0.0",
+    "phaser-ce": "^2.8.8",
     "style-loader": "^0.19.0",
-    "ts-loader": "^2.3.7"
+    "ts-loader": "^2.3.7",
+    "watch": "^1.0.2"
   },
   "scripts": {
     "all": "npm run clean && npm run copy && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -r dist",
-    "copy": "mkdir dist && cp -r templates/* dist/",
+    "copy": "mkdir dist && cp -r src/templates/* dist/",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "dev-server": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC"

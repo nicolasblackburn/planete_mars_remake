@@ -5,17 +5,17 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es5",
-    "jsx": "react",
     "allowJs": true
   },
   "files": [
-    "node_modules/phaser/typescript/phaser.d.ts"
+    "node_modules/phaser-ce/typescript/phaser.d.ts"
   ],
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "src/assets/**/*"
   ]
 }
