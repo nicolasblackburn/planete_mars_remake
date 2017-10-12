@@ -1,3 +1,4 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HappyPack = require('happypack');
 const path = require('path');
@@ -45,7 +46,11 @@ module.exports = {
           }
         ]
       }),
-      new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true })
+      new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+      new CopyWebpackPlugin([
+        {from: 'src/assets', to: 'assets'},
+        {from: 'src/templates/index.html', to: 'index.html'}
+      ], {})
     ],
     devtool: 'cheap-module-eval-source-map',
     devServer: {
