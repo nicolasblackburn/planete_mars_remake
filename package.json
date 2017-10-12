@@ -17,10 +17,7 @@
     "watch": "^1.0.2"
   },
   "scripts": {
-    "all": "npm run clean && npm run copy && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -r dist",
-    "copy": "mkdir dist && cp -r src/templates/* dist/",
     "build": "webpack",
     "dev-server": "webpack-dev-server"
   },
