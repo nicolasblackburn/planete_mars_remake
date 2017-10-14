@@ -1,7 +1,7 @@
-import State from '../State';
-import fontStyles from '../fontStyles';
+import {State} from '../core/State';
+import {fontStyles} from '../fontStyles';
 
-export default class Loading extends State {
+export class Loading extends State {
   private title: Phaser.Text;
 
   public preload() {

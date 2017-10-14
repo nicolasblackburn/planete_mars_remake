@@ -1,10 +1,12 @@
-import Game from '../Game';
-import Sprite from '../Sprite';
-import State from '../State';
-import Tilemap from '../Tilemap';
-import fontStyles from '../fontStyles';
+import {Game} from '../core/Game';
+import {Sprite} from '../core/Sprite';
+import {State} from '../core/State';
+import {Tilemap} from '../core/Tilemap';
+import {fontStyles} from '../fontStyles';
 
-export default class Main extends State {
+const planck = require('planck-js');
+
+export class Main extends State {
   private map: Tilemap;
   private player: Sprite;
   private cameraText: Phaser.Text;

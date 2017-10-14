@@ -5,7 +5,7 @@ const base = {
   lineHeight: 20
 };
 
-export default {
+export const fontStyles = {
   header: {
     ...base,
     fontSize: 48,

@@ -1,7 +1,7 @@
-import Game from '../Game';
-import Sprite from '../Sprite';
+import {Game} from '../core/Game';
+import {Sprite} from '../core/Sprite';
 
-export default class Crab extends Sprite {
+export class Crab extends Sprite {
   private cursors: Phaser.CursorKeys;
   private maxVelocity: number = 4;
 

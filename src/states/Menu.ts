@@ -1,7 +1,7 @@
-import State from '../State';
-import fontStyles from '../fontStyles';
+import {State} from '../core/State';
+import {fontStyles} from '../fontStyles';
 
-export default class Menu extends State {
+export class Menu extends State {
   private group: Phaser.Group;
   private title: Phaser.Text;
   private textClick: Phaser.Text;
