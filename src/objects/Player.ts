@@ -98,26 +98,34 @@ export class Player extends Sprite {
       ({x, y} = this.precalcVelocity[Dir.up]);
       this.animations.play('move_up', null, true);
       this.lastNonDiagonalDirection = Dir.up;
+
     } else if (upIsDown && rightIsDown) {
       ({x, y} = this.precalcVelocity[Dir.upRight]);
+
     } else if (rightIsDown && ! upIsDown && ! downIsDown) {
       ({x, y} = this.precalcVelocity[Dir.right]);
       this.animations.play('move_right', null, true);
+
       this.lastNonDiagonalDirection = Dir.right;
     } else if (rightIsDown && downIsDown) {
       ({x, y} = this.precalcVelocity[Dir.rightDown]);
+
     } else if (downIsDown && ! rightIsDown && ! leftIsDown) {
       ({x, y} = this.precalcVelocity[Dir.down]);
       this.animations.play('move_down', null, true);
       this.lastNonDiagonalDirection = Dir.down;
+
     } else if (downIsDown && leftIsDown) {
       ({x, y} = this.precalcVelocity[Dir.downLeft]);
+
     } else if (leftIsDown && ! upIsDown && ! downIsDown) {
       ({x, y} = this.precalcVelocity[Dir.left]);
       this.animations.play('move_left', null, true);
       this.lastNonDiagonalDirection = Dir.left;
+
     } else if (leftIsDown && upIsDown) {
       ({x, y} = this.precalcVelocity[Dir.leftUp]);
+    
     } else if (! upIsDown && ! rightIsDown && ! downIsDown && ! leftIsDown) {
       switch (this.lastNonDiagonalDirection) {
         case Dir.up:
