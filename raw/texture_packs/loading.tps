@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.4.0</string>
+        <string>4.5.0</string>
         <key>fileName</key>
         <string>/home/nicolas/Projets/planete_mars_remake/raw/texture_packs/loading.tps</string>
         <key>autoSDSettings</key>
@@ -199,10 +199,10 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../graphics/sprites/player-running-right-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-03.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_03.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -218,10 +218,10 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../graphics/sprites/player-running-right-00.png</filename>
-            <filename>../graphics/sprites/player-running-right-01.png</filename>
-            <filename>../graphics/sprites/player-running-right-02.png</filename>
-            <filename>../graphics/sprites/player-running-right-03.png</filename>
+            <filename>../graphics/sprites/player_move_right_00.png</filename>
+            <filename>../graphics/sprites/player_move_right_01.png</filename>
+            <filename>../graphics/sprites/player_move_right_02.png</filename>
+            <filename>../graphics/sprites/player_move_right_03.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

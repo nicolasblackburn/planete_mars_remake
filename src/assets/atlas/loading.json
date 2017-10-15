@@ -1,6 +1,6 @@
 {"frames": {
 
-"player-running-right-00":
+"player_move_right_00":
 {
 	"frame": {"x":0,"y":0,"w":16,"h":16},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"player-running-right-01":
+"player_move_right_01":
 {
 	"frame": {"x":16,"y":0,"w":16,"h":16},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"player-running-right-02":
+"player_move_right_02":
 {
 	"frame": {"x":0,"y":16,"w":16,"h":16},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"player-running-right-03":
+"player_move_right_03":
 {
 	"frame": {"x":16,"y":16,"w":16,"h":16},
 	"rotated": false,
@@ -39,6 +39,6 @@
 	"format": "RGBA8888",
 	"size": {"w":32,"h":32},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:e2d1e5bdada77b784c364ebebae9f9de:bbfdd22717b7d3469e1e7021a82f6745:5294b8b30e478db5089d68a09bebcee6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:a73c551e13bd1fc5758ec2d7b05da10b:bbfdd22717b7d3469e1e7021a82f6745:5294b8b30e478db5089d68a09bebcee6$"
 }
 }
