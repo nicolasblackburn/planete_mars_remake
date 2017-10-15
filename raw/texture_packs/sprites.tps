@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.4.0</string>
+        <string>4.5.0</string>
         <key>fileName</key>
         <string>/home/nicolas/Projets/planete_mars_remake/raw/texture_packs/sprites.tps</string>
         <key>autoSDSettings</key>
@@ -199,62 +199,62 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../graphics/sprites/bat-00.png</key>
-            <key type="filename">../graphics/sprites/bat-01.png</key>
-            <key type="filename">../graphics/sprites/bat-02.png</key>
-            <key type="filename">../graphics/sprites/bat-03.png</key>
-            <key type="filename">../graphics/sprites/bat-04.png</key>
-            <key type="filename">../graphics/sprites/bullet-00.png</key>
-            <key type="filename">../graphics/sprites/crab-00.png</key>
-            <key type="filename">../graphics/sprites/crab-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-down-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-down-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-down-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-down-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-left-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-left-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-left-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-left-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-right-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-down-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-down-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-down-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-down-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-left-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-left-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-left-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-left-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-right-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-right-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-right-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-right-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-up-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-up-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-up-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-shooting-up-03.png</key>
-            <key type="filename">../graphics/sprites/player-running-up-00.png</key>
-            <key type="filename">../graphics/sprites/player-running-up-01.png</key>
-            <key type="filename">../graphics/sprites/player-running-up-02.png</key>
-            <key type="filename">../graphics/sprites/player-running-up-03.png</key>
-            <key type="filename">../graphics/sprites/player-shooting-down-00.png</key>
-            <key type="filename">../graphics/sprites/player-shooting-left-00.png</key>
-            <key type="filename">../graphics/sprites/player-shooting-right-00.png</key>
-            <key type="filename">../graphics/sprites/player-shooting-up-00.png</key>
-            <key type="filename">../graphics/sprites/player-standing-down-00.png</key>
-            <key type="filename">../graphics/sprites/player-standing-left-00.png</key>
-            <key type="filename">../graphics/sprites/player-standing-right-00.png</key>
-            <key type="filename">../graphics/sprites/player-standing-up-00.png</key>
-            <key type="filename">../graphics/sprites/spore-00.png</key>
-            <key type="filename">../graphics/sprites/worm-00.png</key>
-            <key type="filename">../graphics/sprites/worm-01.png</key>
-            <key type="filename">../graphics/sprites/worm-02.png</key>
-            <key type="filename">../graphics/sprites/worm-03.png</key>
-            <key type="filename">../graphics/sprites/worm-04.png</key>
-            <key type="filename">../graphics/sprites/worm-05.png</key>
-            <key type="filename">../graphics/sprites/worm-06.png</key>
+            <key type="filename">../graphics/sprites/bat_00.png</key>
+            <key type="filename">../graphics/sprites/bat_01.png</key>
+            <key type="filename">../graphics/sprites/bat_02.png</key>
+            <key type="filename">../graphics/sprites/bat_03.png</key>
+            <key type="filename">../graphics/sprites/bat_04.png</key>
+            <key type="filename">../graphics/sprites/bullet_00.png</key>
+            <key type="filename">../graphics/sprites/crab_00.png</key>
+            <key type="filename">../graphics/sprites/crab_01.png</key>
+            <key type="filename">../graphics/sprites/player_idle_down_00.png</key>
+            <key type="filename">../graphics/sprites/player_idle_left_00.png</key>
+            <key type="filename">../graphics/sprites/player_idle_right_00.png</key>
+            <key type="filename">../graphics/sprites/player_idle_up_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_down_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_down_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_down_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_down_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_left_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_left_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_left_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_left_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_right_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_down_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_down_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_down_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_down_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_left_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_left_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_left_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_left_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_right_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_right_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_right_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_right_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_up_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_up_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_up_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_shoot_up_03.png</key>
+            <key type="filename">../graphics/sprites/player_move_up_00.png</key>
+            <key type="filename">../graphics/sprites/player_move_up_01.png</key>
+            <key type="filename">../graphics/sprites/player_move_up_02.png</key>
+            <key type="filename">../graphics/sprites/player_move_up_03.png</key>
+            <key type="filename">../graphics/sprites/player_shoot_down_00.png</key>
+            <key type="filename">../graphics/sprites/player_shoot_left_00.png</key>
+            <key type="filename">../graphics/sprites/player_shoot_right_00.png</key>
+            <key type="filename">../graphics/sprites/player_shoot_up_00.png</key>
+            <key type="filename">../graphics/sprites/spore_00.png</key>
+            <key type="filename">../graphics/sprites/worm_00.png</key>
+            <key type="filename">../graphics/sprites/worm_01.png</key>
+            <key type="filename">../graphics/sprites/worm_02.png</key>
+            <key type="filename">../graphics/sprites/worm_03.png</key>
+            <key type="filename">../graphics/sprites/worm_04.png</key>
+            <key type="filename">../graphics/sprites/worm_05.png</key>
+            <key type="filename">../graphics/sprites/worm_06.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -267,14 +267,14 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../graphics/sprites/beast-running-left-00.png</key>
-            <key type="filename">../graphics/sprites/beast-running-left-01.png</key>
-            <key type="filename">../graphics/sprites/beast-running-left-02.png</key>
-            <key type="filename">../graphics/sprites/beast-running-left-03.png</key>
-            <key type="filename">../graphics/sprites/beast-running-right-00.png</key>
-            <key type="filename">../graphics/sprites/beast-running-right-01.png</key>
-            <key type="filename">../graphics/sprites/beast-running-right-02.png</key>
-            <key type="filename">../graphics/sprites/beast-running-right-03.png</key>
+            <key type="filename">../graphics/sprites/beast_move_left_00.png</key>
+            <key type="filename">../graphics/sprites/beast_move_left_01.png</key>
+            <key type="filename">../graphics/sprites/beast_move_left_02.png</key>
+            <key type="filename">../graphics/sprites/beast_move_left_03.png</key>
+            <key type="filename">../graphics/sprites/beast_move_right_00.png</key>
+            <key type="filename">../graphics/sprites/beast_move_right_01.png</key>
+            <key type="filename">../graphics/sprites/beast_move_right_02.png</key>
+            <key type="filename">../graphics/sprites/beast_move_right_03.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -290,70 +290,70 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../graphics/sprites/bat-00.png</filename>
-            <filename>../graphics/sprites/bat-01.png</filename>
-            <filename>../graphics/sprites/bat-02.png</filename>
-            <filename>../graphics/sprites/bat-03.png</filename>
-            <filename>../graphics/sprites/bat-04.png</filename>
-            <filename>../graphics/sprites/beast-running-left-00.png</filename>
-            <filename>../graphics/sprites/beast-running-left-01.png</filename>
-            <filename>../graphics/sprites/beast-running-left-02.png</filename>
-            <filename>../graphics/sprites/beast-running-left-03.png</filename>
-            <filename>../graphics/sprites/beast-running-right-00.png</filename>
-            <filename>../graphics/sprites/beast-running-right-01.png</filename>
-            <filename>../graphics/sprites/beast-running-right-02.png</filename>
-            <filename>../graphics/sprites/beast-running-right-03.png</filename>
-            <filename>../graphics/sprites/bullet-00.png</filename>
-            <filename>../graphics/sprites/crab-00.png</filename>
-            <filename>../graphics/sprites/crab-01.png</filename>
-            <filename>../graphics/sprites/player-running-down-00.png</filename>
-            <filename>../graphics/sprites/player-running-down-01.png</filename>
-            <filename>../graphics/sprites/player-running-down-02.png</filename>
-            <filename>../graphics/sprites/player-running-down-03.png</filename>
-            <filename>../graphics/sprites/player-running-left-00.png</filename>
-            <filename>../graphics/sprites/player-running-left-01.png</filename>
-            <filename>../graphics/sprites/player-running-left-02.png</filename>
-            <filename>../graphics/sprites/player-running-left-03.png</filename>
-            <filename>../graphics/sprites/player-running-right-00.png</filename>
-            <filename>../graphics/sprites/player-running-right-01.png</filename>
-            <filename>../graphics/sprites/player-running-right-02.png</filename>
-            <filename>../graphics/sprites/player-running-right-03.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-down-00.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-down-01.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-down-02.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-down-03.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-left-00.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-left-01.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-left-02.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-left-03.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-right-00.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-right-01.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-right-02.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-right-03.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-up-00.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-up-01.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-up-02.png</filename>
-            <filename>../graphics/sprites/player-running-shooting-up-03.png</filename>
-            <filename>../graphics/sprites/player-running-up-00.png</filename>
-            <filename>../graphics/sprites/player-running-up-01.png</filename>
-            <filename>../graphics/sprites/player-running-up-02.png</filename>
-            <filename>../graphics/sprites/player-running-up-03.png</filename>
-            <filename>../graphics/sprites/player-shooting-down-00.png</filename>
-            <filename>../graphics/sprites/player-shooting-left-00.png</filename>
-            <filename>../graphics/sprites/player-shooting-right-00.png</filename>
-            <filename>../graphics/sprites/player-shooting-up-00.png</filename>
-            <filename>../graphics/sprites/player-standing-down-00.png</filename>
-            <filename>../graphics/sprites/player-standing-left-00.png</filename>
-            <filename>../graphics/sprites/player-standing-right-00.png</filename>
-            <filename>../graphics/sprites/player-standing-up-00.png</filename>
-            <filename>../graphics/sprites/spore-00.png</filename>
-            <filename>../graphics/sprites/worm-00.png</filename>
-            <filename>../graphics/sprites/worm-01.png</filename>
-            <filename>../graphics/sprites/worm-02.png</filename>
-            <filename>../graphics/sprites/worm-03.png</filename>
-            <filename>../graphics/sprites/worm-04.png</filename>
-            <filename>../graphics/sprites/worm-05.png</filename>
-            <filename>../graphics/sprites/worm-06.png</filename>
+            <filename>../graphics/sprites/bat_00.png</filename>
+            <filename>../graphics/sprites/bat_01.png</filename>
+            <filename>../graphics/sprites/bat_02.png</filename>
+            <filename>../graphics/sprites/bat_03.png</filename>
+            <filename>../graphics/sprites/bat_04.png</filename>
+            <filename>../graphics/sprites/beast_move_left_00.png</filename>
+            <filename>../graphics/sprites/beast_move_left_01.png</filename>
+            <filename>../graphics/sprites/beast_move_left_02.png</filename>
+            <filename>../graphics/sprites/beast_move_left_03.png</filename>
+            <filename>../graphics/sprites/beast_move_right_00.png</filename>
+            <filename>../graphics/sprites/beast_move_right_01.png</filename>
+            <filename>../graphics/sprites/beast_move_right_02.png</filename>
+            <filename>../graphics/sprites/beast_move_right_03.png</filename>
+            <filename>../graphics/sprites/bullet_00.png</filename>
+            <filename>../graphics/sprites/crab_00.png</filename>
+            <filename>../graphics/sprites/crab_01.png</filename>
+            <filename>../graphics/sprites/player_idle_down_00.png</filename>
+            <filename>../graphics/sprites/player_idle_left_00.png</filename>
+            <filename>../graphics/sprites/player_idle_right_00.png</filename>
+            <filename>../graphics/sprites/player_idle_up_00.png</filename>
+            <filename>../graphics/sprites/player_move_down_00.png</filename>
+            <filename>../graphics/sprites/player_move_down_01.png</filename>
+            <filename>../graphics/sprites/player_move_down_02.png</filename>
+            <filename>../graphics/sprites/player_move_down_03.png</filename>
+            <filename>../graphics/sprites/player_move_left_00.png</filename>
+            <filename>../graphics/sprites/player_move_left_01.png</filename>
+            <filename>../graphics/sprites/player_move_left_02.png</filename>
+            <filename>../graphics/sprites/player_move_left_03.png</filename>
+            <filename>../graphics/sprites/player_move_right_00.png</filename>
+            <filename>../graphics/sprites/player_move_right_01.png</filename>
+            <filename>../graphics/sprites/player_move_right_02.png</filename>
+            <filename>../graphics/sprites/player_move_right_03.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_down_00.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_down_01.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_down_02.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_down_03.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_left_00.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_left_01.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_left_02.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_left_03.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_right_00.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_right_01.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_right_02.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_right_03.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_up_00.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_up_01.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_up_02.png</filename>
+            <filename>../graphics/sprites/player_move_shoot_up_03.png</filename>
+            <filename>../graphics/sprites/player_move_up_00.png</filename>
+            <filename>../graphics/sprites/player_move_up_01.png</filename>
+            <filename>../graphics/sprites/player_move_up_02.png</filename>
+            <filename>../graphics/sprites/player_move_up_03.png</filename>
+            <filename>../graphics/sprites/player_shoot_down_00.png</filename>
+            <filename>../graphics/sprites/player_shoot_left_00.png</filename>
+            <filename>../graphics/sprites/player_shoot_right_00.png</filename>
+            <filename>../graphics/sprites/player_shoot_up_00.png</filename>
+            <filename>../graphics/sprites/spore_00.png</filename>
+            <filename>../graphics/sprites/worm_00.png</filename>
+            <filename>../graphics/sprites/worm_01.png</filename>
+            <filename>../graphics/sprites/worm_02.png</filename>
+            <filename>../graphics/sprites/worm_03.png</filename>
+            <filename>../graphics/sprites/worm_04.png</filename>
+            <filename>../graphics/sprites/worm_05.png</filename>
+            <filename>../graphics/sprites/worm_06.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

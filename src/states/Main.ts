@@ -9,13 +9,17 @@ const planck = require('planck-js');
 export class Main extends State {
   private map: Tilemap;
   private player: Sprite;
-  private cameraText: Phaser.Text;
+  private hudGroup: Phaser.Group;
+  private healthText: Phaser.Text;
+  private lifeText: Phaser.Text;
 
   public create() {
 	  this.game.physics.startSystem(Phaser.Physics.P2JS);
     this.map = new Tilemap(this.game2, 'level1_intro');
     this.player = this.map.player;
-    this.cameraText = this.game.add.text(96, 96, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader);
+    this.hudGroup = this.game.add.group();
+    this.healthText = this.game.add.text(0, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hudGroup);
+    this.lifeText = this.game.add.text(180, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hudGroup);
   }
 
   public update() {
@@ -40,9 +44,11 @@ export class Main extends State {
       this.game.camera.y = maxY;
     }
 
-    this.cameraText.text = '(' + this.player.x.toFixed(2) + ', ' + this.player.y.toFixed(2) + ')\n';
-    this.cameraText.position.set(
-      this.game.camera.x,
-      this.game.camera.y);
+    this.healthText.text = 'Health: 100%';
+    this.lifeText.text = 'Life: 3';
+
+    this.hudGroup.position.set(
+      this.game.camera.x + 8,
+      this.game.camera.y + 8);
   }
 }
