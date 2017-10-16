@@ -41,10 +41,14 @@ export class Tilemap extends Phaser.Tilemap {
   					switch (layerData.name) {
   						case 'collisions':
                 for (const data of layerData.objects) {
-                  const polygon = new Phaser.Polygon(data.polygon);
-                  const points = polygon.toNumberArray().map((n) => { return n * pixelScale; });
-                  const body = this.game.physics.p2.createBody(data.x * pixelScale, data.y * pixelScale, 0, true, null, points);
-                  //body.debug = true;
+                  if (data.polygon) {
+                    const polygon = new Phaser.Polygon(data.polygon);
+                    const points = polygon.toNumberArray().map((n) => { return n * pixelScale; });
+                    const body = this.game.physics.p2.createBody(data.x * pixelScale, data.y * pixelScale, 0, true, null, points);
+                    body.setCollisionGroup(this.game2.wallsCollisionGroups);
+                    body.collides(this.game2.playerCollisionGroups);
+                    //body.debug = true;
+                  }
                 }
   							break;
 

@@ -9,17 +9,21 @@ const planck = require('planck-js');
 export class Main extends State {
   private map: Tilemap;
   private player: Sprite;
-  private hudGroup: Phaser.Group;
+  private hud: Phaser.Group;
   private healthText: Phaser.Text;
   private lifeText: Phaser.Text;
 
   public create() {
-	  this.game.physics.startSystem(Phaser.Physics.P2JS);
+    this.physics.startSystem(Phaser.Physics.P2JS);
+    this.game2.createCollisionGroups();
+
     this.map = new Tilemap(this.game2, 'level1_intro');
+
     this.player = this.map.player;
-    this.hudGroup = this.game.add.group();
-    this.healthText = this.game.add.text(0, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hudGroup);
-    this.lifeText = this.game.add.text(180, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hudGroup);
+
+    this.hud = this.game.add.group();
+    this.healthText = this.game.add.text(0, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hud);
+    this.lifeText = this.game.add.text(200, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hud);
   }
 
   public update() {
@@ -44,10 +48,10 @@ export class Main extends State {
       this.game.camera.y = maxY;
     }
 
-    this.healthText.text = 'Health: 100%';
-    this.lifeText.text = 'Life: 3';
+    this.healthText.text = 'Énergie: 100%';
+    this.lifeText.text = 'Vies: 3';
 
-    this.hudGroup.position.set(
+    this.hud.position.set(
       this.game.camera.x + 8,
       this.game.camera.y + 8);
   }

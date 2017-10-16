@@ -8,13 +8,17 @@ import {Main} from '../states/Main';
 import {Factory} from './Factory';
 
 export class Game extends Phaser.Game {
-  public factory: Factory;
-  private scaledCanvas: HTMLCanvasElement;
   public pixelScale: number = 4;
-  private scaledContext: CanvasRenderingContext2D;
-  private scaledWidth: number;
-  private scaledHeight: number;
-  public world2: p2.World;
+  public factory: Factory;
+  public playerCollisionGroups: Phaser.Physics.P2.CollisionGroup;
+  public ennemiesCollisionGroups: Phaser.Physics.P2.CollisionGroup;
+  public bulletsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
+  public wallsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
+
+  //private scaledCanvas: HTMLCanvasElement;
+  //private scaledContext: CanvasRenderingContext2D;
+  //private scaledWidth: number;
+  //private scaledHeight: number;
 
   constructor() {
     super({
@@ -23,7 +27,11 @@ export class Game extends Phaser.Game {
       renderer: Phaser.AUTO });
 
     this.factory = new Factory(this);
-    this.world2 = new p2.World({gravity: [0, 0]});
+
+    this.state.add('boot', Boot);
+    this.state.add('loading', Loading);
+    this.state.add('menu', Menu);
+    this.state.add('main', Main);
 
     //this.scale.pageAlignHorizontally = true;
     //this.scale.pageAlignVertically = true;
@@ -37,10 +45,13 @@ export class Game extends Phaser.Game {
     //this.scaledWidth = this.scaledCanvas.width;
     //this.scaledHeight = this.scaledCanvas.height;
 
-    this.state.add('boot', Boot);
-    this.state.add('loading', Loading);
-    this.state.add('menu', Menu);
-    this.state.add('main', Main);
     this.state.start('boot');
+  }
+
+  public createCollisionGroups() {
+    this.playerCollisionGroups = this.physics.p2.createCollisionGroup();
+    this.ennemiesCollisionGroups = this.physics.p2.createCollisionGroup();
+    this.bulletsCollisionGroups = this.physics.p2.createCollisionGroup();
+    this.wallsCollisionGroups = this.physics.p2.createCollisionGroup();
   }
 }

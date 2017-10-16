@@ -6,7 +6,7 @@ export class Crab extends Sprite {
   private maxVelocity: number = 4;
 
   constructor(game: Game, x: number, y: number) {
-    super(game, x, y, 'sprites', 'crab-00');
+    super(game, x, y, 'sprites', 'crab_00');
 
     const pixelScale = this.game2.pixelScale;
 

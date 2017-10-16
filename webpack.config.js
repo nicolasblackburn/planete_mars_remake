@@ -52,7 +52,8 @@ module.exports = {
         {from: 'src/templates/index.html', to: 'index.html'}
       ], {})
     ],
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
+    //devtool: 'cheap-module-eval-source-map',
     devServer: {
       contentBase: path.resolve(__dirname, 'dist')
     }
