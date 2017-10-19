@@ -16,7 +16,8 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.ts$/, loader: 'happypack/loader?id=ts', exclude: /node_modules/ },
+            //{ test: /\.ts$/, loader: 'happypack/loader?id=ts', exclude: /node_modules/ },
+            { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
             { test: /pixi\.js/, loader: 'expose-loader?PIXI' },
             { test: /phaser-split\.js$/, loader: ['expose-loader?Phaser'] },
             { test: /p2\.js/, loader: ['expose-loader?p2'] }
@@ -36,6 +37,7 @@ module.exports = {
       }
     },
     plugins: [
+      /*
       new HappyPack({
         id: 'ts',
         threads: 1,
@@ -47,9 +49,10 @@ module.exports = {
         ]
       }),
       new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+      //*/
       new CopyWebpackPlugin([
-        {from: 'src/assets', to: 'assets'},
-        {from: 'src/templates/index.html', to: 'index.html'}
+        {from: 'src/assets/html/index.html', to: 'index.html'},
+        {from: 'src/assets', to: 'assets', ignore: ['src/assets/html/*']}
       ], {})
     ],
     devtool: 'source-map',

@@ -8,6 +8,7 @@ export class Boot extends State {
   }
 
   public create() {
+    this.game2.init();
 		this.game.state.start('loading');
   }
 }

@@ -4,8 +4,6 @@ import {State} from '../core/State';
 import {Tilemap} from '../core/Tilemap';
 import {fontStyles} from '../fontStyles';
 
-const planck = require('planck-js');
-
 export class Main extends State {
   private map: Tilemap;
   private player: Sprite;
@@ -14,16 +12,13 @@ export class Main extends State {
   private lifeText: Phaser.Text;
 
   public create() {
-    this.physics.startSystem(Phaser.Physics.P2JS);
-    this.game2.createCollisionGroups();
-
     this.map = new Tilemap(this.game2, 'level1_intro');
 
     this.player = this.map.player;
 
     this.hud = this.game.add.group();
-    this.healthText = this.game.add.text(0, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hud);
-    this.lifeText = this.game.add.text(200, 0, '0, 0', <Phaser.PhaserTextStyle>fontStyles.subheader, this.hud);
+    this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.subheader, this.hud);
+    this.lifeText = this.game.add.text(200, 0, '0, 0', fontStyles.subheader, this.hud);
   }
 
   public update() {

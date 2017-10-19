@@ -1,20 +1,18 @@
 import {Direction} from '../core/Direction';
 import {Game} from '../core/Game';
 import {Sprite} from '../core/Sprite';
+import {PlayerInput} from '../input/PlayerInput';
 
 export class Player extends Sprite {
-  private cursors: Phaser.CursorKeys;
-  private spaceKey: Phaser.Key;
-  private maxVelocity: number = 60;
-  private body2: p2.Body;
-  private precalcVelocity: Phaser.Point[] = Array(4);
-  private lastNonDiagonalDirection: number = Direction.down;
-  private aimDirection: Direction = Direction.down;
+  public maxVelocity: number = 60;
   private isMoving: boolean = false;
   private spaceKeyIsDown: boolean = false;
+  private playerInput: PlayerInput;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
+
+    this.playerInput = new PlayerInput(this.game2);
 
     const pixelScale = this.game2.pixelScale;
 
@@ -28,151 +26,37 @@ export class Player extends Sprite {
     this.body.collides(this.game2.wallsCollisionGroups);
     //this.body.debug = true;
 
-    this.precalcVelocities();
-
     this.defineAnimations();
-
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    //this.input.get('shoot').on('enter', (last) => { this.onEnterShoot(last); });
+    //this.input.get('move_shoot').on('enter', (last) => { this.onEnterMoveShoot(last); });
   }
 
   public update() {
-    const pixelScale = this.game2.pixelScale;
-    let upIsDown = false;
-    let rightIsDown = false;
-    let downIsDown = false;
-    let leftIsDown = false;
+    const input = this.playerInput;
 
-    if (this.cursors.up.isUp && this.cursors.down.isUp) {
-      this.body.velocity.y = 0;
-    } else if (this.cursors.up.isDown) {
-      upIsDown = true;
-    } else if (this.cursors.down.isDown) {
-      downIsDown = true;
-    }
+    input.update();
 
-    if (this.cursors.left.isUp && this.cursors.right.isUp) {
-      this.body.velocity.x = 0;
-    } else if (this.cursors.right.isDown) {
-      rightIsDown = true;
-    } else if (this.cursors.left.isDown) {
-      leftIsDown = true;
-    }
+    const scale =  this.maxVelocity * this.game2.pixelScale;
 
-    let x = 0;
-    let y = 0;
+    const animationKey = input.state.key() + '_' + this.vecToString(input.lastNonDiagonalDirection);
+    this.animations.play(animationKey, null, true);
 
-    if (upIsDown && ! rightIsDown && ! leftIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.up]);
-      this.animations.play('move_up', null, true);
-      this.lastNonDiagonalDirection = Direction.up;
-      this.isMoving = true;
-      this.aimDirection = Direction.up;
-
-    } else if (upIsDown && rightIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.upRight]);
-      if (! this.isMoving) {
-        this.animations.play('move_up', null, true);
-        this.lastNonDiagonalDirection = Direction.up;
-      }
-      this.isMoving = true;
-      this.aimDirection = Direction.upRight;
-
-    } else if (rightIsDown && ! upIsDown && ! downIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.right]);
-      this.animations.play('move_right', null, true);
-      this.lastNonDiagonalDirection = Direction.right;
-      this.isMoving = true;
-      this.aimDirection = Direction.right;
-
-    } else if (rightIsDown && downIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.rightDown]);
-      if (! this.isMoving) {
-        this.animations.play('move_right', null, true);
-        this.lastNonDiagonalDirection = Direction.right;
-      }
-      this.isMoving = true;
-      this.aimDirection = Direction.rightDown;
-
-    } else if (downIsDown && ! rightIsDown && ! leftIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.down]);
-      this.animations.play('move_down', null, true);
-      this.lastNonDiagonalDirection = Direction.down;
-      this.isMoving = true;
-      this.aimDirection = Direction.down;
-
-    } else if (downIsDown && leftIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.downLeft]);
-      if (! this.isMoving) {
-        this.animations.play('move_down', null, true);
-        this.lastNonDiagonalDirection = Direction.down;
-      }
-      this.isMoving = true;
-      this.aimDirection = Direction.downLeft;
-
-    } else if (leftIsDown && ! upIsDown && ! downIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.left]);
-      this.animations.play('move_left', null, true);
-      this.isMoving = true;
-      this.aimDirection = Direction.left;
-
-    } else if (leftIsDown && upIsDown) {
-      ({x, y} = this.precalcVelocity[Direction.leftUp]);
-      this.lastNonDiagonalDirection = Direction.left;
-      if (! this.isMoving) {
-        this.animations.play('move_left', null, true);
-        this.lastNonDiagonalDirection = Direction.left;
-      }
-      this.isMoving = true;
-      this.aimDirection = Direction.leftUp;
-
-    } else if (! upIsDown && ! rightIsDown && ! downIsDown && ! leftIsDown) {
-      switch (this.lastNonDiagonalDirection) {
-        case Direction.up:
-          this.animations.play('idle_up', null, true);
-          break;
-
-        case Direction.right:
-          this.animations.play('idle_right', null, true);
-          break;
-
-        case Direction.down:
-          this.animations.play('idle_down', null, true);
-          break;
-
-        case Direction.left:
-          this.animations.play('idle_left', null, true);
-          break;
-      }
-      this.isMoving = false;
-    }
-
-    this.body.velocity.x = x;
-    this.body.velocity.y = y;
-
-    if (this.spaceKey.isDown && ! this.spaceKeyIsDown) {
-      const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
-      bullet.setDirection(this.aimDirection);
-      bullet.body.velocity.x += this.body.velocity.x;
-      bullet.body.velocity.y += this.body.velocity.y;
-      this.spaceKeyIsDown = true;
-    } else if (this.spaceKey.isUp) {
-      this.spaceKeyIsDown = false;
-    }
+    this.body.velocity.x = input.direction.x * scale;
+    this.body.velocity.y = input.direction.y * scale;
   }
 
-  private precalcVelocities() {
-    const v = this.maxVelocity * this.game2.pixelScale;
-    const vDivBySqrtOf2 = v * 0.707;
-
-    this.precalcVelocity[Direction.up] = new Phaser.Point(0, -v);
-    this.precalcVelocity[Direction.upRight] = new Phaser.Point(vDivBySqrtOf2, -vDivBySqrtOf2);
-    this.precalcVelocity[Direction.right] = new Phaser.Point(v, 0);
-    this.precalcVelocity[Direction.rightDown] = new Phaser.Point(vDivBySqrtOf2, vDivBySqrtOf2);
-    this.precalcVelocity[Direction.down] = new Phaser.Point(0, v);
-    this.precalcVelocity[Direction.downLeft] = new Phaser.Point(-vDivBySqrtOf2, vDivBySqrtOf2);
-    this.precalcVelocity[Direction.left] = new Phaser.Point(-v, 0);
-    this.precalcVelocity[Direction.leftUp] = new Phaser.Point(-vDivBySqrtOf2, -vDivBySqrtOf2);
+  private vecToString(vector: Phaser.Point) {
+    if (vector.y < 0) {
+      return 'up';
+    } else if (vector.x > 0) {
+      return 'right';
+    } else if (vector.y > 0) {
+      return 'down';
+    } else if (vector.x < 0) {
+      return 'left';
+    } else {
+      return '';
+    }
   }
 
   private defineAnimations() {

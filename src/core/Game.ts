@@ -48,10 +48,23 @@ export class Game extends Phaser.Game {
     this.state.start('boot');
   }
 
-  public createCollisionGroups() {
+  public init() {
+    this.physics.startSystem(Phaser.Physics.P2JS);
+
+    this.input.keyboard.addCallbacks(this, this.onKeyDown, this.onKeyUp, this.onKeyPress);
+
     this.playerCollisionGroups = this.physics.p2.createCollisionGroup();
     this.ennemiesCollisionGroups = this.physics.p2.createCollisionGroup();
     this.bulletsCollisionGroups = this.physics.p2.createCollisionGroup();
     this.wallsCollisionGroups = this.physics.p2.createCollisionGroup();
+  }
+
+  public onKeyDown(event: Event) {
+  }
+
+  public onKeyUp(event: Event) {
+  }
+
+  public onKeyPress(event: Event) {
   }
 }

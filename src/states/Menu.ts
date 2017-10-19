@@ -7,8 +7,8 @@ export class Menu extends State {
   private textClick: Phaser.Text;
 
   public create() {
-    this.title = this.game.add.text(0, 0, 'PLANÈTE MARS', <Phaser.PhaserTextStyle>fontStyles.header);
-    this.textClick = this.game.add.text(0, 0, 'Cliquer pour commencer', <Phaser.PhaserTextStyle>fontStyles.body);
+    this.title = this.game.add.text(0, 0, 'PLANÈTE MARS', fontStyles.header);
+    this.textClick = this.game.add.text(0, 0, 'Cliquer pour commencer', fontStyles.body);
 
     this.group = this.game.add.group();
     this.group.addMultiple([

@@ -3,7 +3,7 @@ const base = {
   fill: '#ffffff',
   fontSize: 16,
   lineHeight: 20
-};
+} as Phaser.PhaserTextStyle;
 
 export const fontStyles = {
   header: {
