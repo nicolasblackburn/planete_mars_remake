@@ -11,3 +11,6 @@ This is a port to Phaser of the old unfinished game I did.
 - Add basic enemies
 - Player can be hurt and lose a life after reaching 0 'énergie'
 - Remove 'vies' and just keep 'énergie'
+- Create a screen to change the keyboard inputs and allow saving to local storage
+- Save progress in local storage
+- Create a screen to create new game / continue saved games
