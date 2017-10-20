@@ -1,18 +1,18 @@
 import {Direction} from '../core/Direction';
 import {Game} from '../core/Game';
 import {Sprite} from '../core/Sprite';
-import {PlayerInput} from '../input/PlayerInput';
+import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
   public maxVelocity: number = 60;
   private isMoving: boolean = false;
   private spaceKeyIsDown: boolean = false;
-  private playerInput: PlayerInput;
+  private inputHandler: InputHandler;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
 
-    this.playerInput = new PlayerInput(this.game2);
+    this.inputHandler = new InputHandler(this.game2);
 
     const pixelScale = this.game2.pixelScale;
 
@@ -26,67 +26,48 @@ export class Player extends Sprite {
     this.body.collides(this.game2.wallsCollisionGroups);
     //this.body.debug = true;
 
-    this.defineAnimations();
-    //this.input.get('shoot').on('enter', (last) => { this.onEnterShoot(last); });
-    //this.input.get('move_shoot').on('enter', (last) => { this.onEnterMoveShoot(last); });
+    this.addAnimations();
+    this.inputHandler.state.events.onShoot.add(this.onShoot, this);
+  }
+
+  public onShoot() {
+    const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
+    bullet.setDirection(this.inputHandler.aimDirection);
   }
 
   public update() {
-    const input = this.playerInput;
+    const input = this.inputHandler;
 
     input.update();
 
     const scale =  this.maxVelocity * this.game2.pixelScale;
 
-    const animationKey = input.state.key() + '_' + this.vecToString(input.lastNonDiagonalDirection);
-    this.animations.play(animationKey, null, true);
+    this.animations.play(this.currentAnimationKey(), null, true);
 
     this.body.velocity.x = input.direction.x * scale;
     this.body.velocity.y = input.direction.y * scale;
   }
 
-  private vecToString(vector: Phaser.Point) {
+  private currentAnimationKey() {
+    const state = this.inputHandler.state.key();
+    const vector = this.inputHandler.lastNonDiagonalDirection;
     if (vector.y < 0) {
-      return 'up';
+      return state + '_up';
     } else if (vector.x > 0) {
-      return 'right';
+      return state + '_right';
     } else if (vector.y > 0) {
-      return 'down';
+      return state + '_down';
     } else if (vector.x < 0) {
-      return 'left';
+      return state + '_left';
     } else {
       return '';
     }
   }
 
-  private defineAnimations() {
-    this.animations.add('idle_up', ['player_idle_up_00']);
-    this.animations.add('idle_right', ['player_idle_right_00']);
-    this.animations.add('idle_down', ['player_idle_down_00']);
-    this.animations.add('idle_left', ['player_idle_left_00']);
-    this.animations.add('move_up',
-      ['player_move_up_00', 'player_move_up_01', 'player_move_up_02', 'player_move_up_03'], 10);
-    this.animations.add('move_right',
-      ['player_move_right_00', 'player_move_right_01', 'player_move_right_02', 'player_move_right_03'], 10);
-    this.animations.add('move_down',
-      ['player_move_down_00', 'player_move_down_01', 'player_move_down_02', 'player_move_down_03'], 10);
-    this.animations.add('move_left',
-      ['player_move_left_00', 'player_move_left_01', 'player_move_left_02', 'player_move_left_03'], 10);
-    this.animations.add('shoot_up',
-      ['player_shoot_up_00', 'player_shoot_up_01', 'player_shoot_up_02', 'player_shoot_up_03'], 10);
-    this.animations.add('shoot_right',
-      ['player_shoot_right_00', 'player_shoot_right_01', 'player_shoot_right_02', 'player_shoot_right_03'], 10);
-    this.animations.add('shoot_down',
-      ['player_shoot_down_00', 'player_shoot_down_01', 'player_shoot_down_02', 'player_shoot_down_03'], 10);
-    this.animations.add('shoot_left',
-      ['player_shoot_left_00', 'player_shoot_left_01', 'player_shoot_left_02', 'player_shoot_left_03'], 10);
-    this.animations.add('move_shoot_up',
-      ['player_move_shoot_up_00', 'player_move_shoot_up_01', 'player_move_shoot_up_02', 'player_move_shoot_up_03'], 10);
-    this.animations.add('move_shoot_right',
-      ['player_move_shoot_right_00', 'player_move_shoot_right_01', 'player_move_shoot_right_02', 'player_move_shoot_right_03'], 10);
-    this.animations.add('move_shoot_down',
-      ['player_move_shoot_down_00', 'player_move_shoot_down_01', 'player_move_shoot_down_02', 'player_move_shoot_down_03'], 10);
-    this.animations.add('move_shoot_left',
-      ['player_move_shoot_left_00', 'player_move_shoot_left_01', 'player_move_shoot_left_02', 'player_move_shoot_left_03'], 10);
+  private addAnimations() {
+    for (const animation of this.game2.animations.player) {
+      const [key, frames, rate] = animation;
+      this.animations.add(key as string, frames as string[], rate as number);
+    }
   }
 }

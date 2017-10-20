@@ -18,52 +18,50 @@ export class Bullet extends Sprite {
     this.body.collides(this.game2.ennemiesCollisionGroups);
   }
 
-  public setDirection(direction: Direction) {
-    switch (direction) {
-      case Direction.up:
-        this.body.rotation = Math.PI / 2;
-        this.body.velocity.x = 0;
-        this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale;
-        break;
-      case Direction.upRight:
-        this.body.rotation = 3 * Math.PI / 4;
-        this.body.velocity.x = this.maxVelocity * this.game2.pixelScale * 0.707;
-        this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale * 0.707;
-        break;
-      case Direction.right:
-        this.body.rotation = 0;
-        this.body.velocity.x = this.maxVelocity * this.game2.pixelScale;
-        this.body.velocity.y = 0;
-        break;
-      case Direction.rightDown:
-        this.body.rotation = - 3 * Math.PI / 4;
-        this.body.velocity.x = this.maxVelocity * this.game2.pixelScale * 0.707;
-        this.body.velocity.y = this.maxVelocity * this.game2.pixelScale * 0.707;
-        break;
-      case Direction.down:
-        this.body.rotation = Math.PI / 2;
-        this.body.velocity.x = 0;
-        this.body.velocity.y = this.maxVelocity * this.game2.pixelScale;
-        break;
-      case Direction.downLeft:
-        this.body.rotation = 3 * Math.PI / 4;
-        this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale * 0.707;
-        this.body.velocity.y = this.maxVelocity * this.game2.pixelScale * 0.707;
-        break;
-      case Direction.left:
-        this.body.rotation = Math.PI;
-        this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale;
-        this.body.velocity.y = 0;
-        break;
-      case Direction.leftUp:
-        this.body.rotation = Math.PI / 4;
-        this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale * 0.707;
-        this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale * 0.707;
-        break;
+  public setDirection(direction: Phaser.Point) {
+    if (direction.x > 0 && direction.y < 0) {
+      this.body.rotation = 3 * Math.PI / 4;
+      this.body.velocity.x = this.maxVelocity * this.game2.pixelScale * 0.707;
+      this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale * 0.707;
+
+    } else if (direction.x > 0 && direction.y > 0) {
+      this.body.rotation = - 3 * Math.PI / 4;
+      this.body.velocity.x = this.maxVelocity * this.game2.pixelScale * 0.707;
+      this.body.velocity.y = this.maxVelocity * this.game2.pixelScale * 0.707;
+
+    } else if (direction.x < 0 && direction.y > 0) {
+      this.body.rotation = 3 * Math.PI / 4;
+      this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale * 0.707;
+      this.body.velocity.y = this.maxVelocity * this.game2.pixelScale * 0.707;
+
+    } else if (direction.x < 0 && direction.y < 0) {
+      this.body.rotation = Math.PI / 4;
+      this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale * 0.707;
+      this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale * 0.707;
+
+    } else if (direction.y < 0) {
+      this.body.rotation = Math.PI / 2;
+      this.body.velocity.x = 0;
+      this.body.velocity.y = -this.maxVelocity * this.game2.pixelScale;
+
+    } else if (direction.x > 0) {
+      this.body.rotation = 0;
+      this.body.velocity.x = this.maxVelocity * this.game2.pixelScale;
+      this.body.velocity.y = 0;
+
+    } else if (direction.y > 0) {
+      this.body.rotation = Math.PI / 2;
+      this.body.velocity.x = 0;
+      this.body.velocity.y = this.maxVelocity * this.game2.pixelScale;
+
+    } else if (direction.x < 0) {
+      this.body.rotation = Math.PI;
+      this.body.velocity.x = -this.maxVelocity * this.game2.pixelScale;
+      this.body.velocity.y = 0;
+
     }
   }
 
   public update() {
-    this.angle += 1;
   }
 }
