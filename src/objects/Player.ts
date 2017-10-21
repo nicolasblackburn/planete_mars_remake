@@ -13,6 +13,9 @@ export class Player extends Sprite {
 
     this.inputHandler = new InputHandler(this.game2, this);
 
+    //this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    this.scale.set(this.game2.pixelScale);
+
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
     this.body.setRectangle(8, 11, 0, 1);
