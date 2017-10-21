@@ -1,7 +1,6 @@
 import {Game} from '../core/Game';
 import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
-import {Gesture} from '../core/input/Gesture';
 
 export class Player extends Sprite {
   public maxVelocity: number = 60;
