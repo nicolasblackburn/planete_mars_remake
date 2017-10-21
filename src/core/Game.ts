@@ -10,7 +10,6 @@ import {Factory} from './Factory';
 
 export class Game extends Phaser.Game {
   public animations: {[key: string]: (string | number | string[])[][]} = animations;
-  public pixelScale: number = 4;
   public factory: Factory;
   public playerCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public ennemiesCollisionGroups: Phaser.Physics.P2.CollisionGroup;

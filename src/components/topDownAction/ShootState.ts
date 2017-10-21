@@ -35,53 +35,12 @@ export class ShootState extends State {
       input.state.set('idle');
       return;
     }
+
     input.shootTimeout++;
-    if (input.keys.up.isDown && input.keys.right.isDown) {
-      input.direction = new Phaser.Point(sqrt1_2, -sqrt1_2);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(0, -1);
-      input.state.set('move_shoot');
 
-    } else if (input.keys.right.isDown && input.keys.down.isDown) {
-      input.direction = new Phaser.Point(sqrt1_2, sqrt1_2);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(1, 0);
-      input.state.set('move_shoot');
+    input.direction = input.getDirection();
 
-    } else if (input.keys.down.isDown && input.keys.left.isDown) {
-      input.direction = new Phaser.Point(-sqrt1_2, sqrt1_2);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(0, 1);
-      input.state.set('move_shoot');
-
-    } else if (input.keys.left.isDown && input.keys.up.isDown) {
-      input.direction = new Phaser.Point(-sqrt1_2, -sqrt1_2);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(-1, 0);
-      input.state.set('move_shoot');
-
-    } else if (input.keys.up.isDown) {
-      input.direction = new Phaser.Point(0, -1);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(0, -1);
-      input.state.set('move_shoot');
-
-    } else if (input.keys.right.isDown) {
-      input.direction = new Phaser.Point(1, 0);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(1, 0);
-      input.state.set('move_shoot');
-
-    } else if (input.keys.down.isDown) {
-      input.direction = new Phaser.Point(0, 1);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(0, 1);
-      input.state.set('move_shoot');
-
-    } else if (input.keys.left.isDown) {
-      input.direction = new Phaser.Point(-1, 0);
-      input.aimDirection = input.direction;
-      input.lastNonDiagonalDirection = new Phaser.Point(-1, 0);
+    if (input.keys.up.isDown || input.keys.right.isDown || input.keys.down.isDown || input.keys.left.isDown || input.pointer.isDown) {
       input.state.set('move_shoot');
 
     }

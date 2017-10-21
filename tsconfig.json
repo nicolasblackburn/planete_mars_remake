@@ -4,8 +4,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es6",
-    "allowJs": true
+    "target": "es5",
+    "allowJs": true,
+    "downlevelIteration": true,
+    "lib": ["dom", "es6", "es2016", "dom.iterable", "scripthost"]
   },
   "files": [
     "node_modules/phaser-ce/typescript/phaser.d.ts"

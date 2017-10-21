@@ -1,7 +1,7 @@
-import {Direction} from '../core/Direction';
 import {Game} from '../core/Game';
 import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
+import {Gesture} from '../core/input/Gesture';
 
 export class Player extends Sprite {
   public maxVelocity: number = 60;
@@ -12,16 +12,11 @@ export class Player extends Sprite {
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
 
-    this.inputHandler = new InputHandler(this.game2);
-
-    const pixelScale = this.game2.pixelScale;
-
-    this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
-    this.scale.set(pixelScale);
+    this.inputHandler = new InputHandler(this.game2, this);
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
-    this.body.setRectangle(8 * pixelScale, 11 * pixelScale, 0, 1 * pixelScale);
+    this.body.setRectangle(8, 11, 0, 1);
     this.body.setCollisionGroup(this.game2.playerCollisionGroups);
     this.body.collides(this.game2.wallsCollisionGroups);
     //this.body.debug = true;
@@ -32,7 +27,7 @@ export class Player extends Sprite {
 
   public onShoot() {
     const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
-    bullet.setDirection(this.inputHandler.aimDirection);
+    bullet.setDirection(this.inputHandler.direction);
   }
 
   public update() {
@@ -40,24 +35,29 @@ export class Player extends Sprite {
 
     input.update();
 
-    const scale =  this.maxVelocity * this.game2.pixelScale;
-
     this.animations.play(this.currentAnimationKey(), null, true);
 
-    this.body.velocity.x = input.direction.x * scale;
-    this.body.velocity.y = input.direction.y * scale;
+    if (['move', 'move_shoot'].includes(input.state.key())) {
+      this.body.velocity.x = input.direction.x * this.maxVelocity;
+      this.body.velocity.y = input.direction.y * this.maxVelocity;
+
+    } else {
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+
+    }
   }
 
   private currentAnimationKey() {
     const state = this.inputHandler.state.key();
-    const vector = this.inputHandler.lastNonDiagonalDirection;
-    if (vector.y < 0) {
+    const direction = this.inputHandler.direction;
+    if (direction.y < 0) {
       return state + '_up';
-    } else if (vector.x > 0) {
+    } else if (direction.x > 0) {
       return state + '_right';
-    } else if (vector.y > 0) {
+    } else if (direction.y > 0) {
       return state + '_down';
-    } else if (vector.x < 0) {
+    } else if (direction.x < 0) {
       return state + '_left';
     } else {
       return '';

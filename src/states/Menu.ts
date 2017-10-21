@@ -17,7 +17,7 @@ export class Menu extends State {
 
     this.resize();
 
-    this.input.mousePointer.leftButton.onDown.addOnce(() => {
+    this.input.onDown.addOnce(() => {
         this.game.state.start('main');
     });
   }

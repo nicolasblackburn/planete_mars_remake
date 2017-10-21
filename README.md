@@ -5,12 +5,12 @@ This is a port to Phaser of the old unfinished game I did.
 ## Issues / To-dos
 
 - Apply Rich Davey scaling technic [http://www.photonstorm.com/phaser/pixel-perfect-scaling-a-phaser-game]
-- Add mobile controls (pointer down move toward pointer, swipe shoots)
 - Scaling depending on screen dimension, centered canvas
+- Mobile controls: tap shoot, delay for pointer up event to allow shooting and moving at the same time
+- Collision detection is too processor intensive for mobiles, need a more efficient solution
 - Don't allow more than 3 bullets in the screen and reduce the range
 - Add basic enemies
 - Player can be hurt and lose a life after reaching 0 'énergie'
-- Remove 'vies' and just keep 'énergie'
 - Create a screen to change the keyboard inputs and allow saving to local storage
 - Save progress in local storage
-- Create a screen to create new game / continue saved games
+- Create a screen to create new game / continue saved gamesous

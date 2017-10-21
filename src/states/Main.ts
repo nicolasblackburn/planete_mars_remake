@@ -9,7 +9,6 @@ export class Main extends State {
   private player: Sprite;
   private hud: Phaser.Group;
   private healthText: Phaser.Text;
-  private lifeText: Phaser.Text;
 
   public create() {
     this.map = new Tilemap(this.game2, 'level1_intro');
@@ -18,13 +17,11 @@ export class Main extends State {
 
     this.hud = this.game.add.group();
     this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.subheader, this.hud);
-    this.lifeText = this.game.add.text(200, 0, '0, 0', fontStyles.subheader, this.hud);
   }
 
   public update() {
-    const pixelScale = this.game2.pixelScale;
-    const tileWidth = this.map.tileWidth / 2 * pixelScale;
-    const tileHeight = this.map.tileHeight / 2 * pixelScale;
+    const tileWidth = this.map.tileWidth / 2;
+    const tileHeight = this.map.tileHeight / 2;
     const maxX = this.game.world.width - this.camera.width - tileWidth;
     const maxY = this.game.world.height - this.camera.height - tileHeight;
 
@@ -44,7 +41,6 @@ export class Main extends State {
     }
 
     this.healthText.text = 'Énergie: 100%';
-    this.lifeText.text = 'Vies: 3';
 
     this.hud.position.set(
       this.game.camera.x + 8,
