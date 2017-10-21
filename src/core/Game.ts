@@ -9,23 +9,40 @@ import {Main} from '../states/Main';
 import {Factory} from './Factory';
 
 export class Game extends Phaser.Game {
-  public animations: {[key: string]: (string | number | string[])[][]} = animations;
+  public animations: {[key: string]: (string | number | string[])[][]};
   public factory: Factory;
   public playerCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public ennemiesCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public bulletsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public wallsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
-
-  //private scaledCanvas: HTMLCanvasElement;
-  //private scaledContext: CanvasRenderingContext2D;
-  //private scaledWidth: number;
-  //private scaledHeight: number;
+  public pixelScale: number;
+  /*
+  public pixel: { scale: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, width: number, height: number }
+    = { scale: 4, canvas: null, context: null, width: 0, height: 0 };
+  //*/
 
   constructor() {
+    const baseWidth = 240;
+    const baseHeight = 135;
+    const ratio  = 16/9;
+    let scale = Math.floor(window.innerWidth / baseWidth) || 1;
+    let width = baseWidth * scale;
+    let height = width / ratio;
+
+    if (height > window.innerHeight) {
+      scale =  Math.floor(window.innerHeight / baseHeight) || 1;
+      height = baseHeight * scale;
+      width = height * ratio;
+    }
+
     super({
-      width:960,
-      height: 540,
+      width: width,
+      height: height,
       renderer: Phaser.AUTO });
+
+    this.pixelScale = scale;
+
+    this.animations = animations;
 
     this.factory = new Factory(this);
 
@@ -34,25 +51,26 @@ export class Game extends Phaser.Game {
     this.state.add('menu', Menu);
     this.state.add('main', Main);
 
-    //this.scale.pageAlignHorizontally = true;
-    //this.scale.pageAlignVertically = true;
-    //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
-
-    //this.canvas.style.display = 'none';
-    //this.scaledCanvas = Phaser.Canvas.create(this.game.width * this.pixelScale, this.game.height * this.pixelScale);
-    //this.scaledContext = this.scaledCanvas.getContext('2d');
-    //Phaser.Canvas.addToDOM(this.scaledCanvas);
-    //Phaser.Canvas.setSmoothingEnabled(this.scaledContext, false);
-    //this.scaledWidth = this.scaledCanvas.width;
-    //this.scaledHeight = this.scaledCanvas.height;
-
     this.state.start('boot');
+
   }
 
   public init() {
-    this.physics.startSystem(Phaser.Physics.P2JS);
 
-    this.input.keyboard.addCallbacks(this, this.onKeyDown, this.onKeyUp, this.onKeyPress);
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+    this.scale.setResizeCallback(this.resize, this);
+    //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    /*
+    this.canvas.style.display = 'none';
+    this.pixel.canvas = Phaser.Canvas.create(document.body as HTMLDivElement, this.width * this.pixel.scale, this.height * this.pixel.scale);
+    this.pixel.context = this.pixel.canvas.getContext('2d');
+    Phaser.Canvas.addToDOM(this.pixel.canvas, null);
+    Phaser.Canvas.setSmoothingEnabled(this.pixel.context, false);
+    //*/
+
+    this.physics.startSystem(Phaser.Physics.P2JS);
 
     this.playerCollisionGroups = this.physics.p2.createCollisionGroup();
     this.ennemiesCollisionGroups = this.physics.p2.createCollisionGroup();
@@ -60,12 +78,28 @@ export class Game extends Phaser.Game {
     this.wallsCollisionGroups = this.physics.p2.createCollisionGroup();
   }
 
-  public onKeyDown(event: Event) {
+  public resize() {
+    const baseWidth = 240;
+    const baseHeight = 135;
+    const ratio  = 16/9;
+    let scale = Math.floor(window.innerWidth / baseWidth) || 1;
+    let width = baseWidth * scale;
+    let height = width / ratio;
+
+    if (height > window.innerHeight) {
+      scale =  Math.floor(window.innerHeight / baseHeight) || 1;
+      height = baseHeight * scale;
+      width = height * ratio;
+    }
+
+    this.scale.setGameSize(width, height);
+
+    this.state.getCurrentState().resize(width, height);
   }
 
-  public onKeyUp(event: Event) {
+  /*
+  public renderScaledCanvas() {
+    this.pixel.context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, 0, this.pixel.canvas.width, this.pixel.canvas.height);
   }
-
-  public onKeyPress(event: Event) {
-  }
+  //*/
 }

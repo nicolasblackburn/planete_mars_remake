@@ -4,6 +4,7 @@ import {Sprite} from './Sprite';
 export class Tilemap extends Phaser.Tilemap {
   public enemies: Sprite[] = [];
   public player: Sprite;
+  public tilemapLayers: Phaser.TilemapLayer[] = [];
   protected game2: Game;
   protected solidTileCollisionShapes: (Phaser.Rectangle | Phaser.Polygon)[][]= [];
   protected overlapTileCollisionShapes: (Phaser.Rectangle | Phaser.Polygon)[][]= [];
@@ -32,6 +33,7 @@ export class Tilemap extends Phaser.Tilemap {
   				case 'tilelayer':
   					layer = this.createLayer(layerData.name);
             layer.resizeWorld();
+            this.tilemapLayers.push(layer);
   					break;
 
   				case 'objectgroup':
