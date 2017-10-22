@@ -33,6 +33,7 @@ export class Tilemap extends Phaser.Tilemap {
   				case 'tilelayer':
   					layer = this.createLayer(layerData.name);
             layer.resizeWorld();
+            layer.setScale(this.game2.pixelScale);
             this.tilemapLayers.push(layer);
   					break;
 
@@ -42,8 +43,8 @@ export class Tilemap extends Phaser.Tilemap {
                 for (const data of layerData.objects) {
                   if (data.polygon) {
                     const polygon = new Phaser.Polygon(data.polygon);
-                    const points = polygon.toNumberArray();
-                    const body = this.game.physics.p2.createBody(data.x, data.y, 0, true, null, points);
+                    const points = polygon.toNumberArray().map((n) => { return n * this.game2.pixelScale; });
+                    const body = this.game.physics.p2.createBody(data.x * this.game2.pixelScale, data.y * this.game2.pixelScale, 0, true, null, points);
                     body.setCollisionGroup(this.game2.wallsCollisionGroups);
                     body.collides(this.game2.playerCollisionGroups);
                     //body.debug = true;
@@ -53,13 +54,13 @@ export class Tilemap extends Phaser.Tilemap {
 
   						case 'enemies':
                 for (const data of layerData.objects) {
-                  this.enemies.push(factory.create(data.type, data.x, data.y));
+                  this.enemies.push(factory.create(data.type, data.x * this.game2.pixelScale, data.y * this.game2.pixelScale));
                 }
   							break;
 
   						case 'player':
   							const data = layerData.objects[0];
-  							this.player = factory.create(data.type, data.x, data.y);
+  							this.player = factory.create(data.type, data.x * this.game2.pixelScale, data.y * this.game2.pixelScale);
   							break;
   					}
   					break;

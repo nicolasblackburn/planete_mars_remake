@@ -12,6 +12,9 @@ export class Bullet extends Sprite {
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
 
+    this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    this.scale.set(this.game2.pixelScale);
+
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.setCollisionGroup(this.game2.bulletsCollisionGroups);
     this.body.collides(this.game2.ennemiesCollisionGroups);

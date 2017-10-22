@@ -56,9 +56,6 @@ export class Game extends Phaser.Game {
   }
 
   public init() {
-
-    this.stage.smoothed = false;
-
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
     this.scale.setResizeCallback(this.resize, this);
