@@ -27,8 +27,8 @@ export class Main extends State {
     const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
     const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
 
-    this.game.camera.x = this.player.x - (this.camera.width - this.player.width) / 2;
-    this.game.camera.y = this.player.y - (this.camera.height - this.player.height) / 2;
+    this.game.camera.x = this.player.x - this.camera.width / 2;
+    this.game.camera.y = this.player.y - this.camera.height / 2;
 
     this.constrainCamera();
 

@@ -32,9 +32,10 @@ export class Tilemap extends Phaser.Tilemap {
   			switch (layerData.type) {
   				case 'tilelayer':
   					layer = this.createLayer(layerData.name);
-            layer.resizeWorld();
+            layer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
             layer.setScale(this.game2.pixelScale);
             this.tilemapLayers.push(layer);
+            layer.resizeWorld();
   					break;
 
   				case 'objectgroup':
