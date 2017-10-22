@@ -3,7 +3,7 @@ import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
-  public maxVelocity: number = 240;
+  public maxVelocity: number = 60;
   private isMoving: boolean = false;
   private spaceKeyIsDown: boolean = false;
   private inputHandler: InputHandler;
@@ -13,19 +13,23 @@ export class Player extends Sprite {
 
     this.inputHandler = new InputHandler(this.game2, this);
 
+    this.unscaledCollisionBody = new Phaser.Rectangle(0, 1, 8, 11);
+
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
-    this.body.setRectangle(8 * 4, 11 * 4, 0, 1 * 4);
-    this.body.setCollisionGroup(this.game2.playerCollisionGroups);
-    this.body.collides(this.game2.wallsCollisionGroups);
+    this.body.collides(this.game2.wallsCollisionGroup);
+    this.collisionGroup = this.game2.playerCollisionGroup;
+    this.updateBody();
     //this.body.debug = true;
 
     this.addAnimations();
+
     this.inputHandler.state.events.onShoot.add(this.onShoot, this);
   }
 
   public onShoot() {
     const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
+    this.game2.bullets.push(bullet);
     bullet.setDirection(this.inputHandler.direction);
   }
 

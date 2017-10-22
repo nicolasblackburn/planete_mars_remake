@@ -7,14 +7,14 @@ const pi_4 = Math.PI / 4;
 const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
-  private maxVelocity: number = 480;
+  private maxVelocity: number = 120;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
-    this.body.setCollisionGroup(this.game2.bulletsCollisionGroups);
-    this.body.collides(this.game2.ennemiesCollisionGroups);
+    this.body.setCollisionGroup(this.game2.bulletsCollisionGroup);
+    this.body.collides(this.game2.enemiesCollisionGroup);
   }
 
   public setDirection(direction: Phaser.Point) {
@@ -59,8 +59,5 @@ export class Bullet extends Sprite {
       this.body.velocity.y = 0;
 
     }
-  }
-
-  public update() {
   }
 }

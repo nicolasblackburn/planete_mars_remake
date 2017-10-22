@@ -9,10 +9,10 @@ export class Loading extends State {
     this.resize();
 
     // Load initial game assets
-    this.game.load.atlas('sprites', 'assets/atlas/sprites_x4.png', 'assets/atlas/sprites_x4.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-    this.game.load.tilemap('level1_intro', './assets/maps/level1_intro_x4.json', null, Phaser.Tilemap.TILED_JSON);
+    this.game.load.atlas('sprites', 'assets/atlas/sprites.png', 'assets/atlas/sprites.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+    this.game.load.tilemap('level1_intro', './assets/maps/level1_intro.json', null, Phaser.Tilemap.TILED_JSON);
     //this.game.load.tilemap('mars', './assets/maps/mars.json', null, Phaser.Tilemap.TILED_JSON);
-    this.game.load.image('mars', './assets/maps/mars_x4.png');
+    this.game.load.image('mars', './assets/maps/mars.png');
   }
 
   public create() {

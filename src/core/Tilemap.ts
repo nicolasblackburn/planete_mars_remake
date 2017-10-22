@@ -1,14 +1,9 @@
 import {Game} from './Game';
-import {Sprite} from './Sprite';
 
 export class Tilemap extends Phaser.Tilemap {
-  public enemies: Sprite[] = [];
-  public player: Sprite;
   public tilemapLayers: Phaser.TilemapLayer[] = [];
   protected game2: Game;
-  protected solidTileCollisionShapes: (Phaser.Rectangle | Phaser.Polygon)[][]= [];
-  protected overlapTileCollisionShapes: (Phaser.Rectangle | Phaser.Polygon)[][]= [];
-  protected tilePhysics: any;
+  protected collisionBodies: {body: Phaser.Physics.P2.Body, points: number[], x: number, y: number}[] = [];
 
   constructor(game: Game, key: string) {
     super(game, key);
@@ -19,8 +14,6 @@ export class Tilemap extends Phaser.Tilemap {
   private loadMapData(key: string) {
     const factory = this.game2.factory;
     const mapData = this.game.cache.getTilemapData(key).data;
-
-    this.tilePhysics = this.game.add.physicsGroup(Phaser.Physics.P2JS);
 
     for (const tileset of mapData.tilesets) {
       this.addTilesetImage(tileset.name);
@@ -44,10 +37,16 @@ export class Tilemap extends Phaser.Tilemap {
                 for (const data of layerData.objects) {
                   if (data.polygon) {
                     const polygon = new Phaser.Polygon(data.polygon);
-                    const points = polygon.toNumberArray().map((n) => { return n * this.game2.pixelScale; });
-                    const body = this.game.physics.p2.createBody(data.x * this.game2.pixelScale, data.y * this.game2.pixelScale, 0, true, null, points);
-                    body.setCollisionGroup(this.game2.wallsCollisionGroups);
-                    body.collides(this.game2.playerCollisionGroups);
+                    const points = polygon.toNumberArray();
+                    const scaledPoints = points.map((n) => { return n * this.game2.pixelScale; })
+                    const body = this.game.physics.p2.createBody(data.x * this.game2.pixelScale, data.y * this.game2.pixelScale, 0, true, null, scaledPoints);
+                    body.setCollisionGroup(this.game2.wallsCollisionGroup);
+                    body.collides(this.game2.playerCollisionGroup);
+                    this.collisionBodies.push({
+                      body: body,
+                      points: points,
+                      x: data.x,
+                      y: data.y });
                     //body.debug = true;
                   }
                 }
@@ -55,18 +54,44 @@ export class Tilemap extends Phaser.Tilemap {
 
   						case 'enemies':
                 for (const data of layerData.objects) {
-                  this.enemies.push(factory.create(data.type, data.x * this.game2.pixelScale, data.y * this.game2.pixelScale));
+                  this.game2.enemies.push(factory.create(data.type, data.x * this.game2.pixelScale, data.y * this.game2.pixelScale));
                 }
   							break;
 
   						case 'player':
   							const data = layerData.objects[0];
-  							this.player = factory.create(data.type, data.x * this.game2.pixelScale, data.y * this.game2.pixelScale);
+  							this.game2.player = factory.player(data.x * this.game2.pixelScale, data.y * this.game2.pixelScale);
   							break;
   					}
   					break;
   			}
   		}
     }
+  }
+
+  public resize() {
+    for (const layer of this.tilemapLayers) {
+      layer.setScale(this.game2.pixelScale);
+    }
+
+    /*
+    for (const {body, points, x, y} of this.collisionBodies) {
+      //*
+      const scaledPoints = [];
+      for (let i = 0; i < points.length; i += 2) {
+        const px = (points[i] + x) * this.game2.pixelScale;
+        const py = (points[i + 1] + y) * this.game2.pixelScale;
+        scaledPoints.push([px, py]);
+      }
+      body.clearShapes();
+      body.addPolygon(null, scaledPoints);
+      body.setCollisionGroup(this.game2.wallsCollisionGroup);
+      //* /
+    }
+    //*/
+  }
+
+  public updateBodies() {
+
   }
 }

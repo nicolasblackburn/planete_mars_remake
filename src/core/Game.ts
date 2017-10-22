@@ -2,29 +2,35 @@
 import {animations} from '../animations';
 import {Boot} from '../states/Boot';
 import {Loading} from '../states/Loading';
-import {Menu} from '../states/Menu';
 import {Main} from '../states/Main';
+import {Menu} from '../states/Menu';
+import {Sprite} from './Sprite';
+import {Bullet} from '../objects/Bullet';
+import {Player} from '../objects/Player';
 
 // Factories
 import {Factory} from './Factory';
 
+export interface IGameOptions {
+
+}
+
 export class Game extends Phaser.Game {
   public animations: {[key: string]: (string | number | string[])[][]};
+  public bullets: Bullet[];
   public factory: Factory;
-  public playerCollisionGroups: Phaser.Physics.P2.CollisionGroup;
-  public ennemiesCollisionGroups: Phaser.Physics.P2.CollisionGroup;
-  public bulletsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
-  public wallsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
+  public enemies: Sprite[];
+  public player: Player;
+  public playerCollisionGroup: Phaser.Physics.P2.CollisionGroup;
+  public enemiesCollisionGroup: Phaser.Physics.P2.CollisionGroup;
+  public bulletsCollisionGroup: Phaser.Physics.P2.CollisionGroup;
+  public wallsCollisionGroup: Phaser.Physics.P2.CollisionGroup;
   public pixelScale: number;
-  //*
-  public pixel: { scale: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, width: number, height: number };
-  //*/
+  //public scaledCanvas: HTMLCanvasElement;
+  //public scaledContext: CanvasRenderingContext2D;
 
-  constructor() {
-    const width = 240 * 4;
-    const height = 135 * 4;
-    let scale = 1;
-    /*
+  constructor(options?: IGameOptions) {
+    //*
     const baseWidth = 240;
     const baseHeight = 135;
     const ratio  = 16/9;
@@ -45,11 +51,13 @@ export class Game extends Phaser.Game {
       renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
-    this.pixel = { scale: 4, canvas: null, context: null, width: 0, height: 0 };
 
     this.animations = animations;
 
     this.factory = new Factory(this);
+
+    this.bullets = [];
+    this.enemies = [];
 
     this.state.add('boot', Boot);
     this.state.add('loading', Loading);
@@ -62,33 +70,33 @@ export class Game extends Phaser.Game {
 
   public init() {
     //this.renderer.renderSession.roundPixels = true;
-
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
-    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    //this.scale.setResizeCallback(this.resize, this);
+    this.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.setResizeCallback(this.resize, this);
 
     /*
     this.canvas.style.display = 'none';
-    this.pixel.canvas = Phaser.Canvas.create(document.body as HTMLDivElement, this.width * this.pixel.scale, this.height * this.pixel.scale);
-    this.pixel.context = this.pixel.canvas.getContext('2d');
-    Phaser.Canvas.addToDOM(this.pixel.canvas, null);
-    Phaser.Canvas.setSmoothingEnabled(this.pixel.context, false);
+    this.scaledCanvas = Phaser.Canvas.create(document.body as HTMLDivElement, this.width * this.pixelScale, this.height * this.pixelScale);
+    this.scaledContext = this.scaledCanvas.getContext('2d');
+    Phaser.Canvas.addToDOM(this.scaledCanvas, null);
+    Phaser.Canvas.setSmoothingEnabled(this.scaledContext, false);
     //*/
 
     this.physics.startSystem(Phaser.Physics.P2JS);
 
-    this.playerCollisionGroups = this.physics.p2.createCollisionGroup();
-    this.ennemiesCollisionGroups = this.physics.p2.createCollisionGroup();
-    this.bulletsCollisionGroups = this.physics.p2.createCollisionGroup();
-    this.wallsCollisionGroups = this.physics.p2.createCollisionGroup();
+    this.playerCollisionGroup = this.physics.p2.createCollisionGroup();
+    this.enemiesCollisionGroup = this.physics.p2.createCollisionGroup();
+    this.bulletsCollisionGroup = this.physics.p2.createCollisionGroup();
+    this.wallsCollisionGroup = this.physics.p2.createCollisionGroup();
   }
 
   public resize() {
     //*
     const baseWidth = 240;
     const baseHeight = 135;
-    const ratio  = 16/9;
+    const ratio  = baseWidth / baseHeight;
     let scale = Math.floor(window.innerWidth / baseWidth) || 1;
     let width = baseWidth * scale;
     let height = width / ratio;
@@ -99,15 +107,36 @@ export class Game extends Phaser.Game {
       width = height * ratio;
     }
 
-    this.scale.setGameSize(width, height);
+    if (scale === this.pixelScale) {
+      return;
+    }
 
+    this.scale.setUserScale(width / this.width, height / this.height);
+    this.pixelScale = scale;
+
+    //this.scale.setUserScale(scale / this.pixelScale, scale / this.pixelScale);
+
+    /*
     this.state.getCurrentState().resize(width, height);
+
+    for (const bullet of this.bullets) {
+      bullet.resize();
+    }
+
+    for (const enemy of this.enemies) {
+      enemy.resize();
+    }
+
+    if (this.player) {
+      this.player.resize();
+    }
+
     //*/
   }
 
   public render() {
     /*
-    this.pixel.context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, 0, this.pixel.canvas.width, this.pixel.canvas.height);
+    this.scaledContext.drawImage(this.canvas, 0, 0, this.width, this.height, 0, 0, this.scaledCanvas.width, this.scaledCanvas.height);
     //*/
   }
 }
