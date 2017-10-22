@@ -16,12 +16,15 @@ export class Game extends Phaser.Game {
   public bulletsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public wallsCollisionGroups: Phaser.Physics.P2.CollisionGroup;
   public pixelScale: number;
-  /*
-  public pixel: { scale: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, width: number, height: number }
-    = { scale: 4, canvas: null, context: null, width: 0, height: 0 };
+  //*
+  public pixel: { scale: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, width: number, height: number };
   //*/
 
   constructor() {
+    //const width = 240;
+    //const height = 135;
+    //let scale = 4;
+    //*
     const baseWidth = 240;
     const baseHeight = 135;
     const ratio  = 16/9;
@@ -34,13 +37,15 @@ export class Game extends Phaser.Game {
       height = baseHeight * scale;
       width = height * ratio;
     }
+    //*/
 
     super({
       width: width,
       height: height,
-      renderer: Phaser.AUTO });
+      renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
+    this.pixel = { scale: 4, canvas: null, context: null, width: 0, height: 0 };
 
     this.animations = animations;
 
@@ -56,10 +61,11 @@ export class Game extends Phaser.Game {
   }
 
   public init() {
+    this.renderer.renderSession.roundPixels = true;
+
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
     this.scale.setResizeCallback(this.resize, this);
-    //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     /*
     this.canvas.style.display = 'none';
@@ -78,6 +84,7 @@ export class Game extends Phaser.Game {
   }
 
   public resize() {
+    //*
     const baseWidth = 240;
     const baseHeight = 135;
     const ratio  = 16/9;
@@ -94,11 +101,12 @@ export class Game extends Phaser.Game {
     this.scale.setGameSize(width, height);
 
     this.state.getCurrentState().resize(width, height);
+    //*/
   }
 
-  /*
-  public renderScaledCanvas() {
+  public render() {
+    /*
     this.pixel.context.drawImage(this.canvas, 0, 0, this.width, this.height, 0, 0, this.pixel.canvas.width, this.pixel.canvas.height);
+    //*/
   }
-  //*/
 }

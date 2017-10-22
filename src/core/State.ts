@@ -7,4 +7,8 @@ export class State extends Phaser.State {
     super();
     this.game2 = game;
   }
+
+  public render() {
+    this.game2.render();
+  }
 }

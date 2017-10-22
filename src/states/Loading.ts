@@ -16,7 +16,8 @@ export class Loading extends State {
   }
 
   public create() {
-    this.game.state.start('menu');
+    //this.game.state.start('menu');
+    this.game.state.start('main');
   }
 
   public resize() {

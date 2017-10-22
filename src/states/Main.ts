@@ -24,8 +24,10 @@ export class Main extends State {
   }
 
   public update() {
-    const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
-    const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
+    //const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
+    //const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
+    const tileWidth = this.map.tileWidth / 2;
+    const tileHeight = this.map.tileHeight / 2;
 
     this.game.camera.x = this.player.x - this.camera.width / 2;
     this.game.camera.y = this.player.y - this.camera.height / 2;
@@ -47,6 +49,7 @@ export class Main extends State {
     this.healthText.fontSize = fontStyles.subheader.fontSize * scale;
     this.cameraPadding = 8 * scale;
 
+    /*
     for (const layer of this.map.tilemapLayers) {
       layer.setScale(this.game2.pixelScale);
     }
@@ -57,11 +60,14 @@ export class Main extends State {
       this.constrainCamera();
       this.lastScale = this.game2.pixelScale;
     }
+    //*/
   }
 
   private constrainCamera() {
-    const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
-    const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
+    //const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
+    //const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
+    const tileWidth = this.map.tileWidth / 2;
+    const tileHeight = this.map.tileHeight / 2;
     const maxX = this.game.world.width - this.camera.width - tileWidth;
     const maxY = this.game.world.height - this.camera.height - tileHeight;
 

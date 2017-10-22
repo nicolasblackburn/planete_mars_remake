@@ -5,6 +5,7 @@ This is a port to Phaser of the old unfinished game I did.
 ## Issues / To-dos
 
 - Update game objects scales on window resize
+- Scaling issue on mobile, webgl glitches?
 - Mobile controls: tap shoot, delay for pointer up event to allow shooting and moving at the same time
 - Collision detection is too processor intensive for mobiles, need a more efficient solution
 - Don't allow more than 3 bullets in the screen and reduce the range

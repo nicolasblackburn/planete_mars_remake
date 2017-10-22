@@ -20,6 +20,7 @@ export class Menu extends State {
     this.input.onDown.addOnce(() => {
         this.game.state.start('main');
     });
+
   }
 
   public resize() {
