@@ -24,13 +24,11 @@ export class Main extends State {
   }
 
   public update() {
-    //const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
-    //const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
-    const tileWidth = this.map.tileWidth / 2;
-    const tileHeight = this.map.tileHeight / 2;
+    const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
+    const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
 
-    this.game.camera.x = this.player.x - this.camera.width / 2;
-    this.game.camera.y = this.player.y - this.camera.height / 2;
+    this.game.camera.x = Math.floor(this.player.x - this.camera.width / 2);
+    this.game.camera.y = Math.floor(this.player.y - this.camera.height / 2);
 
     this.constrainCamera();
 
@@ -46,17 +44,17 @@ export class Main extends State {
     const height = this.game.height;
     const scale = height === 0 || width / height >= 1 ? height / 360 : width / 360;
 
-    this.healthText.fontSize = fontStyles.subheader.fontSize * scale;
-    this.cameraPadding = 8 * scale;
+    this.healthText.fontSize = Math.floor(fontStyles.subheader.fontSize * scale);
+    this.cameraPadding = Math.floor(8 * scale);
 
-    /*
+    //*
     for (const layer of this.map.tilemapLayers) {
       layer.setScale(this.game2.pixelScale);
     }
 
     if (this.lastScale !== this.game2.pixelScale) {
-      this.game.camera.x /= this.lastScale * this.game2.pixelScale;
-      this.game.camera.y /= this.lastScale * this.game2.pixelScale;
+      this.game.camera.x = Math.floor(this.game.camera.x / this.lastScale * this.game2.pixelScale);
+      this.game.camera.y = Math.floor(this.game.camera.y / this.lastScale * this.game2.pixelScale);
       this.constrainCamera();
       this.lastScale = this.game2.pixelScale;
     }
@@ -64,23 +62,21 @@ export class Main extends State {
   }
 
   private constrainCamera() {
-    //const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
-    //const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
-    const tileWidth = this.map.tileWidth / 2;
-    const tileHeight = this.map.tileHeight / 2;
+    const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
+    const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
     const maxX = this.game.world.width - this.camera.width - tileWidth;
     const maxY = this.game.world.height - this.camera.height - tileHeight;
 
     if (this.game.camera.x < tileWidth) {
-      this.game.camera.x = tileWidth;
+      this.game.camera.x = Math.floor(tileWidth);
     } else if (this.game.camera.x > maxX) {
-      this.game.camera.x = maxX;
+      this.game.camera.x = Math.floor(maxX);
     }
 
     if (this.game.camera.y < tileHeight) {
-      this.game.camera.y = tileHeight;
+      this.game.camera.y = Math.floor(tileHeight);
     } else if (this.game.camera.y > maxY) {
-      this.game.camera.y = maxY;
+      this.game.camera.y = Math.floor(maxY);
     }
   }
 }

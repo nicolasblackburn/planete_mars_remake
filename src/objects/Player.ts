@@ -3,7 +3,7 @@ import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
-  public maxVelocity: number = 60;
+  public maxVelocity: number = 240;
   private isMoving: boolean = false;
   private spaceKeyIsDown: boolean = false;
   private inputHandler: InputHandler;
@@ -13,13 +13,9 @@ export class Player extends Sprite {
 
     this.inputHandler = new InputHandler(this.game2, this);
 
-    //this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
-    //this.scale.set(this.game2.pixelScale);
-
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
-    //this.body.setRectangle(8 * this.game2.pixelScale, 11 * this.game2.pixelScale, 0, 1 * this.game2.pixelScale);
-    this.body.setRectangle(8, 11, 0, 1);
+    this.body.setRectangle(8 * 4, 11 * 4, 0, 1 * 4);
     this.body.setCollisionGroup(this.game2.playerCollisionGroups);
     this.body.collides(this.game2.wallsCollisionGroups);
     //this.body.debug = true;
@@ -41,10 +37,8 @@ export class Player extends Sprite {
     this.animations.play(this.currentAnimationKey(), null, true);
 
     if (['move', 'move_shoot'].includes(input.state.key())) {
-      //this.body.velocity.x = input.direction.x * this.maxVelocity * this.game2.pixelScale;
-      //this.body.velocity.y = input.direction.y * this.maxVelocity * this.game2.pixelScale;
-      this.body.velocity.x = input.direction.x * this.maxVelocity;
-      this.body.velocity.y = input.direction.y * this.maxVelocity;
+      this.body.velocity.x = input.direction.x * this.maxVelocity * this.game2.pixelScale;
+      this.body.velocity.y = input.direction.y * this.maxVelocity * this.game2.pixelScale;
 
     } else {
       this.body.velocity.x = 0;

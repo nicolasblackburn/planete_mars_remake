@@ -21,10 +21,10 @@ export class Game extends Phaser.Game {
   //*/
 
   constructor() {
-    //const width = 240;
-    //const height = 135;
-    //let scale = 4;
-    //*
+    const width = 240 * 4;
+    const height = 135 * 4;
+    let scale = 1;
+    /*
     const baseWidth = 240;
     const baseHeight = 135;
     const ratio  = 16/9;
@@ -61,11 +61,12 @@ export class Game extends Phaser.Game {
   }
 
   public init() {
-    this.renderer.renderSession.roundPixels = true;
+    //this.renderer.renderSession.roundPixels = true;
 
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
-    this.scale.setResizeCallback(this.resize, this);
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    //this.scale.setResizeCallback(this.resize, this);
 
     /*
     this.canvas.style.display = 'none';
