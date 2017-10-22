@@ -3,7 +3,7 @@ import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
-  public maxVelocity: number = 60;
+  public maxVelocity: number = 50;
   private isMoving: boolean = false;
   private spaceKeyIsDown: boolean = false;
   private inputHandler: InputHandler;
@@ -13,13 +13,17 @@ export class Player extends Sprite {
 
     this.inputHandler = new InputHandler(this.game2, this);
 
-    this.unscaledCollisionBody = new Phaser.Rectangle(0, 1, 8, 11);
-
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
-    this.body.collides(this.game2.wallsCollisionGroup);
-    this.collisionGroup = this.game2.playerCollisionGroup;
+
+    this.baseCollisionRectangle = new Phaser.Rectangle(0, 1, 8, 11);
+    this.collisionGroup = this.game2.collisionGroups.get('player');
     this.updateBody();
+
+    this.body.collides([
+      this.game2.collisionGroups.get('walls'),
+      this.game2.collisionGroups.get('enemies') ]);
+
     //this.body.debug = true;
 
     this.addAnimations();

@@ -47,16 +47,12 @@ export class Main extends State {
     this.healthText.fontSize = floor(fontStyles.subheader.fontSize * scale);
     this.cameraPadding = floor(8 * scale);
 
-    //*
     if (this.lastScale !== this.game2.pixelScale) {
       this.game.camera.x = floor(this.game.camera.x / this.lastScale * this.game2.pixelScale);
       this.game.camera.y = floor(this.game.camera.y / this.lastScale * this.game2.pixelScale);
       this.constrainCamera();
       this.lastScale = this.game2.pixelScale;
     }
-
-    this.map.resize();
-    //*/
   }
 
   private constrainCamera() {

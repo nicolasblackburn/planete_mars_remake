@@ -3,7 +3,6 @@ import {Game} from './Game';
 export class Tilemap extends Phaser.Tilemap {
   public tilemapLayers: Phaser.TilemapLayer[] = [];
   protected game2: Game;
-  protected collisionBodies: {body: Phaser.Physics.P2.Body, points: number[], x: number, y: number}[] = [];
 
   constructor(game: Game, key: string) {
     super(game, key);
@@ -40,13 +39,10 @@ export class Tilemap extends Phaser.Tilemap {
                     const points = polygon.toNumberArray();
                     const scaledPoints = points.map((n) => { return n * this.game2.pixelScale; })
                     const body = this.game.physics.p2.createBody(data.x * this.game2.pixelScale, data.y * this.game2.pixelScale, 0, true, null, scaledPoints);
-                    body.setCollisionGroup(this.game2.wallsCollisionGroup);
-                    body.collides(this.game2.playerCollisionGroup);
-                    this.collisionBodies.push({
-                      body: body,
-                      points: points,
-                      x: data.x,
-                      y: data.y });
+                    body.setCollisionGroup(this.game2.collisionGroups.get('walls'));
+                    body.collides([
+                      this.game2.collisionGroups.get('player'),
+                      this.game2.collisionGroups.get('enemies') ]);
                     //body.debug = true;
                   }
                 }
@@ -67,31 +63,5 @@ export class Tilemap extends Phaser.Tilemap {
   			}
   		}
     }
-  }
-
-  public resize() {
-    for (const layer of this.tilemapLayers) {
-      layer.setScale(this.game2.pixelScale);
-    }
-
-    /*
-    for (const {body, points, x, y} of this.collisionBodies) {
-      //*
-      const scaledPoints = [];
-      for (let i = 0; i < points.length; i += 2) {
-        const px = (points[i] + x) * this.game2.pixelScale;
-        const py = (points[i + 1] + y) * this.game2.pixelScale;
-        scaledPoints.push([px, py]);
-      }
-      body.clearShapes();
-      body.addPolygon(null, scaledPoints);
-      body.setCollisionGroup(this.game2.wallsCollisionGroup);
-      //* /
-    }
-    //*/
-  }
-
-  public updateBodies() {
-
   }
 }
