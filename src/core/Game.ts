@@ -23,6 +23,7 @@ export class Game extends Phaser.Game {
   public player: Player;
   public collisionGroups: Map<string, Phaser.Physics.P2.CollisionGroup>;
   public pixelScale: number;
+  public initialScale: number;
 
   constructor(options?: IGameOptions) {
     const baseWidth = 240;
@@ -44,6 +45,7 @@ export class Game extends Phaser.Game {
       renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
+    this.initialScale = scale;
 
     this.animations = animations;
 

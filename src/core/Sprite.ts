@@ -13,16 +13,16 @@ export class Sprite extends Phaser.Sprite {
     //this.collisionGroup = this.game2.collisionGroups.get(collisionGroup);
 
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
-    this.scale.set(this.game2.pixelScale);
+    this.scale.set(this.game2.initialScale);
   }
 
   public updateBody() {
     if (this.body) {
         this.body.setRectangle(
-          this.baseCollisionRectangle.width * this.game2.pixelScale,
-          this.baseCollisionRectangle.height * this.game2.pixelScale,
-          this.baseCollisionRectangle.x * this.game2.pixelScale,
-          this.baseCollisionRectangle.y * this.game2.pixelScale);
+          this.baseCollisionRectangle.width * this.game2.initialScale,
+          this.baseCollisionRectangle.height * this.game2.initialScale,
+          this.baseCollisionRectangle.x * this.game2.initialScale,
+          this.baseCollisionRectangle.y * this.game2.initialScale);
 
         if (this.collisionGroup) {
           this.body.setCollisionGroup(this.collisionGroup);
