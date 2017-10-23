@@ -8,7 +8,7 @@ const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
   public onBulletDestroyed: Phaser.Signal;
-  protected maxVelocity: number = 100;
+  protected maxVelocity: number = 400;
   protected baseVelocity: Phaser.Point;
   protected aliveStartTime: number;
 
@@ -77,7 +77,7 @@ export class Bullet extends Sprite {
       return;
     }
 
-    this.body.velocity.x = this.baseVelocity.x * this.game2.pixelScale;
-    this.body.velocity.y = this.baseVelocity.y * this.game2.pixelScale;
+    this.body.velocity.x = this.baseVelocity.x;
+    this.body.velocity.y = this.baseVelocity.y;
   }
 }
