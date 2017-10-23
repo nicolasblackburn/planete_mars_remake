@@ -7,8 +7,10 @@ const pi_4 = Math.PI / 4;
 const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
-  private maxVelocity: number = 100;
+  public onBulletDestroyed: Phaser.Signal;
+  protected maxVelocity: number = 100;
   protected baseVelocity: Phaser.Point;
+  protected aliveStartTime: number;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
@@ -19,6 +21,8 @@ export class Bullet extends Sprite {
     this.body.collides(this.game2.collisionGroups.get('enemies'));
 
     this.baseVelocity = new Phaser.Point(0, 0);
+    this.aliveStartTime = this.game.time.totalElapsedSeconds();
+    this.onBulletDestroyed = new Phaser.Signal();
   }
 
   public setDirection(direction: Phaser.Point) {
@@ -66,6 +70,13 @@ export class Bullet extends Sprite {
   }
 
   public update() {
+    const elapsedTime = this.game.time.totalElapsedSeconds() - this.aliveStartTime;
+    if (elapsedTime >= 0.6) {
+      this.exists = false;
+      this.onBulletDestroyed.dispatch();
+      return;
+    }
+
     this.body.velocity.x = this.baseVelocity.x * this.game2.pixelScale;
     this.body.velocity.y = this.baseVelocity.y * this.game2.pixelScale;
   }

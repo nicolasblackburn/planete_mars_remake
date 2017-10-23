@@ -4,9 +4,8 @@ import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
   public maxVelocity: number = 50;
-  private isMoving: boolean = false;
-  private spaceKeyIsDown: boolean = false;
-  private inputHandler: InputHandler;
+  protected inputHandler: InputHandler;
+  protected bulletCount: number = 0;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
@@ -32,9 +31,13 @@ export class Player extends Sprite {
   }
 
   public onShoot() {
-    const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
-    this.game2.bullets.push(bullet);
-    bullet.setDirection(this.inputHandler.direction);
+    if (this.bulletCount < 3) {
+      this.bulletCount++;
+      const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
+      bullet.onBulletDestroyed.addOnce(() => { this.bulletCount--; });
+      this.game2.bullets.push(bullet);
+      bullet.setDirection(this.inputHandler.direction);
+    }
   }
 
   public update() {

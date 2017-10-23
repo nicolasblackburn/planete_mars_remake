@@ -19,8 +19,6 @@ export class Main extends State {
     this.hud = this.game.add.group();
     this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.subheader, this.hud);
 
-    (window as any).player = this.game2.player;
-
     this.resize();
   }
 
