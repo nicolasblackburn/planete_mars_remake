@@ -2,10 +2,11 @@ import {State} from '../../core/StateMachine';
 import {InputHandler} from './InputHandler';
 
 const sqrt1_2 = Math.SQRT1_2;
+const abs = Math.abs;
+const max = Math.max;
 
 export class ShootState extends State {
   private input: InputHandler;
-  private shootIsDown: boolean = true;
 
   constructor(input: InputHandler) {
     super();
@@ -13,34 +14,29 @@ export class ShootState extends State {
   }
 
   public enter(previous: string) {
+    this.input.onShootTimeout.add(this.onShootTimeout, this);
+    this.input.keys.shoot.onDown.add(this.onShootDown, this);
+    this.input.onPointerDown.add(this.onShootDown, this);
+    this.input.resetShootStateTimer();
+
     if (previous !== 'move_shoot') {
-      this.input.shootTimeout = 0;
+      this.input.onShoot.dispatch();
     }
+  }
+
+  public onShootDown() {
+    this.input.resetShootStateTimer();
+    this.input.onShoot.dispatch();
+  }
+
+  public onShootTimeout() {
+    this.input.state.set('idle');
   }
 
   public update() {
     const input = this.input;
 
-    if (input.keys.shoot.isDown) {
-      input.shootTimeout = 0;
-      if (! this.shootIsDown) {
-        this.shootIsDown = true;
-        input.state.events.onShoot.dispatch();
-      }
-    } else {
-      this.shootIsDown = false;
-    }
-
-    if (input.shootTimeout >= 10) {
-      input.state.set('idle');
-      return;
-    }
-
-    input.shootTimeout++;
-
-    input.direction = input.getDirection();
-
-    if (input.keys.up.isDown || input.keys.right.isDown || input.keys.down.isDown || input.keys.left.isDown || input.pointer.isDown) {
+    if (input.keys.up.isDown || input.keys.right.isDown || input.keys.down.isDown || input.keys.left.isDown) {
       input.state.set('move_shoot');
 
     }

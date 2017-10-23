@@ -28,7 +28,7 @@ export class Player extends Sprite {
 
     this.addAnimations();
 
-    this.inputHandler.state.events.onShoot.add(this.onShoot, this);
+    this.inputHandler.onShoot.add(this.onShoot, this);
   }
 
   public onShoot() {

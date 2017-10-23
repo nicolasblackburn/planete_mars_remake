@@ -25,12 +25,12 @@ export class Bullet extends Sprite {
     if (direction.x > 0 && direction.y < 0) {
       this.body.rotation = 3 * pi_4;
       this.baseVelocity.x = this.maxVelocity * sqrt1_2;
-      this.body.velocitybaseVelocity.y = -this.maxVelocity * sqrt1_2;
+      this.baseVelocity.y = -this.maxVelocity * sqrt1_2;
 
     } else if (direction.x > 0 && direction.y > 0) {
       this.body.rotation = - 3 * pi_4;
       this.baseVelocity.x = this.maxVelocity * sqrt1_2;
-      this.body.velocitybaseVelocity.y = this.maxVelocity * sqrt1_2;
+      this.baseVelocity.y = this.maxVelocity * sqrt1_2;
 
     } else if (direction.x < 0 && direction.y > 0) {
       this.body.rotation = 3 * pi_4;

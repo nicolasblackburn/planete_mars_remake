@@ -5,12 +5,13 @@ export abstract class State {
 }
 
 export class StateMachine {
+  public onEnter: Phaser.Signal;
+  public onExit: Phaser.Signal;
   private states: Map<string, State> = new Map();
   private _current: string;
-  public events: {[key: string]: Phaser.Signal} = {};
   constructor() {
-    this.events.onEnter = new Phaser.Signal();
-    this.events.onExit = new Phaser.Signal();
+    this.onEnter = new Phaser.Signal();
+    this.onExit = new Phaser.Signal();
   }
   public add(key: string, state: State) {
     this.states.set(key, state);
@@ -25,16 +26,19 @@ export class StateMachine {
     this.states.forEach.apply(null, [callback, ...args]);
   }
   public set(key: string) {
+    if (! this.states.has(key)) {
+      throw new Error('State `' + key + '` doesn\'t exists');
+    }
     if (this._current !== key) {
       let previous = this.key();
       if (this.current()) {
-        this.events.onExit.dispatch(previous, key);
         this.current().exit(key);
+        this.onExit.dispatch(previous, key);
       }
       this._current = key;
       if (this.current()) {
-        this.events.onEnter.dispatch(previous, key);
         this.current().enter(previous);
+        this.onEnter.dispatch(previous, key);
       }
     }
   }
