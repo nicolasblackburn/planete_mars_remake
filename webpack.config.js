@@ -1,6 +1,4 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const HappyPack = require('happypack');
 const path = require('path');
 
 const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
@@ -16,7 +14,6 @@ module.exports = {
     },
     module: {
         loaders: [
-            //{ test: /\.ts$/, loader: 'happypack/loader?id=ts', exclude: /node_modules/ },
             { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
             { test: /pixi\.js/, loader: 'expose-loader?PIXI' },
             { test: /phaser-split\.js$/, loader: ['expose-loader?Phaser'] },
@@ -37,27 +34,15 @@ module.exports = {
       }
     },
     plugins: [
-      /*
-      new HappyPack({
-        id: 'ts',
-        threads: 1,
-        loaders: [
-          {
-            path: 'ts-loader',
-            query: { happyPackMode: true }
-          }
-        ]
-      }),
-      new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
-      //*/
       new CopyWebpackPlugin([
-        {from: 'src/assets/html/index.html', to: 'index.html'},
-        {from: 'src/assets', to: 'assets', ignore: ['src/assets/html/*']}
+        {from: 'src/assets/www/*', to: './'},
+        {from: 'src/assets', to: 'assets', ignore: ['src/assets/www/*']}
       ], {})
     ],
     devtool: 'source-map',
     //devtool: 'cheap-module-eval-source-map',
     devServer: {
+      host: "192.168.1.107",
       contentBase: path.resolve(__dirname, 'dist')
     }
 };

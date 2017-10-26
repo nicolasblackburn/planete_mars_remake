@@ -4,7 +4,7 @@ import {InputHandler} from './InputHandler';
 const sqrt1_2 = Math.SQRT1_2;
 
 export class MoveState extends State {
-  private input: InputHandler;
+  protected input: InputHandler;
 
   constructor(input: InputHandler) {
     super();

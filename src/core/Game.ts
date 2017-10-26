@@ -23,11 +23,13 @@ export class Game extends Phaser.Game {
   public player: Player;
   public collisionGroups: Map<string, Phaser.Physics.P2.CollisionGroup>;
   public pixelScale: number;
-  public initialScale: number;
+  public timeScale: number;
 
   constructor(options?: IGameOptions) {
     const baseWidth = 240;
     const baseHeight = 135;
+    //const baseWidth = 192;
+    //const baseHeight = 108;
     const ratio  = 16/9;
     let scale = Math.floor(window.innerWidth / baseWidth) || 1;
     let width = baseWidth * scale;
@@ -45,7 +47,7 @@ export class Game extends Phaser.Game {
       renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
-    this.initialScale = scale;
+    this.timeScale = this.pixelScale * 0.06;
 
     this.animations = animations;
 
@@ -65,10 +67,12 @@ export class Game extends Phaser.Game {
   }
 
   public init() {
+	  this.time.advancedTiming = true;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
-    this.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    this.scale.setResizeCallback(this.resize, this);
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    //this.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    //this.scale.setResizeCallback(this.resize, this);
 
     this.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -98,6 +102,5 @@ export class Game extends Phaser.Game {
     }
 
     this.scale.setUserScale(width / this.width, height / this.height);
-    this.pixelScale = scale;
   }
 }

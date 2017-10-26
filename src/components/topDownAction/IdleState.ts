@@ -6,7 +6,7 @@ const abs = Math.abs;
 const max = Math.max;
 
 export class IdleState extends State {
-  private input: InputHandler;
+  protected input: InputHandler;
 
   constructor(input: InputHandler) {
     super();
@@ -15,6 +15,7 @@ export class IdleState extends State {
 
   public enter() {
     this.input.onPointerDown.add(this.onPointerDown, this);
+    this.input.keys.shoot.onDown.add(this.onShootDown, this);
   }
 
   public onPointerDown() {
@@ -33,14 +34,15 @@ export class IdleState extends State {
 
   }
 
+  public onShootDown() {
+    this.input.state.set('shoot');
+  }
+
   public update() {
     let input = this.input;
 
     if (input.keys.up.isDown || input.keys.right.isDown || input.keys.down.isDown || input.keys.left.isDown) {
       input.state.set('move');
-
-    } else if (input.keys.shoot.isDown) {
-      input.state.set('shoot');
 
     }
   }

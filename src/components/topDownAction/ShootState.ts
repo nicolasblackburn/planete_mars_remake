@@ -6,7 +6,7 @@ const abs = Math.abs;
 const max = Math.max;
 
 export class ShootState extends State {
-  private input: InputHandler;
+  protected input: InputHandler;
 
   constructor(input: InputHandler) {
     super();

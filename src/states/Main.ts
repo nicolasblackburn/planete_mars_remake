@@ -7,17 +7,17 @@ import {fontStyles} from '../fontStyles';
 const floor = Math.floor;
 
 export class Main extends State {
-  private map: Tilemap;
-  private hud: Phaser.Group;
-  private healthText: Phaser.Text;
-  private cameraPadding: number = 8;
-  private lastScale: number = 1;
+  protected map: Tilemap;
+  protected hud: Phaser.Group;
+  protected healthText: Phaser.Text;
+  protected cameraPadding: number = 8;
+  protected lastScale: number = 1;
 
   public create() {
     this.map = new Tilemap(this.game2, 'level1_intro');
 
     this.hud = this.game.add.group();
-    this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.subheader, this.hud);
+    this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.body, this.hud);
 
     this.resize();
   }
@@ -32,7 +32,7 @@ export class Main extends State {
     this.constrainCamera();
 
     this.healthText.text = 'Énergie: 100%';
-    //this.healthText.text += '\nDevice Pixel Ratio = ' + window.devicePixelRatio;
+    this.healthText.text += '\nFPS: ' + this.game.time.fps;
 
     this.hud.position.set(
       this.game.camera.x + this.cameraPadding,
@@ -44,7 +44,7 @@ export class Main extends State {
     const height = this.game.height;
     const scale = height === 0 || width / height >= 1 ? height / 360 : width / 360;
 
-    this.healthText.fontSize = floor(fontStyles.subheader.fontSize * scale);
+    this.healthText.fontSize = floor(fontStyles.body.fontSize * scale);
     this.cameraPadding = floor(8 * scale);
 
     if (this.lastScale !== this.game2.pixelScale) {
@@ -55,7 +55,7 @@ export class Main extends State {
     }
   }
 
-  private constrainCamera() {
+  protected constrainCamera() {
     const tileWidth = this.map.tileWidth / 2 * this.game2.pixelScale;
     const tileHeight = this.map.tileHeight / 2 * this.game2.pixelScale;
     const maxX = this.game.world.width - this.camera.width - tileWidth;

@@ -2,7 +2,7 @@ import {State} from '../core/State';
 import {fontStyles} from '../fontStyles';
 
 export class Loading extends State {
-  private title: Phaser.Text;
+  protected title: Phaser.Text;
 
   public preload() {
     this.title = this.game.add.text(0 , 0, 'Loading...', <Phaser.PhaserTextStyle>fontStyles.header);

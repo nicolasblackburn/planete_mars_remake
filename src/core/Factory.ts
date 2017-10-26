@@ -4,7 +4,7 @@ import {Crab} from '../objects/Crab';
 import {Player} from '../objects/Player';
 
 export class Factory {
-  private game: Game;
+  protected game: Game;
 
   constructor(game: Game) {
   	this.game = game;

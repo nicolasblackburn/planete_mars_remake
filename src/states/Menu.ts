@@ -2,9 +2,9 @@ import {State} from '../core/State';
 import {fontStyles} from '../fontStyles';
 
 export class Menu extends State {
-  private group: Phaser.Group;
-  private title: Phaser.Text;
-  private textClick: Phaser.Text;
+  protected group: Phaser.Group;
+  protected title: Phaser.Text;
+  protected textClick: Phaser.Text;
 
   public create() {
     this.title = this.game.add.text(0, 0, 'PLANÈTE MARS', fontStyles.header);

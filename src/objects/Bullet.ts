@@ -10,7 +10,8 @@ export class Bullet extends Sprite {
   public onBulletDestroyed: Phaser.Signal;
   protected maxVelocity: number = 100;
   protected baseVelocity: Phaser.Point;
-  protected aliveStartTime: number;
+  protected destroyTimer: Phaser.Timer;
+  protected destroyDelay: number = 600;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
@@ -21,8 +22,10 @@ export class Bullet extends Sprite {
     this.body.collides(this.game2.collisionGroups.get('enemies'));
 
     this.baseVelocity = new Phaser.Point(0, 0);
-    this.aliveStartTime = this.game.time.totalElapsedSeconds();
     this.onBulletDestroyed = new Phaser.Signal();
+    this.destroyTimer = this.game.time.create();
+    this.destroyTimer.add(this.destroyDelay, this.onDestroy, this);
+    this.destroyTimer.start();
   }
 
   public setDirection(direction: Phaser.Point) {
@@ -70,14 +73,12 @@ export class Bullet extends Sprite {
   }
 
   public update() {
-    const elapsedTime = this.game.time.totalElapsedSeconds() - this.aliveStartTime;
-    if (elapsedTime >= 0.6) {
-      this.exists = false;
-      this.onBulletDestroyed.dispatch();
-      return;
-    }
+    this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * this.game2.timeScale;
+    this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * this.game2.timeScale;
+  }
 
-    this.body.velocity.x = this.baseVelocity.x * this.game2.initialScale;
-    this.body.velocity.y = this.baseVelocity.y * this.game2.initialScale;
+  protected onDestroy() {
+    this.exists = false;
+    this.onBulletDestroyed.dispatch();
   }
 }

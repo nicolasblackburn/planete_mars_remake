@@ -10,7 +10,7 @@ export class Tilemap extends Phaser.Tilemap {
     this.loadMapData(key);
   }
 
-  private loadMapData(key: string) {
+  protected loadMapData(key: string) {
     const factory = this.game2.factory;
     const mapData = this.game.cache.getTilemapData(key).data;
 
@@ -24,7 +24,8 @@ export class Tilemap extends Phaser.Tilemap {
   			switch (layerData.type) {
   				case 'tilelayer':
   					layer = this.createLayer(layerData.name);
-            layer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+            //layer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+            layer.smoothed = false;
             layer.setScale(this.game2.pixelScale);
             this.tilemapLayers.push(layer);
             layer.resizeWorld();

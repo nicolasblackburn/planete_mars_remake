@@ -3,7 +3,7 @@ import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
 
 export class Player extends Sprite {
-  public maxVelocity: number = 50;
+  public maxVelocity: number = 40;
   protected inputHandler: InputHandler;
   protected bulletCount: number = 0;
 
@@ -48,8 +48,8 @@ export class Player extends Sprite {
     this.animations.play(this.currentAnimationKey(), null, true);
 
     if (['move', 'move_shoot'].includes(input.state.key())) {
-      this.body.velocity.x = input.direction.x * this.maxVelocity * this.game2.initialScale;
-      this.body.velocity.y = input.direction.y * this.maxVelocity * this.game2.initialScale;
+      this.body.velocity.x = input.direction.x * this.maxVelocity * this.game.time.elapsedMS * this.game2.timeScale;
+      this.body.velocity.y = input.direction.y * this.maxVelocity * this.game.time.elapsedMS * this.game2.timeScale;
 
     } else {
       this.body.velocity.x = 0;
@@ -58,7 +58,7 @@ export class Player extends Sprite {
     }
   }
 
-  private currentAnimationKey() {
+  protected currentAnimationKey() {
     const state = this.inputHandler.state.key();
     const direction = this.inputHandler.direction;
     if (direction.y < 0) {
@@ -74,7 +74,7 @@ export class Player extends Sprite {
     }
   }
 
-  private addAnimations() {
+  protected addAnimations() {
     for (const animation of this.game2.animations.player) {
       const [key, frames, rate] = animation;
       this.animations.add(key as string, frames as string[], rate as number);

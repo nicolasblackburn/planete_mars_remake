@@ -101,6 +101,11 @@ export class InputHandler {
       const dy = point.y;
       const tan = dx !== 0 ? abs(dy / dx) : 0;
 
+      if (abs(dx) < 8 && abs(dy) < 8) {
+        return defaultDirection;
+
+      }
+
       if (dx === 0 && dy < 0) {
         return new Phaser.Point(0, -1);
 
