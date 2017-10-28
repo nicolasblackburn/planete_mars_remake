@@ -42,7 +42,7 @@ module.exports = {
     devtool: 'source-map',
     //devtool: 'cheap-module-eval-source-map',
     devServer: {
-      host: "192.168.1.107",
+      //host: "192.168.1.107",
       contentBase: path.resolve(__dirname, 'dist')
     }
 };

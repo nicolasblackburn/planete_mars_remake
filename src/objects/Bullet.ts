@@ -18,9 +18,6 @@ export class Bullet extends Sprite {
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
 
-    this.body.setCollisionGroup(this.game2.collisionGroups.get('bullets'));
-    this.body.collides(this.game2.collisionGroups.get('enemies'));
-
     this.baseVelocity = new Phaser.Point(0, 0);
     this.onBulletDestroyed = new Phaser.Signal();
     this.destroyTimer = this.game.time.create();

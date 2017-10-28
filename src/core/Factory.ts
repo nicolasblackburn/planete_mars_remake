@@ -25,19 +25,16 @@ export class Factory {
 
   public bullet(x: number, y: number) {
   	const sprite = new Bullet(this.game, x, y);
-    this.game.add.existing(sprite);
     return sprite;
   }
 
   public crab(x: number, y: number) {
   	const sprite = new Crab(this.game, x, y);
-    this.game.add.existing(sprite);
     return sprite;
   }
 
   public player(x: number, y: number) {
   	const sprite = new Player(this.game, x, y);
-    this.game.add.existing(sprite);
     return sprite;
 
   }

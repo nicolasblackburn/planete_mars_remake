@@ -1,11 +1,13 @@
 import {Game} from '../core/Game';
 import {Sprite} from '../core/Sprite';
 import {InputHandler} from '../components/topDownAction/InputHandler';
+import {Main} from '../states/Main';
 
 export class Player extends Sprite {
   public maxVelocity: number = 40;
-  protected inputHandler: InputHandler;
   protected bulletCount: number = 0;
+  protected inputHandler: InputHandler;
+  protected state: Main;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
@@ -16,12 +18,7 @@ export class Player extends Sprite {
     this.body.fixedRotation = true;
 
     this.baseCollisionRectangle = new Phaser.Rectangle(0, 1, 8, 11);
-    this.collisionGroup = this.game2.collisionGroups.get('player');
     this.updateBody();
-
-    this.body.collides([
-      this.game2.collisionGroups.get('walls'),
-      this.game2.collisionGroups.get('enemies') ]);
 
     //this.body.debug = true;
 
@@ -33,11 +30,15 @@ export class Player extends Sprite {
   public onShoot() {
     if (this.bulletCount < 3) {
       this.bulletCount++;
-      const bullet = this.game2.factory.bullet(this.body.x, this.body.y);
-      bullet.onBulletDestroyed.addOnce(() => { this.bulletCount--; });
-      this.game2.bullets.push(bullet);
-      bullet.setDirection(this.inputHandler.direction);
+      const bullet = this.state.addBullet(this.body.x, this.body.y, this.inputHandler.direction);
+      bullet.onBulletDestroyed.addOnce(() => {
+        this.bulletCount--;
+      });
     }
+  }
+
+  public setState(state: Main) {
+    this.state = state;
   }
 
   public update() {
