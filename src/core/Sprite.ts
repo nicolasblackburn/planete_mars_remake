@@ -23,4 +23,11 @@ export class Sprite extends Phaser.Sprite {
           this.baseCollisionRectangle.y * this.game2.pixelScale);
     }
   }
+
+  protected addAnimations(groupKey: string) {
+    for (const animation of this.game2.animations[groupKey]) {
+      const [key, frames, rate] = animation;
+      this.animations.add(key as string, frames as string[], rate as number);
+    }
+  }
 }

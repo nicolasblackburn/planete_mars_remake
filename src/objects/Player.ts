@@ -22,7 +22,7 @@ export class Player extends Sprite {
 
     //this.body.debug = true;
 
-    this.addAnimations();
+    this.addAnimations('player');
 
     this.inputHandler.onShoot.add(this.onShoot, this);
   }
@@ -31,7 +31,7 @@ export class Player extends Sprite {
     if (this.bulletCount < 3) {
       this.bulletCount++;
       const bullet = this.state.addBullet(this.body.x, this.body.y, this.inputHandler.direction);
-      bullet.onBulletDestroyed.addOnce(() => {
+      bullet.events.onKilled.addOnce(() => {
         this.bulletCount--;
       });
     }
@@ -72,13 +72,6 @@ export class Player extends Sprite {
       return state + '_left';
     } else {
       return '';
-    }
-  }
-
-  protected addAnimations() {
-    for (const animation of this.game2.animations.player) {
-      const [key, frames, rate] = animation;
-      this.animations.add(key as string, frames as string[], rate as number);
     }
   }
 }

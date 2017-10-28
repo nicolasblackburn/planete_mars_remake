@@ -60,6 +60,7 @@ export class Game extends Phaser.Game {
     //this.scale.setResizeCallback(this.resize, this);
 
     this.physics.startSystem(Phaser.Physics.P2JS);
+    this.physics.p2.setImpactEvents(true);
   }
 
   public resize() {

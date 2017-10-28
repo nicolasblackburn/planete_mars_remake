@@ -26,14 +26,16 @@ export class Main extends State {
 
     bullet.body.setCollisionGroup( this.collisions.get('bullets') );
     bullet.body.collides( this.collisions.get('enemies') );
+    bullet.body.createGroupCallback( this.collisions.get('enemies'), this.onCollideBulletEnemy, this);
 
     return bullet;
   }
 
   public addEnemy(type: string, x: number, y: number) {
       const enemy = this.game2.factory.create(type, x, y);
+      this.enemies.add(enemy);
       //enemy.exists = false;
-      enemy.body.setCollisionGroup(this.collisions.get('enemies'));
+      enemy.body.setCollisionGroup( this.collisions.get('enemies') );
       enemy.body.collides([
         this.collisions.get('walls'),
         this.collisions.get('bullets') ]);
@@ -62,6 +64,9 @@ export class Main extends State {
     this.enemies = this.game2.add.group();
     this.bullets = this.game2.add.group();
 
+    this.enemies.updateOnlyExistingChildren = true;
+    this.bullets.updateOnlyExistingChildren = true;
+
     this.map = new Phaser.Tilemap(this.game2, 'level1_intro');
     this.loadMapData('level1_intro');
 
@@ -69,6 +74,11 @@ export class Main extends State {
     this.healthText = this.game.add.text(0, 0, '0, 0', fontStyles.body, this.hud);
 
     this.resize();
+  }
+
+  public onCollideBulletEnemy(bullet: Phaser.Physics.P2.Body, enemy: Phaser.Physics.P2.Body, bulletShape: p2.Shape, enemyShape: p2.Shape) {
+    bullet.sprite.kill();
+    enemy.sprite.exists = false;
   }
 
   public resize() {

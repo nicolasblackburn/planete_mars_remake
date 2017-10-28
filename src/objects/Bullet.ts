@@ -10,19 +10,20 @@ export class Bullet extends Sprite {
   public onBulletDestroyed: Phaser.Signal;
   protected maxVelocity: number = 100;
   protected baseVelocity: Phaser.Point;
-  protected destroyTimer: Phaser.Timer;
-  protected destroyDelay: number = 600;
+  protected aliveTimer: Phaser.Timer;
+  protected killDelay: number = 600;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
+    this.body.kinematic = true;
 
     this.baseVelocity = new Phaser.Point(0, 0);
     this.onBulletDestroyed = new Phaser.Signal();
-    this.destroyTimer = this.game.time.create();
-    this.destroyTimer.add(this.destroyDelay, this.onDestroy, this);
-    this.destroyTimer.start();
+    this.aliveTimer = this.game.time.create();
+    this.aliveTimer.add(this.killDelay, this.kill, this);
+    this.aliveTimer.start();
   }
 
   public setDirection(direction: Phaser.Point) {
@@ -72,10 +73,5 @@ export class Bullet extends Sprite {
   public update() {
     this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * this.game2.timeScale;
     this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * this.game2.timeScale;
-  }
-
-  protected onDestroy() {
-    this.exists = false;
-    this.onBulletDestroyed.dispatch();
   }
 }

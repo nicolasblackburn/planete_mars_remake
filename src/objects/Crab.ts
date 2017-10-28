@@ -8,5 +8,14 @@ export class Crab extends Sprite {
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'crab_00');
 
+    this.game.physics.enable(this, Phaser.Physics.P2JS);
+    //this.body.kinematic = true;
+    this.body.fixedRotation = true;
+
+    this.addAnimations('crab');
+  }
+
+  public update() {
+    this.animations.play('idle', null, true);
   }
 }

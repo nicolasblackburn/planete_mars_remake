@@ -42,7 +42,18 @@
         {
          "draworder":"topdown",
          "name":"enemies",
-         "objects":[],
+         "objects":[
+                {
+                 "height":16,
+                 "id":72,
+                 "name":"Crab1",
+                 "rotation":0,
+                 "type":"Crab",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":80
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -320,7 +331,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":67,
+ "nextobjectid":73,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "templategroups":[],

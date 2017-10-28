@@ -1,5 +1,8 @@
 export const animations = {
-  player: [
+  'crab': [
+    ['idle', ['crab_00', 'crab_01'], 5]
+  ],
+  'player': [
     ['idle_up', ['player_idle_up_00']],
     ['idle_right', ['player_idle_right_00']],
     ['idle_down', ['player_idle_down_00']],
