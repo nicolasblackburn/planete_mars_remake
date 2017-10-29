@@ -15,14 +15,19 @@ export class Game extends Phaser.Game {
   public timeScale: number;
 
   constructor() {
-    //const baseWidth = 240;
-    //const baseHeight = 135;
-    const baseWidth = 192;
-    const baseHeight = 108;
+    const baseWidth = 224;
+    const baseHeight = 126;
+    //const baseWidth = 192;
+    //const baseHeight = 108;
     const ratio  = 16/9;
-    let scale = Math.floor(window.innerWidth / baseWidth) || 1;
-    let width = baseWidth * scale;
-    let height = width / ratio;
+
+    let scale;
+    let width;
+    let height;
+
+    scale = Math.floor(window.innerWidth / baseWidth) || 1;
+    width = baseWidth * scale;
+    height = width / ratio;
 
     if (height > window.innerHeight) {
       scale =  Math.floor(window.innerHeight / baseHeight) || 1;
@@ -36,6 +41,7 @@ export class Game extends Phaser.Game {
       renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
+    console.log(scale);
     this.timeScale = this.pixelScale * 0.06;
 
     this.animations = animations;
