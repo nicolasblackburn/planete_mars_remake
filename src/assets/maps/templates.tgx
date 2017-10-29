@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templategroup name="templates" nexttemplateid="1">
+ <template name="Room1" id="0">
+  <object type="Room" width="224" height="126"/>
+ </template>
+</templategroup>

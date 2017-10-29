@@ -12,6 +12,7 @@ export class Boot extends State {
   }
 
   public create() {
-		this.game.state.start('loading');
+    (window as any).debug = new Debug(this.game2);
+		this.game2.state.start('loading');
   }
 }
