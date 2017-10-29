@@ -1,5 +1,5 @@
-import {Game} from 'core/Game';
-import {Sprite} from 'core/Sprite';
+import { Game } from 'core/Game';
+import { Sprite } from 'core/Sprite';
 
 export class Crab extends Sprite {
   protected cursors: Phaser.CursorKeys;

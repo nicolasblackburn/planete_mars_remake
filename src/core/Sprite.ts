@@ -1,4 +1,4 @@
-import {Game} from 'core/Game';
+import { Game } from 'core/Game';
 
 export class Sprite extends Phaser.Sprite {
   public game2: Game;
@@ -19,11 +19,11 @@ export class Sprite extends Phaser.Sprite {
 
   public updateBody() {
     if (this.body) {
-        this.body.setRectangle(
-          this.baseCollisionRectangle.width * this.game2.pixelScale,
-          this.baseCollisionRectangle.height * this.game2.pixelScale,
-          this.baseCollisionRectangle.x * this.game2.pixelScale,
-          this.baseCollisionRectangle.y * this.game2.pixelScale);
+      this.body.setRectangle(
+        this.baseCollisionRectangle.width * this.game2.pixelScale,
+        this.baseCollisionRectangle.height * this.game2.pixelScale,
+        this.baseCollisionRectangle.x * this.game2.pixelScale,
+        this.baseCollisionRectangle.y * this.game2.pixelScale);
     }
   }
 

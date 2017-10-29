@@ -1,11 +1,10 @@
-import {Game} from 'core/Game';
-import {Sprite} from 'core/Sprite';
-import {State} from 'statemachine/State';
-import {StateMachine} from 'statemachine/StateMachine';
-import {IdleState} from 'input/topdownaction/IdleState';
-import {MoveState} from 'input/topdownaction/MoveState';
-import {ShootState} from 'input/topdownaction/ShootState';
-import {MoveShootState} from 'input/topdownaction/MoveShootState';
+import { Game } from 'core/Game';
+import { Sprite } from 'core/Sprite';
+import { IdleState } from 'input/topdownaction/IdleState';
+import { MoveShootState } from 'input/topdownaction/MoveShootState';
+import { MoveState } from 'input/topdownaction/MoveState';
+import { ShootState } from 'input/topdownaction/ShootState';
+import { StateMachine } from 'statemachine/StateMachine';
 
 const pi_8 = Math.PI / 8;
 const tan_pi_8 = Math.tan(pi_8);
@@ -18,7 +17,7 @@ export class InputHandler {
   public state: StateMachine;
   public target: Sprite;
   public direction: Phaser.Point;
-  public keys: {[key: string]: Phaser.Key};
+  public keys: { [key: string]: Phaser.Key };
   public game: Game;
   public pointer: Phaser.Pointer;
   public delayedPointerdown: boolean = false;
@@ -220,7 +219,7 @@ export class InputHandler {
     }
     */
     //*
-    if (this.pointer.isUp && ! this.delayedPointerUp) {
+    if (this.pointer.isUp && !this.delayedPointerUp) {
       const timeElapsed = this.game.time.totalElapsedSeconds() - this.pointerUpStartTime;
       if (timeElapsed >= 0.2) {
         this.delayedPointerUp = true;
