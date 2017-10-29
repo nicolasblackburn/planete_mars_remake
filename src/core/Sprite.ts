@@ -1,4 +1,4 @@
-import {Game} from './Game';
+import {Game} from 'core/Game';
 
 export class Sprite extends Phaser.Sprite {
   public game2: Game;
@@ -12,6 +12,9 @@ export class Sprite extends Phaser.Sprite {
 
     this.smoothed = false;
     this.scale.set(this.game2.pixelScale);
+
+    this.game.physics.enable(this, Phaser.Physics.P2JS);
+    this.body.immovable = true;
   }
 
   public updateBody() {

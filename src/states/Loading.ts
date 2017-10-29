@@ -1,5 +1,5 @@
-import {State} from '../core/State';
-import {fontStyles} from '../fontStyles';
+import {State} from 'core/State';
+import {fontStyles} from 'fontStyles';
 
 export class Loading extends State {
   protected title: Phaser.Text;

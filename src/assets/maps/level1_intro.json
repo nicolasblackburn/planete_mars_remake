@@ -53,6 +53,50 @@
                  "width":16,
                  "x":160,
                  "y":80
+                }, 
+                {
+                 "height":16,
+                 "id":73,
+                 "name":"Crab2",
+                 "rotation":0,
+                 "type":"Crab",
+                 "visible":true,
+                 "width":16,
+                 "x":200,
+                 "y":208
+                }, 
+                {
+                 "height":16,
+                 "id":74,
+                 "name":"Crab2",
+                 "rotation":0,
+                 "type":"Crab",
+                 "visible":true,
+                 "width":16,
+                 "x":264,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":75,
+                 "name":"Crab4",
+                 "rotation":0,
+                 "type":"Crab",
+                 "visible":true,
+                 "width":16,
+                 "x":392,
+                 "y":152
+                }, 
+                {
+                 "height":16,
+                 "id":76,
+                 "name":"Crab3",
+                 "rotation":0,
+                 "type":"Crab",
+                 "visible":true,
+                 "width":16,
+                 "x":416,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -331,7 +375,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":73,
+ "nextobjectid":77,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "templategroups":[],

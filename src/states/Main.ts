@@ -1,9 +1,9 @@
-import {fontStyles} from '../fontStyles';
-import {Bullet} from '../objects/Bullet';
-import {Game} from '../core/Game';
-import {Player} from '../objects/Player';
-import {Sprite} from '../core/Sprite';
-import {State} from '../core/State';
+import {fontStyles} from 'fontStyles';
+import {Bullet} from 'objects/Bullet';
+import {Game} from 'core/Game';
+import {Player} from 'objects/Player';
+import {Sprite} from 'core/Sprite';
+import {State} from 'core/State';
 
 const floor = Math.floor;
 

@@ -1,7 +1,7 @@
-import {Game} from './Game';
-import {Bullet} from '../objects/Bullet';
-import {Crab} from '../objects/Crab';
-import {Player} from '../objects/Player';
+import {Game} from 'core/Game';
+import {Bullet} from 'objects/Bullet';
+import {Crab} from 'objects/Crab';
+import {Player} from 'objects/Player';
 
 export class Factory {
   protected game: Game;

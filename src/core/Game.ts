@@ -1,9 +1,9 @@
 // States
-import {animations} from '../animations';
-import {Boot} from '../states/Boot';
-import {Loading} from '../states/Loading';
-import {Main} from '../states/Main';
-import {Menu} from '../states/Menu';
+import {animations} from 'animations';
+import {Boot} from 'states/Boot';
+import {Loading} from 'states/Loading';
+import {Main} from 'states/Main';
+import {Menu} from 'states/Menu';
 
 // Factories
 import {Factory} from './Factory';

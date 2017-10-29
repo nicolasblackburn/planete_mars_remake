@@ -4,6 +4,8 @@ This is a port to Phaser of the old unfinished game I did.
 
 ## Issues / To-dos
 
+- Mechanism to make virtual rooms in one tilemap
+- Fix keyboards input cannot shoot maximum bullets
 - Bullets should go into a pool to be reused once they killed a target or they've been removed from the map
 - Keep a list of spawn points for the enemies
 - When a spawn point enters the camera and it's enemy is not spawned, it spawns an enemy

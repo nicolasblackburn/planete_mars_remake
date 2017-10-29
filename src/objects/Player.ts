@@ -1,7 +1,7 @@
-import {Game} from '../core/Game';
-import {Sprite} from '../core/Sprite';
-import {InputHandler} from '../components/topDownAction/InputHandler';
-import {Main} from '../states/Main';
+import {Game} from 'core/Game';
+import {Sprite} from 'core/Sprite';
+import {InputHandler} from 'input/topdownaction/InputHandler';
+import {Main} from 'states/Main';
 
 export class Player extends Sprite {
   public maxVelocity: number = 40;

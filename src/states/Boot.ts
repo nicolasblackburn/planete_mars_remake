@@ -1,5 +1,5 @@
-import {State} from '../core/State';
-import {Debug} from '../core/Debug';
+import {State} from 'core/State';
+import {Debug} from 'core/Debug';
 
 export class Boot extends State {
   public init() {

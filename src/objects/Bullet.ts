@@ -1,5 +1,5 @@
-import {Game} from '../core/Game';
-import {Sprite} from '../core/Sprite';
+import {Game} from 'core/Game';
+import {Sprite} from 'core/Sprite';
 
 const pi = Math.PI;
 const pi_2 = Math.PI / 2;
@@ -15,9 +15,6 @@ export class Bullet extends Sprite {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'bullet_00');
-
-    this.game.physics.enable(this, Phaser.Physics.P2JS);
-    this.body.kinematic = true;
 
     this.baseVelocity = new Phaser.Point(0, 0);
     this.onBulletDestroyed = new Phaser.Signal();
