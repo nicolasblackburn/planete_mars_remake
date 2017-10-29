@@ -1,3 +1,4 @@
+import { Group } from 'core/Group';
 import {fontStyles} from 'fontStyles';
 import {Bullet} from 'objects/Bullet';
 import {Game} from 'core/Game';
@@ -8,9 +9,9 @@ import {State} from 'core/State';
 const floor = Math.floor;
 
 export class Main extends State {
-  public mapLayers: Phaser.Group;
-  public bullets: Phaser.Group;
-  public enemies: Phaser.Group;
+  public layers: Group;
+  public bullets: Group;
+  public enemies: Group;
   public player: Player;
   protected cameraPadding: number = 8;
   public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
@@ -60,9 +61,9 @@ export class Main extends State {
     this.collisions.set('bullets', this.physics.p2.createCollisionGroup());
     this.collisions.set('walls', this.physics.p2.createCollisionGroup());
 
-    this.mapLayers = this.game2.add.group();
-    this.enemies = this.game2.add.group();
-    this.bullets = this.game2.add.group();
+    this.layers = this.game2.factory.group();
+    this.enemies = this.game2.factory.group();
+    this.bullets = this.game2.factory.group();
 
     this.enemies.updateOnlyExistingChildren = true;
     this.bullets.updateOnlyExistingChildren = true;
@@ -146,7 +147,7 @@ export class Main extends State {
     	if (layerData.name) {
   			switch (layerData.type) {
   				case 'tilelayer':
-  					layer = this.map.createLayer(layerData.name, null, null, this.mapLayers);
+  					layer = this.map.createLayer(layerData.name, null, null, this.layers);
             //layer.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
             layer.smoothed = false;
             layer.setScale(this.game2.pixelScale);

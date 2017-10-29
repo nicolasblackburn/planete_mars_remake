@@ -17,7 +17,7 @@ export class Player extends Sprite {
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;
 
-    this.baseCollisionRectangle = new Phaser.Rectangle(0, 1, 8, 11);
+    this.baseCollisionShape = new Phaser.Rectangle(0, 1, 8, 11);
     this.updateBody();
 
     //this.body.debug = true;

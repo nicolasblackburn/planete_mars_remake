@@ -15,6 +15,7 @@ export class Crab extends Sprite {
   }
 
   public update() {
+    console.log('Crab', this.awake);
     this.animations.play('idle', null, true);
   }
 }

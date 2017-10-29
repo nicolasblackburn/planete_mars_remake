@@ -1,3 +1,4 @@
+import { Group } from 'core/Group';
 import {Game} from 'core/Game';
 import {Bullet} from 'objects/Bullet';
 import {Crab} from 'objects/Crab';
@@ -29,13 +30,15 @@ export class Factory {
   }
 
   public crab(x: number, y: number) {
-  	const sprite = new Crab(this.game, x, y);
-    return sprite;
+    return new Crab(this.game, x, y);
+  }
+
+  public group() {
+    return new Group(this.game);
   }
 
   public player(x: number, y: number) {
-  	const sprite = new Player(this.game, x, y);
-    return sprite;
+    return new Player(this.game, x, y);
 
   }
 }
