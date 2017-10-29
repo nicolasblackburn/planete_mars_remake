@@ -41,7 +41,6 @@ export class Game extends Phaser.Game {
       renderer: Phaser.CANVAS });
 
     this.pixelScale = scale;
-    console.log(scale);
     this.timeScale = this.pixelScale * 0.06;
 
     this.animations = animations;

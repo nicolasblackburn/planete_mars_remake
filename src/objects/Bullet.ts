@@ -18,7 +18,7 @@ export class Bullet extends Sprite {
 
     this.baseVelocity = new Phaser.Point(0, 0);
     this.onBulletDestroyed = new Phaser.Signal();
-    this.aliveTimer = this.game.time.create();
+    this.aliveTimer = this.game2.time.create();
     this.aliveTimer.add(this.killDelay, this.kill, this);
     this.aliveTimer.start();
   }
