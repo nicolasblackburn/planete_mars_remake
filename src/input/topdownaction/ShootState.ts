@@ -14,7 +14,7 @@ export class ShootState extends State {
   }
 
   public enter(previous: string) {
-    this.input.onShootTimeout.add(this.onShootTimeout, this);
+    this.input.onShootStateTimeout.add(this.onShootStateTimeout, this);
     this.input.keys.shoot.onDown.add(this.onShootDown, this);
     this.input.onPointerDown.add(this.onShootDown, this);
     this.input.resetShootStateTimer();
@@ -25,11 +25,11 @@ export class ShootState extends State {
   }
 
   public onShootDown() {
-    this.input.resetShootStateTimer();
     this.input.onShoot.dispatch();
+    this.input.resetShootStateTimer();
   }
 
-  public onShootTimeout() {
+  public onShootStateTimeout() {
     this.input.state.set('idle');
   }
 
@@ -38,7 +38,6 @@ export class ShootState extends State {
 
     if (input.keys.up.isDown || input.keys.right.isDown || input.keys.down.isDown || input.keys.left.isDown) {
       input.state.set('move_shoot');
-
     }
   }
 }

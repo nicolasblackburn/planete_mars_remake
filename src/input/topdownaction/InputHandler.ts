@@ -23,13 +23,13 @@ export class InputHandler {
   public delayedPointerdown: boolean = false;
   public delayedPointerUp: boolean = true;
   public onShoot: Phaser.Signal;
-  public onShootTimeout: Phaser.Signal;
+  public onShootStateTimeout: Phaser.Signal;
   public onDelayedPointerDown: Phaser.Signal;
   public onDelayedPointerUp: Phaser.Signal;
   public onPointerDown: Phaser.Signal;
   public onPointerUp: Phaser.Signal;
-  protected shootDownStartTime: number;
-  protected shootTimerStarted: boolean = false;
+  protected shootStateTimer: Phaser.Timer;
+  protected shootStateDelay: number = 300;
   protected pointerDownStartTime: number;
   protected delayedPointerDownDispatched: boolean = true;
   protected pointerUpStartTime: number;
@@ -52,7 +52,7 @@ export class InputHandler {
     this.onPointerDown = new Phaser.Signal();
     this.onPointerUp = new Phaser.Signal();
     this.onShoot = new Phaser.Signal();
-    this.onShootTimeout = new Phaser.Signal();
+    this.onShootStateTimeout = new Phaser.Signal();
     this.onDelayedPointerDown = new Phaser.Signal();
     this.onDelayedPointerUp = new Phaser.Signal();
 
@@ -79,11 +79,11 @@ export class InputHandler {
   }
 
   public onEnter(oldState: string, newState: string) {
-    //console.log(oldState + ' -> ' + newState);
   }
 
   public onExit() {
-    this.onShootTimeout.removeAll();
+    this.keys.shoot.onDown.removeAll();
+    this.onShootStateTimeout.removeAll();
     this.onDelayedPointerDown.removeAll();
     this.onDelayedPointerUp.removeAll();
     this.onPointerDown.removeAll();
@@ -193,20 +193,23 @@ export class InputHandler {
   }
 
   public resetShootStateTimer() {
-    this.shootTimerStarted = true;
-    this.shootDownStartTime = this.game.time.totalElapsedSeconds();
+    if (this.shootStateTimer) {
+      this.shootStateTimer.destroy();
+    }
+    this.shootStateTimer = this.game.time.create();
+    this.shootStateTimer.add(this.shootStateDelay, this.exitShootState, this);
+    this.shootStateTimer.start();
+  }
+
+  public stopShootStateTimer() {
+    if (this.shootStateTimer) {
+      this.shootStateTimer.destroy();
+    }
   }
 
   public update() {
     this.updateDirection();
 
-    if (this.shootTimerStarted) {
-      const timeElapsed = this.game.time.totalElapsedSeconds() - this.shootDownStartTime;
-      if (timeElapsed >= 0.3) {
-        this.shootTimerStarted = false;
-        this.onShootTimeout.dispatch();
-      }
-    }
     /*
     if (this.pointer.isDown && ! this.moveStartDispatched) {
       const timeElapsed = this.game.time.totalElapsedSeconds() - this.pointerDownStartTime;
@@ -228,6 +231,10 @@ export class InputHandler {
     }
     //*/
     this.state.current().update();
+  }
+
+  public exitShootState() {
+    this.onShootStateTimeout.dispatch();
   }
 
   public updateDirection() {

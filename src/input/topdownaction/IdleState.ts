@@ -14,14 +14,18 @@ export class IdleState extends State {
   }
 
   public enter() {
-    this.input.onPointerDown.add(this.onPointerDown, this);
+    //this.input.onPointerDown.add(this.onPointerDown, this);
     this.input.keys.shoot.onDown.add(this.onShootDown, this);
   }
 
   public onPointerDown() {
     const point = this.input.getRelativePointerCoordinates();
     const tresh = max(this.input.target.width, this.input.target.height);
+    
+    this.input.updateDirection();
+    this.input.state.set('move_shoot');
 
+    /*
     if (abs(point.x) >= tresh || abs(point.y) >= tresh) {
       this.input.updateDirection();
       this.input.state.set('move_shoot');
@@ -31,6 +35,7 @@ export class IdleState extends State {
       this.input.state.set('shoot');
 
     }
+    */
 
   }
 

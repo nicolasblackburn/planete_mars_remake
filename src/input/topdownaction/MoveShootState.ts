@@ -13,7 +13,7 @@ export class MoveShootState extends State {
 
   public enter(previous: string) {
     this.input.onDelayedPointerUp.add(this.onMoveEnd, this);
-    this.input.onShootTimeout.add(this.onShootTimeout, this);
+    this.input.onShootStateTimeout.add(this.onShootStateTimeout, this);
     this.input.keys.shoot.onDown.add(this.onShootDown, this);
     this.input.onPointerDown.add(this.onShootDown, this);
     this.input.resetShootStateTimer();
@@ -28,11 +28,11 @@ export class MoveShootState extends State {
   }
 
   public onShootDown() {
-    this.input.resetShootStateTimer();
     this.input.onShoot.dispatch();
+    this.input.resetShootStateTimer();
   }
 
-  public onShootTimeout() {
+  public onShootStateTimeout() {
     this.input.state.set('move');
   }
 
