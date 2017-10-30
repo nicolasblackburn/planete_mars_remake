@@ -14,7 +14,7 @@ export class IdleState extends State {
   }
 
   public enter() {
-    //this.input.onPointerDown.add(this.onPointerDown, this);
+    this.input.onPointerDown.add(this.onPointerDown, this);
     this.input.keys.shoot.onDown.add(this.onShootDown, this);
   }
 
