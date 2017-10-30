@@ -201,20 +201,24 @@ export class Main extends State {
   }
 
   protected constrainCamera() {
+    const pixelScale = this.game2.pixelScale;
+    const tileWidth = this.map.tileWidth / 4 * pixelScale;
+    const tileHeight = this.map.tileHeight / 4 * pixelScale;
+
     const room = this.getCurrentRoom();
     const maxX = room.x + room.width - this.camera.width;
     const maxY = room.y + room.height - this.camera.height;
 
-    if (this.game2.camera.x < room.x) {
-      this.game2.camera.x = floor(room.x);
-    } else if (this.game2.camera.x > maxX) {
-      this.game2.camera.x = floor(maxX);
+    if (this.game2.camera.x < room.x - tileWidth) {
+      this.game2.camera.x = floor(room.x - tileWidth);
+    } else if (this.game2.camera.x > maxX + tileWidth) {
+      this.game2.camera.x = floor(maxX + tileWidth);
     }
 
-    if (this.game2.camera.y < room.y) {
-      this.game2.camera.y = floor(room.y);
-    } else if (this.game2.camera.y > maxY) {
-      this.game2.camera.y = floor(maxY);
+    if (this.game2.camera.y < room.y - tileHeight) {
+      this.game2.camera.y = floor(room.y - tileHeight);
+    } else if (this.game2.camera.y > maxY + tileHeight) {
+      this.game2.camera.y = floor(maxY + tileHeight);
     }
   }
 
