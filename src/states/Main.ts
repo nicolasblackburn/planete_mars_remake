@@ -27,14 +27,6 @@ export class Main extends State {
     this.game2.world.add(bullet);
     bullet.setDirection(direction);
 
-    bullet.body.setCollisionGroup(this.collisions.get("bullets"));
-    bullet.body.collides(this.collisions.get("enemies"));
-    bullet.body.createGroupCallback(
-      this.collisions.get("enemies"),
-      this.onCollideBulletEnemy,
-      this
-    );
-
     return bullet;
   }
 
@@ -58,10 +50,7 @@ export class Main extends State {
     }
 
     enemy.body.setCollisionGroup(this.collisions.get("enemies"));
-    enemy.body.collides([
-      this.collisions.get("walls"),
-      this.collisions.get("bullets")
-    ]);
+    enemy.body.collides(this.collisions.get("walls"));
   }
 
   public addPlayer(x: number, y: number, name?: string) {
@@ -78,11 +67,7 @@ export class Main extends State {
     }
 
     player.body.setCollisionGroup(this.collisions.get("player"));
-
-    player.body.collides([
-      this.collisions.get("walls"),
-      this.collisions.get("enemies")
-    ]);
+    player.body.collides(this.collisions.get("walls"));
   }
 
   public create() {
