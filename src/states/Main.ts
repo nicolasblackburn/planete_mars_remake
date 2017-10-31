@@ -5,6 +5,8 @@ import { Group } from "core/Group";
 import { State } from "core/State";
 import { fontStyles } from "fontStyles";
 import { Player } from "objects/Player";
+import { Polygon } from 'geom/Polygon';
+import {Debug} from 'core/Debug';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
@@ -37,6 +39,12 @@ export class Main extends State {
     this.cameraPadding = CAMERA_PADDING;
     this.lastScale = 1;
     this.rooms = new Map();
+    Object.assign(window, {
+      tri: new Polygon([100, 100, 200, 100, 200, 200]),
+      quad: new Polygon([110, 160, 210, 170, 240, 240, 99, 200]),
+      Polygon: Polygon,
+      debug: new Debug(this.game2)
+    });
   }
 
   public addEnemy(type: string, x: number, y: number, name?: string) {
@@ -233,6 +241,10 @@ export class Main extends State {
   }
 
   protected constrainCamera() {
+    const pixelScale = this.game2.pixelScale;
+    const tileWidth = this.map.tileWidth / 4 * pixelScale;
+    const tileHeight = this.map.tileHeight / 4 * pixelScale;
+
     const room = this.getCurrentRoom();
     
     if (! room) {
@@ -242,16 +254,16 @@ export class Main extends State {
     const maxX = room.x + room.width - this.camera.width;
     const maxY = room.y + room.height - this.camera.height;
 
-    if (this.game2.camera.x < room.x) {
-      this.game2.camera.x = floor(room.x);
-    } else if (this.game2.camera.x > maxX) {
-      this.game2.camera.x = floor(maxX);
+    if (this.game2.camera.x < room.x - tileWidth) {
+      this.game2.camera.x = floor(room.x - tileWidth);
+    } else if (this.game2.camera.x > maxX + tileWidth) {
+      this.game2.camera.x = floor(maxX + tileWidth);
     }
 
-    if (this.game2.camera.y < room.y) {
-      this.game2.camera.y = floor(room.y);
-    } else if (this.game2.camera.y > maxY) {
-      this.game2.camera.y = floor(maxY);
+    if (this.game2.camera.y < room.y - tileHeight) {
+      this.game2.camera.y = floor(room.y - tileHeight);
+    } else if (this.game2.camera.y > maxY + tileHeight) {
+      this.game2.camera.y = floor(maxY + tileHeight);
     }
   }
 

@@ -1,5 +1,4 @@
 import {State} from 'core/State';
-import {Debug} from 'core/Debug';
 
 export class Boot extends State {
   public init() {
@@ -12,7 +11,6 @@ export class Boot extends State {
   }
 
   public create() {
-    (window as any).debug = new Debug(this.game2);
 		this.game2.state.start('loading');
   }
 }

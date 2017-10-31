@@ -14,17 +14,19 @@ export class Debug {
     return gr;
   }
 
-  public poly(points: number[][], color: number = 0xffffff) {
-    if (!points.length) {
-      throw new Error('Empty point list');
+  public poly(points: number[], color: number = 0xffffff) {
+    if (points.length < 2) {
+      throw new Error('Not enough points');
     }
 
-    const [x, y] = points[0];
     const gr = this.game.add.graphics();
     gr.lineStyle(1, color, 1);
+    const x = points[0];
+    const y = points[1];
     gr.moveTo(x, y);
-    for (const point of points.slice(1)) {
-      const [x, y] = point;
+    for (let i = 2; i < points.length - 1; i += 2) {
+      const x = points[i];
+      const y = points[i + 1];
       gr.lineTo(x, y);
     }
     gr.lineTo(x, y);
