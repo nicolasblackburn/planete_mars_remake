@@ -1,8 +1,10 @@
-import { Game } from '../core/Game';
+import { Game } from 'core/Game';
 import { Group } from "core/Group";
 import { State } from "core/State";
 import { fontStyles } from "fontStyles";
 import { Player } from "objects/Player";
+import { Polygon } from 'geom/Polygon';
+import {Debug} from 'core/Debug';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
@@ -43,6 +45,12 @@ export class Main extends State {
     this.cameraPadding = CAMERA_PADDING;
     this.lastScale = 1;
     this.rooms = new Map();
+    Object.assign(window, {
+      tri: new Polygon([100, 100, 200, 100, 200, 200]),
+      quad: new Polygon([110, 160, 210, 170, 240, 240, 99, 200]),
+      Polygon: Polygon,
+      debug: new Debug(this.game2)
+    });
   }
 
   public addEnemy(type: string, x: number, y: number, name?: string) {
@@ -60,7 +68,8 @@ export class Main extends State {
     enemy.body.setCollisionGroup(this.collisions.get("enemies"));
     enemy.body.collides([
       this.collisions.get("walls"),
-      this.collisions.get("bullets")
+      this.collisions.get("bullets"),
+      this.collisions.get("player")
     ]);
   }
 
