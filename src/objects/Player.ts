@@ -17,6 +17,7 @@ export class Player extends Sprite {
   protected blinkingTimer: Phaser.Timer;
   protected blinkingDelay: number = 3000;
   protected blinkingCounter: number;
+  protected blinkingRate: number = 30;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
@@ -94,9 +95,9 @@ export class Player extends Sprite {
 
     if (this.blinkingState) {
       this.blinkingCounter += this.game.time.elapsedMS;
-      if (this.blinkingCounter > 30) {
+      if (this.blinkingCounter > this.blinkingRate) {
         this.visible = !this.visible;
-        this.blinkingCounter = this.blinkingCounter - 30;
+        this.blinkingCounter = this.blinkingCounter - this.blinkingRate;
       }
     }
 
