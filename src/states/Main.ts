@@ -1,4 +1,6 @@
-import { Game } from '../core/Game';
+import { Sprite } from 'core/Sprite';
+import { Bullet } from 'objects/Bullet';
+import { Game } from 'core/Game';
 import { Group } from "core/Group";
 import { State } from "core/State";
 import { fontStyles } from "fontStyles";
@@ -24,8 +26,8 @@ export class Main extends State {
   public addBullet(x: number, y: number, direction: Phaser.Point) {
     const bullet = this.game2.factory.bullet(x, y);
     bullet.name = "bullet";
-    this.game2.world.add(bullet);
     bullet.setDirection(direction);
+    this.bullets.add(bullet);
 
     return bullet;
   }
@@ -80,6 +82,7 @@ export class Main extends State {
 
     this.layers = this.game2.factory.group();
     this.enemies = this.game2.factory.group();
+    this.addPlayer(0, 0, 'player');
     this.bullets = this.game2.factory.group();
 
     this.enemies.updateOnlyExistingChildren = true;
@@ -106,17 +109,22 @@ export class Main extends State {
     return this.rooms.get(this.currentRoom);
   }
 
-  public onCollideBulletEnemy(
-    bullet: Phaser.Physics.P2.Body,
-    enemy: Phaser.Physics.P2.Body,
-    bulletShape: p2.Shape,
-    enemyShape: p2.Shape
+  public collideBulletEnemy(
+    bullet: Bullet,
+    enemy: Sprite
   ) {
-    bullet.sprite.kill();
-    enemy.sprite.exists = false;
+    bullet.kill();
+    enemy.kill();
+  }
+  
+  public collidePlayerEnemy(
+    player: Player,
+    enemy: Sprite
+  ) {
+    player.hurt();
   }
 
-  public onCollidePlayerRoom(
+  public collidePlayerRoom(
     player: Phaser.Physics.P2.Body,
     room: Phaser.Physics.P2.Body,
     playerShape: p2.Shape,
@@ -147,9 +155,48 @@ export class Main extends State {
   }
 
   public update() {
-    const pixelScale = this.game2.pixelScale;
-    const tileWidth = this.map.tileWidth / 2 * pixelScale;
-    const tileHeight = this.map.tileHeight / 2 * pixelScale;
+    for (const enemy of this.enemies.children) {
+      if (enemy instanceof Sprite) {
+        if (enemy.awake && enemy.exists) {
+          const enemyRect = new Phaser.Rectangle(
+            enemy.getBounds().x, 
+            enemy.getBounds().y, 
+            enemy.getBounds().width, 
+            enemy.getBounds().height);
+  
+          for (const bullet of this.bullets.children) {
+            if (bullet instanceof Bullet) {
+              if (bullet.awake && bullet.exists) {
+          
+                const bulletRect = new Phaser.Rectangle(
+                  bullet.getBounds().x, 
+                  bullet.getBounds().y, 
+                  bullet.getBounds().width, 
+                  bullet.getBounds().height);
+                  
+                if (bulletRect.intersects(enemyRect, 0)) {
+                  this.collideBulletEnemy(bullet as Bullet, enemy as Sprite);
+                }
+        
+              }
+            }
+          }
+
+          if (enemy.exists) {
+            const playerRect = new Phaser.Rectangle(
+              this.player.getBounds().x, 
+              this.player.getBounds().y, 
+              this.player.getBounds().width, 
+              this.player.getBounds().height);
+ 
+            if (playerRect.intersects(enemyRect, 0)) {
+              this.collidePlayerEnemy(this.player as Player, enemy as Sprite);
+            }
+          }
+        }
+
+      }
+    }
 
     this.updateRoom();
 
@@ -187,6 +234,11 @@ export class Main extends State {
 
   protected constrainCamera() {
     const room = this.getCurrentRoom();
+    
+    if (! room) {
+      return;
+    }
+
     const maxX = room.x + room.width - this.camera.width;
     const maxY = room.y + room.height - this.camera.height;
 
@@ -288,7 +340,9 @@ export class Main extends State {
 
               case "player":
                 const data = layerData.objects[0];
-                this.addPlayer(data.x, data.y, data.name);
+                this.player.body.x = data.x * pixelScale;
+                this.player.body.y = data.y * pixelScale;
+                this.player.name = data.name;
                 break;
             }
             break;
