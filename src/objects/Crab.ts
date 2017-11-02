@@ -1,7 +1,8 @@
 import { Game } from 'core/Game';
-import { Sprite } from 'core/Sprite';
+import { Enemy } from 'core/Enemy';
 
-export class Crab extends Sprite {
+export class Crab extends Enemy {
+  public damagePoints: number = 40;
   protected cursors: Phaser.CursorKeys;
   protected maxVelocity: number = 4;
   public spawnPoint: Phaser.Point;

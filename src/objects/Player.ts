@@ -4,6 +4,7 @@ import {InputHandler} from 'input/topdownaction/InputHandler';
 import {Main} from 'states/Main';
 
 export class Player extends Sprite {
+  public health: number = 100;
   public maxVelocity: number = 40;
   public hurtVelocity: number = 100;
   public hurtState: boolean = false;
@@ -37,7 +38,7 @@ export class Player extends Sprite {
     this.inputHandler.onShoot.add(this.shoot, this);
   }
 
-  public hurt() {
+  public hurt(damage: number) {
     if (this.hurtState || this.blinkingState) {
       return;
     }
@@ -52,6 +53,7 @@ export class Player extends Sprite {
     this.hurtDirection.x *= -1;
     this.hurtDirection.y *= -1;
     this.hurtState = true;
+    this.health -= damage;
   }
 
   public hurtTimeout() {

@@ -1,4 +1,5 @@
 import { Sprite } from 'core/Sprite';
+import { Enemy } from 'core/Enemy';
 import { Bullet } from 'objects/Bullet';
 import { Game } from 'core/Game';
 import { Group } from "core/Group";
@@ -119,7 +120,7 @@ export class Main extends State {
 
   public collideBulletEnemy(
     bullet: Bullet,
-    enemy: Sprite
+    enemy: Enemy
   ) {
     bullet.kill();
     enemy.kill();
@@ -127,9 +128,9 @@ export class Main extends State {
   
   public collidePlayerEnemy(
     player: Player,
-    enemy: Sprite
+    enemy: Enemy
   ) {
-    player.hurt();
+    player.hurt(enemy.damagePoints);
   }
 
   public collidePlayerRoom(
@@ -164,7 +165,7 @@ export class Main extends State {
 
   public update() {
     for (const enemy of this.enemies.children) {
-      if (enemy instanceof Sprite) {
+      if (enemy instanceof Enemy) {
         if (enemy.awake && enemy.exists) {
           const enemyRect = new Phaser.Rectangle(
             enemy.getBounds().x, 
@@ -183,7 +184,7 @@ export class Main extends State {
                   bullet.getBounds().height);
                   
                 if (bulletRect.intersects(enemyRect, 0)) {
-                  this.collideBulletEnemy(bullet as Bullet, enemy as Sprite);
+                  this.collideBulletEnemy(bullet as Bullet, enemy as Enemy);
                 }
         
               }
@@ -198,7 +199,7 @@ export class Main extends State {
               this.player.getBounds().height);
  
             if (playerRect.intersects(enemyRect, 0)) {
-              this.collidePlayerEnemy(this.player as Player, enemy as Sprite);
+              this.collidePlayerEnemy(this.player as Player, enemy as Enemy);
             }
           }
         }
@@ -215,7 +216,7 @@ export class Main extends State {
 
     this.constrainCamera();
 
-    this.healthText.text = "Énergie: 100%";
+    this.healthText.text = "Énergie: " + this.player.health + "%";
     //this.healthText.text += "\nFPS: " + this.game2.time.fps;
 
     this.hud.position.set(
