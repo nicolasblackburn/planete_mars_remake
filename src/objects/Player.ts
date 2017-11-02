@@ -4,6 +4,7 @@ import {InputHandler} from 'input/topdownaction/InputHandler';
 import {Main} from 'states/Main';
 
 export class Player extends Sprite {
+  public health: number = 100;
   public maxVelocity: number = 40;
   public hurtVelocity: number = 100;
   public hurtState: boolean = false;
@@ -17,6 +18,7 @@ export class Player extends Sprite {
   protected blinkingTimer: Phaser.Timer;
   protected blinkingDelay: number = 3000;
   protected blinkingCounter: number;
+  protected blinkingRate: number = 30;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
@@ -36,7 +38,7 @@ export class Player extends Sprite {
     this.inputHandler.onShoot.add(this.shoot, this);
   }
 
-  public hurt() {
+  public hurt(damage: number) {
     if (this.hurtState || this.blinkingState) {
       return;
     }
@@ -51,6 +53,7 @@ export class Player extends Sprite {
     this.hurtDirection.x *= -1;
     this.hurtDirection.y *= -1;
     this.hurtState = true;
+    this.health -= damage;
   }
 
   public hurtTimeout() {
@@ -94,9 +97,9 @@ export class Player extends Sprite {
 
     if (this.blinkingState) {
       this.blinkingCounter += this.game.time.elapsedMS;
-      if (this.blinkingCounter > 30) {
+      if (this.blinkingCounter > this.blinkingRate) {
         this.visible = !this.visible;
-        this.blinkingCounter = this.blinkingCounter - 30;
+        this.blinkingCounter = this.blinkingCounter - this.blinkingRate;
       }
     }
 
