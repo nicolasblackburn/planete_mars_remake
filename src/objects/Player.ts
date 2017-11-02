@@ -4,10 +4,21 @@ import {InputHandler} from 'input/topdownaction/InputHandler';
 import {Main} from 'states/Main';
 
 export class Player extends Sprite {
+  public health: number = 100;
   public maxVelocity: number = 40;
+  public hurtVelocity: number = 100;
+  public hurtState: boolean = false;
+  public blinkingState: boolean = false;
   protected bulletCount: number = 0;
   protected inputHandler: InputHandler;
-  protected state: Main;
+  protected gameState: Main;
+  protected hurtTimer: Phaser.Timer;
+  protected hurtDelay: number = 100;
+  protected hurtDirection: Phaser.Point;
+  protected blinkingTimer: Phaser.Timer;
+  protected blinkingDelay: number = 3000;
+  protected blinkingCounter: number;
+  protected blinkingRate: number = 30;
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
@@ -24,13 +35,48 @@ export class Player extends Sprite {
 
     this.addAnimations('player');
 
-    this.inputHandler.onShoot.add(this.onShoot, this);
+    this.inputHandler.onShoot.add(this.shoot, this);
   }
 
-  public onShoot() {
-    if (this.bulletCount < 3) {
+  public hurt(damage: number) {
+    if (this.hurtState || this.blinkingState) {
+      return;
+    }
+
+    if (this.hurtTimer) {
+      this.hurtTimer.destroy();
+    }
+    this.hurtTimer = this.game2.time.create();
+    this.hurtTimer.add(this.hurtDelay, this.hurtTimeout, this);
+    this.hurtTimer.start();
+    this.hurtDirection = this.inputHandler.getDirection();
+    this.hurtDirection.x *= -1;
+    this.hurtDirection.y *= -1;
+    this.hurtState = true;
+    this.health -= damage;
+  }
+
+  public hurtTimeout() {
+    this.hurtState = false;
+    if (this.blinkingTimer) {
+      this.blinkingTimer.destroy();
+    }
+    this.blinkingTimer = this.game2.time.create();
+    this.blinkingTimer.add(this.blinkingDelay, this.blinkingTimeout, this);
+    this.blinkingTimer.start();
+    this.blinkingState = true;
+    this.blinkingCounter = 0;
+  }
+
+  public blinkingTimeout() {
+    this.blinkingState = false;
+    this.visible = true;
+  }
+
+  public shoot() {
+    if (this.bulletCount < 3 && !this.hurtState) {
       this.bulletCount++;
-      const bullet = this.state.addBullet(this.body.x, this.body.y, this.inputHandler.direction);
+      const bullet = this.gameState.addBullet(this.body.x, this.body.y, this.inputHandler.direction);
       bullet.events.onKilled.addOnce(() => {
         this.bulletCount--;
       });
@@ -38,10 +84,25 @@ export class Player extends Sprite {
   }
 
   public setState(state: Main) {
-    this.state = state;
+    this.gameState = state;
   }
 
   public update() {
+    if (this.hurtState) {
+      this.animations.currentAnim.stop(false, false);
+      this.body.velocity.x = this.hurtDirection.x * this.hurtVelocity * this.game.time.elapsedMS * this.game2.timeScale;
+      this.body.velocity.y = this.hurtDirection.y * this.hurtVelocity * this.game.time.elapsedMS * this.game2.timeScale;
+      return;
+    }
+
+    if (this.blinkingState) {
+      this.blinkingCounter += this.game.time.elapsedMS;
+      if (this.blinkingCounter > this.blinkingRate) {
+        this.visible = !this.visible;
+        this.blinkingCounter = this.blinkingCounter - this.blinkingRate;
+      }
+    }
+
     const input = this.inputHandler;
 
     input.update();
