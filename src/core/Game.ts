@@ -56,6 +56,10 @@ export class Game extends Phaser.Game {
 
   }
 
+  public getMainState() {
+    return this.state.states['main'];
+  }
+
   public init() {
 	  this.time.advancedTiming = true;
     this.scale.pageAlignHorizontally = true;

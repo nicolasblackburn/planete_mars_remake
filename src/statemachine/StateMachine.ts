@@ -1,9 +1,9 @@
 import {State} from 'statemachine/State';
 
-export class StateMachine {
+export class StateMachine<T extends State> {
   public onEnter: Phaser.Signal;
   public onExit: Phaser.Signal;
-  protected states: Map<string, State> = new Map();
+  protected states: Map<string, T> = new Map();
   protected _current: string;
 
   constructor() {
@@ -11,7 +11,7 @@ export class StateMachine {
     this.onExit = new Phaser.Signal();
   }
 
-  public add(key: string, state: State) {
+  public add(key: string, state: T) {
     this.states.set(key, state);
   }
 

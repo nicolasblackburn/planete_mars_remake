@@ -2,7 +2,7 @@ import { Game } from "core/Game";
 
 export class Sprite extends Phaser.Sprite {
   public game2: Game;
-  protected baseCollisionShape: Phaser.Rectangle;
+  public baseCollisionShape: Phaser.Rectangle;
   public awake: boolean;
 
   constructor(

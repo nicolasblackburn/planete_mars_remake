@@ -2,7 +2,7 @@ import { Group } from 'core/Group';
 import {Game} from 'core/Game';
 import {Bullet} from 'objects/Bullet';
 import {Crab} from 'objects/Crab';
-import {Player} from 'objects/Player';
+import {Player} from 'objects/player/Player';
 
 export class Factory {
   protected game: Game;

@@ -5,7 +5,7 @@ import { Game } from 'core/Game';
 import { Group } from "core/Group";
 import { State } from "core/State";
 import { fontStyles } from "fontStyles";
-import { Player } from "objects/Player";
+import { Player } from "objects/player/Player";
 import { Polygon } from 'geom/Polygon';
 import {Debug} from 'core/Debug';
 
@@ -19,12 +19,12 @@ export class Main extends State {
   public enemies: Group;
   public player: Player;
   public currentRoom: string;
+  public map: Phaser.Tilemap;
   protected cameraPadding: number;
   public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
   protected healthText: Phaser.Text;
   protected hud: Phaser.Group;
   protected lastScale: number;
-  protected map: Phaser.Tilemap;
 
   public addBullet(x: number, y: number, direction: Phaser.Point) {
     const bullet = this.game2.factory.bullet(x, y);
@@ -69,7 +69,6 @@ export class Main extends State {
       x * this.game2.pixelScale,
       y * this.game2.pixelScale
     );
-    player.setState(this);
     this.player = player;
     this.game2.world.add(player);
 
@@ -226,13 +225,28 @@ export class Main extends State {
   }
 
   protected updateRoom() {
-    const playerX = this.player.x;
-    const playerY = this.player.y;
+    const pixelScale = this.game2.pixelScale;
+    const player = this.player;
+    const treshold = 16 * pixelScale;
+
+    const bounds = new Phaser.Rectangle(0, 0, 0, 0);
+    player.baseCollisionShape.clone(bounds);
+    bounds.width *= pixelScale;
+    bounds.height *= pixelScale;
+    bounds.x += player.x - player.anchor.x * bounds.width - treshold;
+    bounds.y += player.y - player.anchor.y * bounds.height - treshold;
+    bounds.width += 2 * treshold;
+    bounds.height += 2 * treshold;
 
     for (const [key, room] of this.rooms.entries()) {
-      if (key !== this.currentRoom && room.contains(playerX, playerY)) {
-        this.setCurrentRoom(key);
-        break;
+      if (key !== this.currentRoom) {
+        if (room.contains(player.x, player.y)) {
+          this.setCurrentRoom(key);
+          break;
+        } else if (room.intersects(bounds, 0) && this.game2.input.activePointer.isDown) {
+          // trigger the next room animation
+          break;
+        }
       }
     }
   }
@@ -255,16 +269,16 @@ export class Main extends State {
     const maxX = room.x + room.width - this.camera.width;
     const maxY = room.y + room.height - this.camera.height;
 
-    if (this.game2.camera.x < room.x - tileWidth) {
-      this.game2.camera.x = floor(room.x - tileWidth);
-    } else if (this.game2.camera.x > maxX + tileWidth) {
-      this.game2.camera.x = floor(maxX + tileWidth);
+    if (this.game2.camera.x < room.x) {
+      this.game2.camera.x = room.x;
+    } else if (this.game2.camera.x > maxX) {
+      this.game2.camera.x = maxX;
     }
 
-    if (this.game2.camera.y < room.y - tileHeight) {
-      this.game2.camera.y = floor(room.y - tileHeight);
-    } else if (this.game2.camera.y > maxY + tileHeight) {
-      this.game2.camera.y = floor(maxY + tileHeight);
+    if (this.game2.camera.y < room.y) {
+      this.game2.camera.y = room.y;
+    } else if (this.game2.camera.y > maxY) {
+      this.game2.camera.y = maxY;
     }
   }
 
