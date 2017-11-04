@@ -7,7 +7,6 @@ const pi_4 = Math.PI / 4;
 const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
-  public onBulletDestroyed: Phaser.Signal;
   protected maxVelocity: number = 100;
   protected baseVelocity: Phaser.Point;
   protected aliveTimer: Phaser.Timer;
@@ -17,16 +16,9 @@ export class Bullet extends Sprite {
     super(game, x, y, 'sprites', 'bullet_00');
 
     this.baseVelocity = new Phaser.Point(0, 0);
-    this.onBulletDestroyed = new Phaser.Signal();
     this.aliveTimer = this.game.time.create();
-    this.aliveTimer.add(this.killDelay, this.aliveTimerAction, this);
+    this.aliveTimer.add(this.killDelay, this.kill, this);
     this.aliveTimer.start();
-  }
-  
-  public aliveTimerAction() {
-    this.kill();
-    this.onBulletDestroyed.dispatch();
-    console.log('Timeout');
   }
 
   public setDirection(direction: Phaser.Point) {

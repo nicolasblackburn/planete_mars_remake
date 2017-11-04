@@ -1,7 +1,9 @@
 import { Game } from "core/Game";
 
 export class Sprite extends Phaser.Sprite {
+  public game2: Game;
   public baseCollisionShape: Phaser.Rectangle;
+  public awake: boolean;
 
   constructor(
     game: Game,
@@ -12,6 +14,7 @@ export class Sprite extends Phaser.Sprite {
   ) {
     
     super(game, x, y, key, frame);
+    this.game2 = game;
 
     this.baseCollisionShape = new Phaser.Rectangle(
       0,
@@ -21,14 +24,14 @@ export class Sprite extends Phaser.Sprite {
     );
 
     this.smoothed = false;
-    this.scale.set(game.pixelScale);
+    this.scale.set(this.game2.pixelScale);
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.immovable = true;
 
-    this.exists = false;
+    this.awake = false;
   }
-
+  
   /**
    * Returns the bounds of the sprite as a Phaser.Rectangle.
    */
@@ -42,27 +45,28 @@ export class Sprite extends Phaser.Sprite {
   }
 
   public preUpdate() {
-    if (!this.exists && this.inCamera) {
-      this.exists = true;
+    if (!super.preUpdate()) {
+      return false;
     }
-    return super.preUpdate();
+    if (!this.awake && this.inCamera) {
+      this.awake = true;
+    }
+    return true;
   }
 
   public updateBody() {
     if (this.body) {
-      const game = this.game as Game;
       this.body.setRectangle(
-        this.baseCollisionShape.width * game.pixelScale,
-        this.baseCollisionShape.height * game.pixelScale,
-        this.baseCollisionShape.x * game.pixelScale,
-        this.baseCollisionShape.y * game.pixelScale
+        this.baseCollisionShape.width * this.game2.pixelScale,
+        this.baseCollisionShape.height * this.game2.pixelScale,
+        this.baseCollisionShape.x * this.game2.pixelScale,
+        this.baseCollisionShape.y * this.game2.pixelScale
       );
     }
   }
 
   protected addAnimations(groupKey: string) {
-    const game = this.game as Game;
-    for (const animation of game.animations[groupKey]) {
+    for (const animation of this.game2.animations[groupKey]) {
       const [key, frames, rate] = animation;
       this.animations.add(key as string, frames as string[], rate as number);
     }
