@@ -5,6 +5,7 @@ import { MoveShootState } from 'input/topdownaction/MoveShootState';
 import { MoveState } from 'input/topdownaction/MoveState';
 import { ShootState } from 'input/topdownaction/ShootState';
 import { StateMachine } from 'statemachine/StateMachine';
+import { State } from 'statemachine/State';
 
 const pi_8 = Math.PI / 8;
 const tan_pi_8 = Math.tan(pi_8);
@@ -14,7 +15,7 @@ const abs = Math.abs;
 const max = Math.max;
 
 export class InputHandler {
-  public state: StateMachine;
+  public state: StateMachine<State>;
   public target: Sprite;
   public direction: Phaser.Point;
   public keys: { [key: string]: Phaser.Key };
@@ -47,7 +48,7 @@ export class InputHandler {
       shoot: this.game.input.keyboard.addKey(Phaser.Keyboard.S)
     }
 
-    this.pointer = this.game.input.pointer1;
+    this.pointer = this.game.input.activePointer;
 
     this.onPointerDown = new Phaser.Signal();
     this.onPointerUp = new Phaser.Signal();
@@ -56,14 +57,12 @@ export class InputHandler {
     this.onDelayedPointerDown = new Phaser.Signal();
     this.onDelayedPointerUp = new Phaser.Signal();
 
-    this.game.input.onDown.add((pointer: Phaser.Pointer) => {
-      this.pointer = pointer;
+    this.game.input.onDown.add(() => {
       this.onPointerDown.dispatch();
       this.delayedPointerUp = false;
     });
 
-    this.game.input.onUp.add((pointer: Phaser.Pointer) => {
-      this.pointer = pointer;
+    this.game.input.onUp.add(() => {
       this.onPointerUp.dispatch();
       this.pointerUpStartTime = this.game.time.totalElapsedSeconds();
     });

@@ -1,8 +1,8 @@
 import { Game } from "core/Game";
 
 export class Sprite extends Phaser.Sprite {
-  public game2: Game;
-  protected baseCollisionShape: Phaser.Rectangle;
+  public collisionRectangle: Phaser.Rectangle;
+  public collisionRectangleOffset: Phaser.Point;
   public awake: boolean;
 
   constructor(
@@ -14,22 +14,33 @@ export class Sprite extends Phaser.Sprite {
   ) {
     
     super(game, x, y, key, frame);
-    this.game2 = game;
 
-    this.baseCollisionShape = new Phaser.Rectangle(
+    this.collisionRectangle = new Phaser.Rectangle(
       0,
       0,
-      this.getBounds().width,
-      this.getBounds().height
+      this.width,
+      this.height
     );
 
     this.smoothed = false;
-    this.scale.set(this.game2.pixelScale);
+    this.scale.set(game.pixelScale);
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.immovable = true;
 
     this.awake = false;
+  }
+  
+  /**
+   * Returns the bounds of the sprite as a Phaser.Rectangle.
+   */
+  public getBoundsAsRectangle() {
+    const bounds = this.getBounds();
+    return new Phaser.Rectangle(
+      bounds.x, 
+      bounds.y, 
+      bounds.width, 
+      bounds.height);
   }
 
   public preUpdate() {
@@ -44,17 +55,30 @@ export class Sprite extends Phaser.Sprite {
 
   public updateBody() {
     if (this.body) {
+      const game = this.game as Game;
+      const pixelScale = game.pixelScale
+      const x = this.collisionRectangle.x * pixelScale;
+      const y = this.collisionRectangle.y * pixelScale;
+      const width = this.collisionRectangle.width * pixelScale;
+      const height = this.collisionRectangle.height * pixelScale;
+
+      // The physics body offset coordinates are relative to the center of mass
+      // so we apply a transform to the top/left rectangle coordinates
+      const offsetX = x + (width - this.width) / 2;
+      const offsetY = y + (height - this.height) / 2;
+
       this.body.setRectangle(
-        this.baseCollisionShape.width * this.game2.pixelScale,
-        this.baseCollisionShape.height * this.game2.pixelScale,
-        this.baseCollisionShape.x * this.game2.pixelScale,
-        this.baseCollisionShape.y * this.game2.pixelScale
+        width,
+        height,
+        offsetX,
+        offsetY
       );
     }
   }
 
   protected addAnimations(groupKey: string) {
-    for (const animation of this.game2.animations[groupKey]) {
+    const game = this.game as Game;
+    for (const animation of game.animations[groupKey]) {
       const [key, frames, rate] = animation;
       this.animations.add(key as string, frames as string[], rate as number);
     }
