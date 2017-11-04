@@ -5,7 +5,7 @@ import { Game } from 'core/Game';
 import { Group } from "core/Group";
 import { fontStyles } from "fontStyles";
 import { Player } from "objects/player/Player";
-import { applyTransform } from 'geom/Transform';
+import { applyTransform, Shape, intersects, rectangleToPolygon, rectangleToNumberArray } from 'geom/index';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
@@ -18,29 +18,31 @@ export class Main extends Phaser.State {
   public player: Player;
   public currentRoom: string;
   public map: Phaser.Tilemap;
+  protected triggers: Shape[];
   protected cameraPadding: number;
   public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
   protected healthText: Phaser.Text;
   protected hud: Phaser.Group;
   protected lastScale: number;
 
-  public addBullet(x: number, y: number, direction: Phaser.Point) {
-    const game = this.game as Game;
-    const bullet = game.factory.bullet(x, y);
-    bullet.name = "bullet";
-    bullet.setDirection(direction);
-    bullet.body.setCollisionGroup(this.collisions.get("bullets"));
-    this.bullets.add(bullet);
-
-    return bullet;
-  }
-
   constructor() {
     super();
+    this.triggers = [];
     this.cameraPadding = CAMERA_PADDING;
     this.lastScale = 1;
     this.rooms = new Map();
   }
+  
+    public addBullet(x: number, y: number, direction: Phaser.Point) {
+      const game = this.game as Game;
+      const bullet = game.factory.bullet(x, y);
+      bullet.name = "bullet";
+      bullet.setDirection(direction);
+      bullet.body.setCollisionGroup(this.collisions.get("bullets"));
+      this.bullets.add(bullet);
+  
+      return bullet;
+    }
 
   public addEnemy(type: string, x: number, y: number, name?: string) {
     const game = this.game as Game;
@@ -213,25 +215,36 @@ export class Main extends Phaser.State {
     const game = this.game as Game;
     const pixelScale = game.pixelScale;
     const player = this.player;
-    const treshold = 16 * pixelScale;
 
-    const bounds = new Phaser.Rectangle(0, 0, 0, 0);
-    player.collisionRectangle.clone(bounds);
-    bounds.width *= pixelScale;
-    bounds.height *= pixelScale;
-    bounds.x += player.x - player.anchor.x * bounds.width - treshold;
-    bounds.y += player.y - player.anchor.y * bounds.height - treshold;
-    bounds.width += 2 * treshold;
-    bounds.height += 2 * treshold;
+    const bounds = 
+      applyTransform(
+        new Phaser.Matrix()
+          .scale(pixelScale, pixelScale)
+          .translate(
+            player.x - player.anchor.x * player.width, 
+            player.y - player.anchor.y * player.height
+          ),
+        Phaser.Rectangle.clone(player.collisionRectangle)
+      ) as Phaser.Rectangle;
+
+    (window as any).debug
+      .clear()
+      .draw(bounds);
+
+    for (const trigger of this.triggers) {
+      (window as any).debug
+        .draw(trigger);
+
+      if (intersects(bounds, trigger) && game.input.activePointer.isDown) {
+        console.log('Intersects!');
+      }
+    }
 
     for (const [key, room] of this.rooms.entries()) {
       if (key !== this.currentRoom) {
         if (room.contains(player.x, player.y)) {
           this.setCurrentRoom(key);
           break;
-        } else if (room.intersects(bounds, 0) && game.input.activePointer.isDown) {
-          // trigger the next room animation
-          //break;
         }
       }
     }
@@ -297,32 +310,40 @@ export class Main extends Phaser.State {
 
               case "collisions":
                 for (const data of layerData.objects) {
-                  if (data.polygon) {
-                    const x = data.x * pixelScale;
-                    const y = data.y * pixelScale;
-                    const points = data.polygon.reduce(
-                      (points: number[], point: { x: number; y: number }) => {
-                        const x = point.x * pixelScale;
-                        const y = point.y * pixelScale;
-                        return points.concat(x, y);
-                      },
-                      []
-                    );
-                    const body = game.physics.p2.createBody(
+                  const x = data.x * pixelScale;
+                  const y = data.y * pixelScale;
+                  const shape = applyTransform(
+                    new Phaser.Matrix().scale(pixelScale, pixelScale),
+                    this.parseShape({...data, x: 0, y: 0})
+                  );
+                  let body;
+
+                  if (shape instanceof Phaser.Polygon) {
+                    body = game.physics.p2.createBody(
                       x,
                       y,
                       0,
                       true,
                       null,
-                      points
+                      shape.toNumberArray()
                     );
-
-                    body.setCollisionGroup(this.collisions.get("walls"));
-                    body.collides([
-                      this.collisions.get("player"),
-                      this.collisions.get("enemies")
-                    ]);
+                  } else if (shape instanceof Phaser.Rectangle) {
+                    body = game.physics.p2.createBody(
+                      x,
+                      y,
+                      0,
+                      true,
+                      null,
+                      rectangleToNumberArray(shape)
+                    );
                   }
+                  
+                  body.setCollisionGroup(this.collisions.get("walls"));
+                  body.collides([
+                    this.collisions.get("player"),
+                    this.collisions.get("enemies")
+                  ]);
+                  //body.debug = true;
                 }
                 break;
 
@@ -359,15 +380,11 @@ export class Main extends Phaser.State {
 
               case "triggers":
               for (const data of layerData.objects) {
-                const shape = this.parseShape(data);
-                if (shape instanceof Phaser.Polygon) {
-                  console.log(shape.constructor, shape);
-                  const poly = applyTransform(
-                    new Phaser.Matrix(pixelScale, 0, 0, pixelScale, 0, 0),
-                    shape  
-                  ) as Phaser.Polygon;
-                  (window as any).debug.poly(poly.toNumberArray());
-                }
+                const shape = applyTransform(
+                  new Phaser.Matrix().scale(pixelScale, pixelScale),
+                  this.parseShape(data)
+                );
+                this.triggers.push(shape);
               }
               break;
             }
@@ -378,9 +395,11 @@ export class Main extends Phaser.State {
   }
 
   protected parseShape(data: any) {
+    const x = data.x || 0;
+    const y = data.y || 0;
     if (data.polygon) {
       return new Phaser.Polygon(data.polygon.map((p: any) => { 
-        return {x: p.x + data.x, y: p.y + data.y};
+        return {x: p.x + x, y: p.y + y};
       }));
     } else if (
       data.hasOwnProperty("x") &&
@@ -388,12 +407,14 @@ export class Main extends Phaser.State {
       data.hasOwnProperty("width") &&
       data.hasOwnProperty("height")
     ) {
+      /*
       return new Phaser.Polygon([
-        data.x, data.y, 
-        data.x + data.width, data.y, 
-        data.x + data.width, data.y + data.height, 
-        data.x, data.y + data.height]);
-      //return new Phaser.Rectangle(data.x, data.y, data.width, data.height);
+        x, y, 
+        x + data.width, y, 
+        x + data.width, y + data.height, 
+        x, y + data.height]);
+      */
+      return new Phaser.Rectangle(x, y, data.width, data.height);
     } else {
       return null;
     }

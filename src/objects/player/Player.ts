@@ -7,6 +7,7 @@ import {Main} from 'states/Main';
 import { StateMachine } from 'statemachine/StateMachine';
 import { PlayerState } from 'objects/player/PlayerState';
 import { HurtState } from 'objects/player/HurtState';
+import { ControlledState } from 'objects/player/ControlledState';
 
 export class Player extends Sprite {
   public health: number = 100;
@@ -37,12 +38,25 @@ export class Player extends Sprite {
     this.state = new StateMachine();
     this.state.add('normal', new NormalState(this));
     this.state.add('hurt', new HurtState(this));
+    this.state.add('controlled', new ControlledState(this));
     this.state.set('normal');
+
+    (window as any).player = this;
   }
 
-  public currentAnimationKey() {
-    const state = this.inputHandler.state.key();
-    const direction = this.inputHandler.direction;
+  /**
+   * Returns the animation key. If no parameter is passed, it returns a key based on the
+   * input handler state and direction.
+   * @param state
+   * @param direction 
+   */
+  public animationKey(state?: string, direction?: Phaser.Point) {
+    if (!state) {
+      state = this.inputHandler.state.key();
+    }
+    if (!direction) {
+      direction = this.inputHandler.direction;
+    }
     if (direction.y < 0) {
       return state + '_up';
     } else if (direction.x > 0) {

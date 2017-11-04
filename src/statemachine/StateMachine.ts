@@ -27,20 +27,20 @@ export class StateMachine<T extends State> {
     this.states.forEach.apply(null, [callback, ...args]);
   }
 
-  public set(key: string) {
+  public set(key: string, ...args: any[]) {
     if (! this.states.has(key)) {
       throw new Error('State `' + key + '` doesn\'t exists');
     }
     if (this._current !== key) {
       let previous = this.key();
       if (this.current()) {
-        this.current().exit(key);
-        this.onExit.dispatch(previous, key);
+        this.current().exit.apply(this.current(), [key, ...args]);
+        this.onExit.dispatch.apply(this.onExit, [previous, key, ...args]);
       }
       this._current = key;
       if (this.current()) {
-        this.current().enter(previous);
-        this.onEnter.dispatch(previous, key);
+        this.current().enter.apply(this.current(), [previous, ...args]);
+        this.onEnter.dispatch.apply(this.onEnter, [previous, key, ...args]);
       }
     }
   }

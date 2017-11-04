@@ -1,3 +1,4 @@
+import { Shape } from 'geom/index';
 export class Debug {
   private game: Phaser.Game;
   private objects: PIXI.DisplayObject[] = [];
@@ -6,12 +7,20 @@ export class Debug {
     this.game = game;
   }
 
+  public draw(shape: Shape, color: number = 0xffffff) {
+    if (shape instanceof Phaser.Rectangle) {
+      this.rect(shape.x, shape.y ,shape.width, shape.height, color);
+    } else if (shape instanceof Phaser.Polygon) {
+      this.poly(shape.toNumberArray(), color);
+    }
+  }
+
   public rect(x: number, y: number, width: number, height: number, color: number = 0xffffff) {
     const gr = this.game.add.graphics();
     gr.lineStyle(1, color, 1);
     gr.drawRect(x, y, width, height);
     this.objects.push(gr);
-    return gr;
+    return this;
   }
 
   public poly(points: number[], color: number = 0xffffff) {
@@ -31,7 +40,7 @@ export class Debug {
     }
     gr.lineTo(x, y);
     this.objects.push(gr);
-    return gr;
+    return this;
   }
 
   public clear() {
@@ -39,5 +48,6 @@ export class Debug {
       object.parent.removeChild(object);
     }
     this.objects = [];
+    return this;
   }
 }

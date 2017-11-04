@@ -4,7 +4,6 @@ import {Boot} from 'states/Boot';
 import {Loading} from 'states/Loading';
 import {Main} from 'states/Main';
 import {Menu} from 'states/Menu';
-import { Polygon } from 'geom/Polygon';
 import {Debug} from 'core/Debug';
 
 // Factories
@@ -63,6 +62,11 @@ export class Game extends Phaser.Game {
   }
 
   public init() {
+    
+    Object.assign(window, {
+      debug: new Debug(this)
+    });
+
 	  this.time.advancedTiming = true;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
@@ -72,13 +76,6 @@ export class Game extends Phaser.Game {
 
     this.physics.startSystem(Phaser.Physics.P2JS);
     this.physics.p2.setImpactEvents(true);
-
-    Object.assign(window, {
-      tri: new Polygon([100, 100, 200, 100, 200, 200]),
-      quad: new Polygon([110, 160, 210, 170, 240, 240, 99, 200]),
-      Polygon: Polygon,
-      debug: new Debug(this)
-    });
   }
 
   /*
