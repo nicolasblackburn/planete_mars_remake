@@ -25,7 +25,7 @@ export class HurtState extends PlayerState {
 
   public update() {
     const hurtVelocity = this.hurtVelocity;
-    const elapsedMS = this.player.game2.time.elapsedMS * this.player.game2.timeScale;
+    const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
 
     this.player.animations.currentAnim.stop(false, false);
     this.player.body.velocity.x = this.hurtDirection.x * hurtVelocity * elapsedMS;

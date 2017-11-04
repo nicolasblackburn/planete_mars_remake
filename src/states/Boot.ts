@@ -1,8 +1,9 @@
-import {State} from 'core/State';
+import { Game } from 'core/Game';
 
-export class Boot extends State {
+export class Boot extends Phaser.State {
   public init() {
-    this.game2.init();
+    const game = this.game as Game;
+    game.init();
   }
 
   public preload() {
@@ -11,6 +12,7 @@ export class Boot extends State {
   }
 
   public create() {
-		this.game2.state.start('loading');
+    const game = this.game as Game;
+		game.state.start('loading');
   }
 }

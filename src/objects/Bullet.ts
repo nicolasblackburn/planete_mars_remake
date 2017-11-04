@@ -18,9 +18,15 @@ export class Bullet extends Sprite {
 
     this.baseVelocity = new Phaser.Point(0, 0);
     this.onBulletDestroyed = new Phaser.Signal();
-    this.aliveTimer = this.game2.time.create();
-    this.aliveTimer.add(this.killDelay, this.kill, this);
+    this.aliveTimer = this.game.time.create();
+    this.aliveTimer.add(this.killDelay, this.aliveTimerAction, this);
     this.aliveTimer.start();
+  }
+  
+  public aliveTimerAction() {
+    console.log('kill bullet');
+    this.exists = false;
+    this.onBulletDestroyed.dispatch();
   }
 
   public setDirection(direction: Phaser.Point) {
@@ -68,7 +74,8 @@ export class Bullet extends Sprite {
   }
 
   public update() {
-    this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * this.game2.timeScale;
-    this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * this.game2.timeScale;
+    const game = this.game as Game;
+    this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * game.timeScale;
+    this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * game.timeScale;
   }
 }

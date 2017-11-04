@@ -4,6 +4,8 @@ import {Boot} from 'states/Boot';
 import {Loading} from 'states/Loading';
 import {Main} from 'states/Main';
 import {Menu} from 'states/Menu';
+import { Polygon } from 'geom/Polygon';
+import {Debug} from 'core/Debug';
 
 // Factories
 import {Factory} from './Factory';
@@ -15,8 +17,8 @@ export class Game extends Phaser.Game {
   public timeScale: number;
 
   constructor() {
-    const baseWidth = 224;
-    const baseHeight = 126;
+    const baseWidth = 256;
+    const baseHeight = 144;
     //const baseWidth = 192;
     //const baseHeight = 108;
     const ratio  = 16/9;
@@ -70,8 +72,16 @@ export class Game extends Phaser.Game {
 
     this.physics.startSystem(Phaser.Physics.P2JS);
     this.physics.p2.setImpactEvents(true);
+
+    Object.assign(window, {
+      tri: new Polygon([100, 100, 200, 100, 200, 200]),
+      quad: new Polygon([110, 160, 210, 170, 240, 240, 99, 200]),
+      Polygon: Polygon,
+      debug: new Debug(this)
+    });
   }
 
+  /*
   public resize() {
     //*
     const baseWidth = 240;
@@ -93,4 +103,5 @@ export class Game extends Phaser.Game {
 
     this.scale.setUserScale(width / this.width, height / this.height);
   }
+  */
 }

@@ -19,8 +19,8 @@ export class Player extends Sprite {
   constructor(game: Game, x: number, y: number) {
     super(game, x, y, 'sprites', 'player_idle_down_00');
 
-    this.gameState = this.game2.getMainState();
-    this.inputHandler = new InputHandler(this.game2, this);
+    this.gameState = game.getMainState();
+    this.inputHandler = new InputHandler(game, this);
 
     this.game.physics.enable(this, Phaser.Physics.P2JS);
     this.body.fixedRotation = true;

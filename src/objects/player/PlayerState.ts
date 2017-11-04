@@ -11,7 +11,7 @@ export class PlayerState extends State {
   constructor(player: Player) {
     super();
     this.player = player;
-    this.game = this.player.game2;
+    this.game = this.player.game as Game;
     this.gameState = this.player.gameState;
   }
 

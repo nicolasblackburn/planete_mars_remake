@@ -29,7 +29,7 @@ export class NormalState extends PlayerState {
   public update() {
     const input = this.player.inputHandler;
     const maxVelocity = this.walkVelocity;
-    const elapsedMS = this.player.game2.time.elapsedMS * this.player.game2.timeScale;
+    const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
 
     input.update();
 
