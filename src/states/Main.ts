@@ -121,7 +121,6 @@ export class Main extends Phaser.State {
   ) {
     bullet.kill();
     enemy.kill();
-    console.log(enemy.exists);
   }
   
   public collidePlayerEnemy(
@@ -217,7 +216,7 @@ export class Main extends Phaser.State {
     const treshold = 16 * pixelScale;
 
     const bounds = new Phaser.Rectangle(0, 0, 0, 0);
-    player.baseCollisionShape.clone(bounds);
+    player.collisionRectangle.clone(bounds);
     bounds.width *= pixelScale;
     bounds.height *= pixelScale;
     bounds.x += player.x - player.anchor.x * bounds.width - treshold;
