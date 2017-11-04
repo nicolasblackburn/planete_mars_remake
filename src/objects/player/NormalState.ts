@@ -20,7 +20,7 @@ export class NormalState extends PlayerState {
       const y = this.player.body.y;
       const direction = this.player.inputHandler.direction;
       const bullet = this.gameState.addBullet(x, y, direction);
-      bullet.events.onKilled.addOnce(() => {
+      bullet.onBulletDestroyed.addOnce(() => {
         this.bulletCount--;
       });
     }

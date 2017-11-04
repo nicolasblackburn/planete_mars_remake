@@ -24,9 +24,9 @@ export class Bullet extends Sprite {
   }
   
   public aliveTimerAction() {
-    console.log('kill bullet');
-    this.exists = false;
+    this.kill();
     this.onBulletDestroyed.dispatch();
+    console.log('Timeout');
   }
 
   public setDirection(direction: Phaser.Point) {

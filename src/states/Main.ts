@@ -12,9 +12,9 @@ const CAMERA_PADDING = 8;
 
 export class Main extends Phaser.State {
   public rooms: Map<string, Phaser.Rectangle>;
-  public layers: Group<Sprite>;
-  public bullets: Group<Bullet>;
-  public enemies: Group<Enemy>;
+  public layers: Group;
+  public bullets: Group;
+  public enemies: Group;
   public player: Player;
   public currentRoom: string;
   public map: Phaser.Tilemap;
@@ -29,6 +29,7 @@ export class Main extends Phaser.State {
     const bullet = game.factory.bullet(x, y);
     bullet.name = "bullet";
     bullet.setDirection(direction);
+    bullet.body.setCollisionGroup(this.collisions.get("bullets"));
     this.bullets.add(bullet);
 
     return bullet;
@@ -86,9 +87,9 @@ export class Main extends Phaser.State {
     this.collisions.set("rooms", this.physics.p2.createCollisionGroup());
 
     this.layers = game.factory.group();
-    this.enemies = game.factory.group() as Group<Enemy>;
+    this.enemies = game.factory.group();
     this.addPlayer(0, 0, 'player');
-    this.bullets = game.factory.group() as Group<Bullet>;
+    this.bullets = game.factory.group();
 
     this.enemies.updateOnlyExistingChildren = true;
     this.bullets.updateOnlyExistingChildren = true;
@@ -120,6 +121,7 @@ export class Main extends Phaser.State {
   ) {
     bullet.kill();
     enemy.kill();
+    console.log(enemy.exists);
   }
   
   public collidePlayerEnemy(
@@ -186,31 +188,25 @@ export class Main extends Phaser.State {
   }
 
   protected updateCollisions() {
-    for (const enemy of this.enemies) {
-      if (enemy.exists) {
-        const enemyRect = enemy.getBoundsAsRectangle();
+    this.enemies.forEachExists((enemy: Enemy) => {
+      const enemyRect = enemy.getBoundsAsRectangle();
 
-        for (const bullet of this.bullets) {
-          if (bullet.exists) {
-      
-            const bulletRect = bullet.getBoundsAsRectangle();
-              
-            if (bulletRect.intersects(enemyRect, 0)) {
-              this.collideBulletEnemy(bullet as Bullet, enemy as Enemy);
-            }
-    
-          }
+      this.bullets.forEachExists((bullet: Bullet) =>  {
+        const bulletRect = bullet.getBoundsAsRectangle();
+          
+        if (bulletRect.intersects(enemyRect, 0)) {
+          this.collideBulletEnemy(bullet as Bullet, enemy as Enemy);
         }
+      });
 
-        if (enemy.exists) {
-          const playerRect = this.player.getBoundsAsRectangle();
+      if (enemy.exists) {
+        const playerRect = this.player.getBoundsAsRectangle();
 
-          if (playerRect.intersects(enemyRect, 0)) {
-            this.collidePlayerEnemy(this.player as Player, enemy as Enemy);
-          }
+        if (playerRect.intersects(enemyRect, 0)) {
+          this.collidePlayerEnemy(this.player as Player, enemy as Enemy);
         }
       }
-    }
+    });
 
   }
 

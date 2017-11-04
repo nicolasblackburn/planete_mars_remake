@@ -4,8 +4,8 @@ import { Enemy } from 'core/Enemy';
 import { Player } from 'objects/player/Player';
 export class Room {
     public adjacentRooms: Array<Room>;
-    public bullets: Group<Bullet>;
-    public enemies: Group<Enemy>;
+    public bullets: Group;
+    public enemies: Group;
     public player: Player;
 
     constructor(player: Player) {

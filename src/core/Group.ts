@@ -1,15 +1,16 @@
 import { Sprite } from 'core/Sprite';
 import { Game } from 'core/Game';
 
-export class Group<T extends Sprite> extends Phaser.Group {
+export class Group extends Phaser.Group {
   constructor(game: Game) {
     super(game);
     this.updateOnlyExistingChildren = true;
   }
 
+  /*
   [Symbol.iterator]() {
     let index = 0;
-    let children = this.children;
+    let children = this.;
     return {
       next(): IteratorResult<T> {
         if (index < children.length) {
@@ -26,4 +27,5 @@ export class Group<T extends Sprite> extends Phaser.Group {
       }
     };
   }
+  */
 }
