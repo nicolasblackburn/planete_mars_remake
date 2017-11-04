@@ -2,16 +2,18 @@ import { Sprite } from 'core/Sprite';
 import { Game } from 'core/Game';
 
 export class Group extends Phaser.Group {
-  public game2: Game;
   public updateOnlyAwakeChildren: boolean;
 
   constructor(game: Game) {
     super(game);
-    this.game2 = game;
     this.updateOnlyExistingChildren = true;
     this.updateOnlyAwakeChildren = true;
   }
 
+  /**
+   * Basically identical to Phaser's Group.update() method but we also skip update
+   * of non-awake sprites.
+   */
   public update() {
     //  Goes in reverse, because it's highly likely the child will destroy itself in `update`
     var i = this.children.length;

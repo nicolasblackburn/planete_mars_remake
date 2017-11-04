@@ -33,7 +33,7 @@ export class NormalState extends PlayerState {
 
     input.update();
 
-    this.player.animations.play(this.player.currentAnimationKey(), null, true);
+    this.player.animations.play(this.player.animationKey(), null, true);
 
     if (['move', 'move_shoot'].includes(input.state.key())) {
       this.player.body.velocity.x = input.direction.x * maxVelocity * elapsedMS;
