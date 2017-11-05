@@ -1,44 +1,38 @@
-import { Group } from 'core/Group';
-import {Game} from 'core/Game';
-import {Bullet} from 'objects/Bullet';
-import {Crab} from 'objects/Crab';
-import {Player} from 'objects/player/Player';
+import { Room } from "core/Room";
+import { Group } from "core/Group";
+import { Game } from "core/Game";
+import { Bullet } from "objects/Bullet";
+import { Crab } from "objects/Crab";
+import { Player } from "objects/player/Player";
 
 export class Factory {
-  protected game: Game;
+    protected game: Game;
 
-  constructor(game: Game) {
-  	this.game = game;
-  }
-
-  public create(type: string, x: number, y: number) {
-    switch (type) {
-      case 'Bullet':
-        return this.bullet(x, y);
-
-      case 'Crab':
-        return this.crab(x, y);
-
-      case 'Player':
-        return this.player(x, y);
+    constructor(game: Game) {
+        this.game = game;
     }
-  }
 
-  public bullet(x: number, y: number) {
-  	const sprite = new Bullet(this.game, x, y);
-    return sprite;
-  }
+    public create(type: string, x: number, y: number) {
+        switch (type) {
+            case "Crab":
+                return new Crab(this.game, x, y);
+        }
+    }
 
-  public crab(x: number, y: number) {
-    return new Crab(this.game, x, y);
-  }
+    public bullet(x: number, y: number) {
+        const sprite = new Bullet(this.game, x, y);
+        return sprite;
+    }
 
-  public group() {
-    return new Group(this.game);
-  }
+    public crab(x: number, y: number) {
+        return new Crab(this.game, x, y);
+    }
 
-  public player(x: number, y: number) {
-    return new Player(this.game, x, y);
+    public group() {
+        return new Group(this.game);
+    }
 
-  }
+    public player(x: number, y: number) {
+        return new Player(this.game, x, y);
+    }
 }

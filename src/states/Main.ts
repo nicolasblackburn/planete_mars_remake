@@ -1,422 +1,214 @@
-import { Sprite } from 'core/Sprite';
-import { Enemy } from 'core/Enemy';
-import { Bullet } from 'objects/Bullet';
-import { Game } from 'core/Game';
+import { MapParser } from "core/MapParser";
+import { Sprite } from "core/Sprite";
+import { Enemy } from "core/Enemy";
+import { Bullet } from "objects/Bullet";
+import { Game } from "core/Game";
 import { Group } from "core/Group";
 import { fontStyles } from "fontStyles";
 import { Player } from "objects/player/Player";
-import { applyTransform, Shape, intersects, rectangleToPolygon, rectangleToNumberArray } from 'geom/index';
+import {
+    applyTransform,
+    Shape,
+    intersects,
+    rectangleToPolygon,
+    rectangleToNumberArray
+} from "geom";
+import { Room } from "core/Room";
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
 
 export class Main extends Phaser.State {
-  public rooms: Map<string, Phaser.Rectangle>;
-  public layers: Group;
-  public bullets: Group;
-  public enemies: Group;
-  public player: Player;
-  public currentRoom: string;
-  public map: Phaser.Tilemap;
-  protected triggers: Shape[];
-  protected cameraPadding: number;
-  public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
-  protected healthText: Phaser.Text;
-  protected hud: Phaser.Group;
-  protected lastScale: number;
+    public topRoom: Room;
+    public rooms: Map<string, Phaser.Rectangle>;
+    public currentRoom: string;
+    public triggers: Shape[];
+    protected cameraPadding: number;
+    protected healthText: Phaser.Text;
+    protected hud: Phaser.Group;
+    protected lastScale: number;
+    protected mapParser: MapParser;
 
-  constructor() {
-    super();
-    this.triggers = [];
-    this.cameraPadding = CAMERA_PADDING;
-    this.lastScale = 1;
-    this.rooms = new Map();
-  }
-  
-    public addBullet(x: number, y: number, direction: Phaser.Point) {
-      const game = this.game as Game;
-      const bullet = game.factory.bullet(x, y);
-      bullet.name = "bullet";
-      bullet.setDirection(direction);
-      bullet.body.setCollisionGroup(this.collisions.get("bullets"));
-      this.bullets.add(bullet);
-  
-      return bullet;
+    constructor() {
+        super();
+        this.triggers = [];
+        this.cameraPadding = CAMERA_PADDING;
+        this.lastScale = 1;
+        this.rooms = new Map();
     }
 
-  public addEnemy(type: string, x: number, y: number, name?: string) {
-    const game = this.game as Game;
-    const enemy = game.factory.create(
-      type,
-      x * game.pixelScale,
-      y * game.pixelScale
-    );
-    this.enemies.add(enemy);
+    public create() {
+        const game = this.game as Game;
+        this.mapParser = new MapParser(game);
 
-    if (name) {
-      enemy.name = name;
+        this.topRoom = new Room(game);
+        this.topRoom.create();
+        this.topRoom.setMap(new Phaser.Tilemap(game, "level1_intro"));
+        this.mapParser.loadMapData("level1_intro", this);
+
+        this.updateRoom();
+
+        this.hud = game.add.group();
+        this.healthText = this.game.add.text(
+            0,
+            0,
+            "0, 0",
+            fontStyles.body,
+            this.hud
+        );
+
+        this.resize();
     }
 
-    enemy.body.setCollisionGroup(this.collisions.get("enemies"));
-    enemy.body.collides(this.collisions.get("walls"));
-  }
-
-  public addPlayer(x: number, y: number, name?: string) {
-    const game = this.game as Game;
-    const player = game.factory.player(
-      x * game.pixelScale,
-      y * game.pixelScale
-    );
-    this.player = player;
-    game.world.add(player);
-
-    if (name) {
-      player.name = name;
+    public getCurrentRoom() {
+        return this.rooms.get(this.currentRoom);
     }
 
-    player.body.setCollisionGroup(this.collisions.get("player"));
-    player.body.collides(this.collisions.get("walls"));
-  }
-
-  public create() {
-    const game = this.game as Game;
-
-    this.collisions = new Map();
-    this.collisions.set("player", this.physics.p2.createCollisionGroup());
-    this.collisions.set("enemies", this.physics.p2.createCollisionGroup());
-    this.collisions.set("bullets", this.physics.p2.createCollisionGroup());
-    this.collisions.set("walls", this.physics.p2.createCollisionGroup());
-    this.collisions.set("rooms", this.physics.p2.createCollisionGroup());
-
-    this.layers = game.factory.group();
-    this.enemies = game.factory.group();
-    this.addPlayer(0, 0, 'player');
-    this.bullets = game.factory.group();
-
-    this.enemies.updateOnlyExistingChildren = true;
-    this.bullets.updateOnlyExistingChildren = true;
-
-    this.map = new Phaser.Tilemap(game, "level1_intro");
-    this.loadMapData("level1_intro");
-
-    this.updateRoom();
-
-    this.hud = game.add.group();
-    this.healthText = this.game.add.text(
-      0,
-      0,
-      "0, 0",
-      fontStyles.body,
-      this.hud
-    );
-
-    this.resize();
-  }
-
-  public getCurrentRoom() {
-    return this.rooms.get(this.currentRoom);
-  }
-
-  public collideBulletEnemy(
-    bullet: Bullet,
-    enemy: Enemy
-  ) {
-    bullet.kill();
-    enemy.kill();
-  }
-  
-  public collidePlayerEnemy(
-    player: Player,
-    enemy: Enemy
-  ) {
-    player.hurt(enemy.damagePoints);
-  }
-
-  public collidePlayerRoom(
-    player: Phaser.Physics.P2.Body,
-    room: Phaser.Physics.P2.Body,
-    playerShape: p2.Shape,
-    roomShape: p2.Shape
-  ) {
-    console.log('Collide room `' + (room as any).name + '`');
-  }
-  
-  public resize() {
-    const game = this.game as Game;
-    const width = game.width;
-    const height = game.height;
-    const scale =
-      height === 0 || width / height >= 1 ? height / 360 : width / 360;
-
-    this.healthText.fontSize = floor(fontStyles.body.fontSize * scale);
-    this.cameraPadding = floor(8 * scale);
-
-    if (this.lastScale !== game.pixelScale) {
-      game.camera.x = floor(
-        game.camera.x / this.lastScale * game.pixelScale
-      );
-      game.camera.y = floor(
-        game.camera.y / this.lastScale * game.pixelScale
-      );
-      this.constrainCamera();
-      this.lastScale = game.pixelScale;
-    }
-  }
-  
-  public setCurrentRoom(key: string) {
-    this.currentRoom = key;
-  }
-
-  public update() {
-    this.updateRoom();
-    this.updateCollisions();
-
-    const game = this.game as Game;
-    const room = this.getCurrentRoom();
-
-    game.camera.x = floor(this.player.x - this.camera.width / 2);
-    game.camera.y = floor(this.player.y - this.camera.height / 2);
-
-    this.constrainCamera();
-
-    this.healthText.text = "Énergie: " + this.player.health + "%";
-    //this.healthText.text += "\nFPS: " + game.time.fps;
-
-    this.hud.position.set(
-      game.camera.x + this.cameraPadding,
-      game.camera.y + this.cameraPadding
-    );
-  }
-
-  protected updateCollisions() {
-    this.enemies.forEachExists((enemy: Enemy) => {
-      const enemyRect = enemy.getBoundsAsRectangle();
-
-      this.bullets.forEachExists((bullet: Bullet) =>  {
-        const bulletRect = bullet.getBoundsAsRectangle();
-          
-        if (bulletRect.intersects(enemyRect, 0)) {
-          this.collideBulletEnemy(bullet as Bullet, enemy as Enemy);
-        }
-      });
-
-      if (enemy.exists) {
-        const playerRect = this.player.getBoundsAsRectangle();
-
-        if (playerRect.intersects(enemyRect, 0)) {
-          this.collidePlayerEnemy(this.player as Player, enemy as Enemy);
-        }
-      }
-    });
-
-  }
-
-  protected updateRoom() {
-    const game = this.game as Game;
-    const pixelScale = game.pixelScale;
-    const player = this.player;
-
-    const bounds = 
-      applyTransform(
-        new Phaser.Matrix()
-          .scale(pixelScale, pixelScale)
-          .translate(
-            player.x - player.anchor.x * player.width, 
-            player.y - player.anchor.y * player.height
-          ),
-        Phaser.Rectangle.clone(player.collisionRectangle)
-      ) as Phaser.Rectangle;
-
-    (window as any).debug
-      .clear()
-      .draw(bounds);
-
-    for (const trigger of this.triggers) {
-      (window as any).debug
-        .draw(trigger);
-
-      if (intersects(bounds, trigger) && game.input.activePointer.isDown) {
-        console.log('Intersects!');
-      }
+    public collideBulletEnemy(bullet: Bullet, enemy: Enemy) {
+        bullet.kill();
+        enemy.kill();
     }
 
-    for (const [key, room] of this.rooms.entries()) {
-      if (key !== this.currentRoom) {
-        if (room.contains(player.x, player.y)) {
-          this.setCurrentRoom(key);
-          break;
-        }
-      }
-    }
-  }
-
-  protected constrainCamera() {
-    const game = this.game as Game;
-    const pixelScale = game.pixelScale;
-    const tileWidth = this.map.tileWidth / 4 * pixelScale;
-    const tileHeight = this.map.tileHeight / 4 * pixelScale;
-
-    const room = this.getCurrentRoom();
-    
-    if (! room) {
-      return;
+    public collidePlayerEnemy(player: Player, enemy: Enemy) {
+        player.hurt(enemy.damagePoints);
     }
 
-    const maxX = room.x + room.width - this.camera.width;
-    const maxY = room.y + room.height - this.camera.height;
+    public resize() {
+        const game = this.game as Game;
+        const width = game.width;
+        const height = game.height;
+        const scale =
+            height === 0 || width / height >= 1 ? height / 360 : width / 360;
 
-    if (game.camera.x < room.x) {
-      game.camera.x = room.x;
-    } else if (game.camera.x > maxX) {
-      game.camera.x = maxX;
-    }
+        this.healthText.fontSize = floor(fontStyles.body.fontSize * scale);
+        this.cameraPadding = floor(8 * scale);
 
-    if (game.camera.y < room.y) {
-      game.camera.y = room.y;
-    } else if (game.camera.y > maxY) {
-      game.camera.y = maxY;
-    }
-  }
-
-  protected loadMapData(key: string) {
-    const game = this.game as Game;
-    const pixelScale = game.pixelScale;
-    const factory = game.factory;
-    const mapData = game.cache.getTilemapData(key).data;
-
-    for (const tileset of mapData.tilesets) {
-      this.map.addTilesetImage(tileset.name);
-    }
-
-    for (const layerData of mapData.layers) {
-      let layer;
-      if (layerData.name) {
-        switch (layerData.type) {
-          case "tilelayer":
-            layer = this.map.createLayer(
-              layerData.name,
-              null,
-              null,
-              this.layers
+        if (this.lastScale !== game.pixelScale) {
+            game.camera.x = floor(
+                game.camera.x / this.lastScale * game.pixelScale
             );
-            
-            layer.smoothed = false;
-            layer.setScale(pixelScale);
-            layer.resizeWorld();
-            break;
-
-          case "objectgroup":
-            switch (layerData.name) {
-
-              case "collisions":
-                for (const data of layerData.objects) {
-                  const x = data.x * pixelScale;
-                  const y = data.y * pixelScale;
-                  const shape = applyTransform(
-                    new Phaser.Matrix().scale(pixelScale, pixelScale),
-                    this.parseShape({...data, x: 0, y: 0})
-                  );
-                  let body;
-
-                  if (shape instanceof Phaser.Polygon) {
-                    body = game.physics.p2.createBody(
-                      x,
-                      y,
-                      0,
-                      true,
-                      null,
-                      shape.toNumberArray()
-                    );
-                  } else if (shape instanceof Phaser.Rectangle) {
-                    body = game.physics.p2.createBody(
-                      x,
-                      y,
-                      0,
-                      true,
-                      null,
-                      rectangleToNumberArray(shape)
-                    );
-                  }
-                  
-                  body.setCollisionGroup(this.collisions.get("walls"));
-                  body.collides([
-                    this.collisions.get("player"),
-                    this.collisions.get("enemies")
-                  ]);
-                  //body.debug = true;
-                }
-                break;
-
-              case "enemies":
-                for (const data of layerData.objects) {
-                  this.addEnemy(data.type, data.x, data.y, data.name);
-                }
-                break;
-
-              case "player":
-                const data = layerData.objects[0];
-                this.player.body.x = data.x * pixelScale;
-                this.player.body.y = data.y * pixelScale;
-                this.player.name = data.name;
-                break;
-
-              case "rooms":
-                for (const data of layerData.objects) {
-                  if (
-                    data.hasOwnProperty("x") &&
-                    data.hasOwnProperty("y") &&
-                    data.hasOwnProperty("width") &&
-                    data.hasOwnProperty("height")
-                  ) {
-                    const x = data.x * pixelScale;
-                    const y = data.y * pixelScale;
-                    const width = data.width * pixelScale;
-                    const height = data.height * pixelScale;
-
-                    this.rooms.set(data.name, new Phaser.Rectangle(x, y, width, height));
-                  }
-                }
-                break;
-
-              case "triggers":
-              for (const data of layerData.objects) {
-                const shape = applyTransform(
-                  new Phaser.Matrix().scale(pixelScale, pixelScale),
-                  this.parseShape(data)
-                );
-                this.triggers.push(shape);
-              }
-              break;
-            }
-            break;
+            game.camera.y = floor(
+                game.camera.y / this.lastScale * game.pixelScale
+            );
+            this.constrainCamera();
+            this.lastScale = game.pixelScale;
         }
-      }
     }
-  }
 
-  protected parseShape(data: any) {
-    const x = data.x || 0;
-    const y = data.y || 0;
-    if (data.polygon) {
-      return new Phaser.Polygon(data.polygon.map((p: any) => { 
-        return {x: p.x + x, y: p.y + y};
-      }));
-    } else if (
-      data.hasOwnProperty("x") &&
-      data.hasOwnProperty("y") &&
-      data.hasOwnProperty("width") &&
-      data.hasOwnProperty("height")
-    ) {
-      /*
-      return new Phaser.Polygon([
-        x, y, 
-        x + data.width, y, 
-        x + data.width, y + data.height, 
-        x, y + data.height]);
-      */
-      return new Phaser.Rectangle(x, y, data.width, data.height);
-    } else {
-      return null;
+    public setCurrentRoom(key: string) {
+        this.currentRoom = key;
     }
-  }
+
+    public update() {
+        this.updateRoom();
+        this.updateCollisions();
+
+        const game = this.game as Game;
+        const room = this.getCurrentRoom();
+        const player = this.topRoom.player;
+
+        game.camera.x = floor(player.x - this.camera.width / 2);
+        game.camera.y = floor(player.y - this.camera.height / 2);
+
+        this.constrainCamera();
+
+        this.healthText.text = "Énergie: " + player.health + "%";
+        //this.healthText.text += "\nFPS: " + game.time.fps;
+
+        this.hud.position.set(
+            game.camera.x + this.cameraPadding,
+            game.camera.y + this.cameraPadding
+        );
+    }
+
+    protected updateCollisions() {
+        this.topRoom.enemies.forEachExists((enemy: Enemy) => {
+            const enemyRect = enemy.getBoundsAsRectangle();
+
+            this.topRoom.bullets.forEachExists((bullet: Bullet) => {
+                const bulletRect = bullet.getBoundsAsRectangle();
+
+                if (bulletRect.intersects(enemyRect, 0)) {
+                    this.collideBulletEnemy(bullet as Bullet, enemy as Enemy);
+                }
+            });
+
+            if (enemy.exists) {
+                const playerRect = this.topRoom.player.getBoundsAsRectangle();
+
+                if (playerRect.intersects(enemyRect, 0)) {
+                    this.collidePlayerEnemy(
+                        this.topRoom.player as Player,
+                        enemy as Enemy
+                    );
+                }
+            }
+        });
+    }
+
+    protected updateRoom() {
+        const game = this.game as Game;
+        const pixelScale = game.pixelScale;
+        const player = this.topRoom.player;
+
+        const bounds = applyTransform(
+            new Phaser.Matrix()
+                .scale(pixelScale, pixelScale)
+                .translate(
+                    player.x - player.anchor.x * player.width,
+                    player.y - player.anchor.y * player.height
+                ),
+            Phaser.Rectangle.clone(player.collisionRectangle)
+        ) as Phaser.Rectangle;
+
+        (window as any).debug.clear().draw(bounds);
+
+        for (const trigger of this.triggers) {
+            (window as any).debug.draw(trigger);
+
+            if (
+                intersects(bounds, trigger) &&
+                game.input.activePointer.isDown
+            ) {
+                console.log("Intersects!");
+            }
+        }
+
+        for (const [key, room] of this.rooms.entries()) {
+            if (key !== this.currentRoom) {
+                if (room.contains(player.x, player.y)) {
+                    this.setCurrentRoom(key);
+                    break;
+                }
+            }
+        }
+    }
+
+    protected constrainCamera() {
+        const game = this.game as Game;
+        const pixelScale = game.pixelScale;
+        const tileWidth = this.topRoom.map.tileWidth / 4 * pixelScale;
+        const tileHeight = this.topRoom.map.tileHeight / 4 * pixelScale;
+
+        const room = this.getCurrentRoom();
+
+        if (!room) {
+            return;
+        }
+
+        const maxX = room.x + room.width - this.camera.width;
+        const maxY = room.y + room.height - this.camera.height;
+
+        if (game.camera.x < room.x) {
+            game.camera.x = room.x;
+        } else if (game.camera.x > maxX) {
+            game.camera.x = maxX;
+        }
+
+        if (game.camera.y < room.y) {
+            game.camera.y = room.y;
+        } else if (game.camera.y > maxY) {
+            game.camera.y = maxY;
+        }
+    }
 }
