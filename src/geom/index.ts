@@ -110,3 +110,156 @@ export function applyTransform(transform: Phaser.Matrix, shape: Shape): Shape {
         return shapes as Shape;
     }
 }
+
+export function add(pointsA: number[], pointsB: number[]) {
+    const result = [];
+    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+        result.push(pointsA[i] + pointsB[i]);
+    }
+    return result;
+}
+
+export function sub(pointsA: number[], pointsB: number[]) {
+    const result = [];
+    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+        result.push(pointsA[i] - pointsB[i]);
+    }
+    return result;
+}
+
+export function scale(scalar: number, points: number[]) {
+    const result = [];
+    for (let i = 0; i < points.length; i ++) {
+        result.push(scalar * points[i]);
+    }
+    return result;
+}
+
+export function dot(pointsA: number[], pointsB: number[]) {
+    let result = 0;
+    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+        result += pointsA[i] * pointsB[i];
+    }
+    return result;
+}
+
+/**
+ * Let A and B be two segments with end points A1, A2 and B1, B2.
+ * We solve the linear equation A1 + s(A2 - A1) = B1 + t(B2 - B1) for 0 <= s < |A2 - A1| and 0 <= t < |B2 - B1|.
+ * 
+ * A segment from point P_1 to point P_2 is represented by an array of 4 numbers: 
+ *     array[0] = x coordinate of P_1 
+ *     array[1] = y coordinate of P_1
+ *     array[2] = x coordinate of P_2
+ *     array[3] = y coordinate of P_2
+ * 
+ * The end point (P_2) of a segment is open.
+ * 
+ * If the third parameter is passed, the solution to the equation, if it exists will be stored in it.
+ */
+export function intersectsSegmentSegment(segmentA: number[], segmentB: number[], solution?: number[]) {
+    const a11 = segmentA[2] - segmentA[0];
+    const a12 = segmentB[0] - segmentB[2];
+    const a21 = segmentA[3] - segmentA[1];
+    const a22 = segmentB[1] - segmentB[3];
+    const y1 = segmentB[0] - segmentA[0];
+    const y2 = segmentB[1] - segmentA[1];
+
+    const detA = a11 * a22 - a12 * a21;
+
+    if (detA === 0) {
+        // The segments are parallel which means [a21 a22] is a scalar multiple of [a11 a12]
+        if (a11 * y2 - a21 * y1 !== 0) {
+            // The segments are not confounded, so there are no solutions
+            return false;
+
+        } else {
+            // We find the interval intersection on the x axis
+            let a1 = segmentA[0];
+            let a2 = segmentA[2];
+            let b1 = segmentB[0];
+            let b2 = segmentB[2];
+
+            if (a1 === a2 && a2 === b1 && b1 === b2) {
+                // Degenerate case where both segments reduce to a point
+
+                if (solution) {
+                    solution[0] = 0;
+                    solution[1] = 0;
+                }
+                
+                return true;
+
+            }
+
+            if (segmentA[0] !== segmentA[2]) {
+                // We find the interval intersection on the y axis because the x axis have no variation
+                a1 = segmentA[1];
+                a2 = segmentA[3];
+                b1 = segmentB[1];
+                b2 = segmentB[3];
+            }
+
+            if (a1 > a2) {
+                const swap = a2;
+                a2 = a1;
+                a1 = swap;
+            }
+
+            if (b1 > b2) {
+                const swap = b2;
+                b2 = b1;
+                b1 = swap;
+            }
+
+            if (b2 < a1) {
+                return false;
+
+            } else if (a1 === a2 && a2 <= b1) {
+                // Degenerate case where the first segment reduce to a point
+                
+                if (solution) {
+                    solution[0] = 0;
+                    solution[1] = 0;
+                }
+
+                return true;
+            
+            } else if (a2 <= b1) {
+                return false;
+
+            } else if (a1 <= b1) {
+                
+                if (solution) {
+                    solution[0] = (segmentB[0] - segmentA[0]) / (segmentA[2] - segmentA[0]);
+                    solution[1] = 0;
+                }
+                
+                return true;
+
+            } else {
+                
+                if (solution) {
+                    solution[0] = 0;
+                    solution[1] = (segmentA[0] - segmentB[0]) / (segmentB[2] - segmentB[0]);
+                }
+
+                return true;
+            } 
+
+        }
+
+    } else {
+        const s = (a22 * y1 - a12 * y2) / detA;
+        const t = (a11 * y2 - a21 * y1) / detA;
+        const absASquare = a11 * a11 + a21 * a21;
+        const absBSquare = a12 * a12 + a22 * a22;
+
+        if (solution) {
+            solution[0] = s;
+            solution[1] = t;
+        }
+
+        return 0 <= s && s * s < absASquare && 0 <= t && t * t < absBSquare;
+    }
+}

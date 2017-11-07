@@ -14,6 +14,7 @@ import {
     rectangleToNumberArray
 } from "geom";
 import { Room } from "core/Room";
+import { Trigger } from 'core/Trigger';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
@@ -22,7 +23,7 @@ export class Main extends Phaser.State {
     public topRoom: Room;
     public rooms: Map<string, Phaser.Rectangle>;
     public currentRoom: string;
-    public triggers: Shape[];
+    public triggers: Trigger[];
     protected cameraPadding: number;
     protected healthText: Phaser.Text;
     protected hud: Phaser.Group;
@@ -163,12 +164,11 @@ export class Main extends Phaser.State {
 
         (window as any).debug.clear().draw(bounds);
 
-        for (const trigger of this.triggers) {
-            (window as any).debug.draw(trigger);
+        for (const {shape, action, context} of this.triggers) {
+            (window as any).debug.draw(shape);
 
             if (
-                intersects(bounds, trigger) &&
-                game.input.activePointer.isDown
+                intersects(bounds, shape)
             ) {
                 console.log("Intersects!");
             }
