@@ -426,11 +426,11 @@
                  "name":"",
                  "properties":
                     {
-                     "action":"changeRoom 'room2' 'down'"
+                     "axis":"[0,1]"
                     },
                  "propertytypes":
                     {
-                     "action":"string"
+                     "axis":"string"
                     },
                  "rotation":0,
                  "type":"Passage",
@@ -443,6 +443,14 @@
                  "height":32,
                  "id":90,
                  "name":"",
+                 "properties":
+                    {
+                     "axis":"[1,0]"
+                    },
+                 "propertytypes":
+                    {
+                     "axis":"string"
+                    },
                  "rotation":0,
                  "type":"Passage",
                  "visible":true,
@@ -500,7 +508,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":95,
+ "nextobjectid":96,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "templategroups":[
