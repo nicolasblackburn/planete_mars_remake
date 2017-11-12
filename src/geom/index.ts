@@ -157,7 +157,7 @@ export function dot(pointsA: number[], pointsB: number[]) {
  * 
  * If the third parameter is passed, the solution to the equation, if it exists will be stored in it.
  */
-export function intersectsSegmentSegment(segmentA: number[], segmentB: number[], solution?: number[]) {
+export function intersectsSegmentSegment(segmentA: number[], segmentB: number[], solutionRef?: number[]) {
     const a11 = segmentA[2] - segmentA[0];
     const a12 = segmentB[0] - segmentB[2];
     const a21 = segmentA[3] - segmentA[1];
@@ -166,6 +166,7 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
     const y2 = segmentB[1] - segmentA[1];
 
     const detA = a11 * a22 - a12 * a21;
+    let solution = solutionRef ? solutionRef: [];
 
     if (detA === 0) {
         // The segments are parallel which means [a21 a22] is a scalar multiple of [a11 a12]
@@ -173,79 +174,90 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
             // The segments are not confounded, so there are no solutions
             return false;
 
-        } else {
-            // We find the interval intersection on the x axis
-            let a1 = segmentA[0];
-            let a2 = segmentA[2];
-            let b1 = segmentB[0];
-            let b2 = segmentB[2];
+        } else if (a11 === 0 && a12 === 0) {
 
-            if (a1 === a2 && a2 === b1 && b1 === b2) {
-                // Degenerate case where both segments reduce to a point
-
-                if (solution) {
-                    solution[0] = 0;
-                    solution[1] = 0;
-                }
-                
-                return true;
-
-            }
-
-            if (segmentA[0] !== segmentA[2]) {
-                // We find the interval intersection on the y axis because the x axis have no variation
-                a1 = segmentA[1];
-                a2 = segmentA[3];
-                b1 = segmentB[1];
-                b2 = segmentB[3];
-            }
-
-            if (a1 > a2) {
-                const swap = a2;
-                a2 = a1;
-                a1 = swap;
-            }
-
-            if (b1 > b2) {
-                const swap = b2;
-                b2 = b1;
-                b1 = swap;
-            }
-
-            if (b2 < a1) {
-                return false;
-
-            } else if (a1 === a2 && a2 <= b1) {
-                // Degenerate case where the first segment reduce to a point
-                
-                if (solution) {
-                    solution[0] = 0;
-                    solution[1] = 0;
-                }
-
-                return true;
-            
-            } else if (a2 <= b1) {
-                return false;
-
-            } else if (a1 <= b1) {
-                
-                if (solution) {
-                    solution[0] = (segmentB[0] - segmentA[0]) / (segmentA[2] - segmentA[0]);
-                    solution[1] = 0;
-                }
-                
+            if (y1 === 0) {
+                // Degenerate case where both segments reduce to confounded points
+                solution[0] = 0;
+                solution[1] = 0;
                 return true;
 
             } else {
+                // Degenerate case where both segments reduce to different points, no solution
+                return false;
+
+            }
+
+
+        } else if (a11 === 0) {
+            // Degenerate case where segment A is a point
+            const s = 0;
+            const t = y1 / a12;
+
+            if (0 <= t && t <= 1) {
+                // Point is on segment B
+                solution[0] = s;
+                solution[1] = t;
+                return true;
                 
-                if (solution) {
-                    solution[0] = 0;
-                    solution[1] = (segmentA[0] - segmentB[0]) / (segmentB[2] - segmentB[0]);
-                }
+            } else {
+                // Point is not on segment B
+                return false;
+                
+            }
+
+        } else if (a12 === 0) {
+            // Degenerate case where segment B is a point
+            const s = y1 / a11;
+            const t = 0;
+
+            if (0 <= s && s <= 1) {
+                // Point is on segment A
+                solution[0] = s;
+                solution[1] = t;
+                return true;
+                
+            } else {
+                // Point is not on segment A
+                return false;
+                
+            }
+        
+        } else {
+            // Find the solution interval:
+            // We have 
+            //         a11 * s + a12 * t = y1
+            //         0 <= s <= 1 
+            // and     0 <= t <= 1.
+            // Then t = y1 / a12 - a11 / a12 * s
+            // and 0 <= y1 / a12 - a11 /a12 * s <= 1,
+            // implying -y1 / a12 <= -a11 / a12 * s <= 1 - y1 / a12
+            //           y1 / a12 >= a11 / a12 * s >= y1 / a12 - 1
+            //           y1 / a11 >= s >= y1 / a11 - a12 / a11
+            //           y1 / a11 - a12 / a11 <= s <= y1 / a11.
+            // We find as solution
+            // s in [b, B]
+            // where b = max(0, y1 / a11 - a12 / a11)
+            // and B = min(1, y1 / a11)
+            // with conditions 0 <= b <= B <= 1
+            const b = Math.max(0, y1 / a11 - a12 / a11);
+            const B = Math.min(1, y1 / a11);
+
+            if (b > B || 1 < b || B < 0) {
+                // Segments don't overlap
+                return false;
+
+            } else  {
+                // Segments overlap
+                const s = b; 
+                const t = y1 / a12 - a11 / a12 * s;
+
+                solution[0] = b;
+                solution[1] = t;
 
                 return true;
-            } 
+
+            }
 
         }
 
@@ -255,11 +267,33 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
         const absASquare = a11 * a11 + a21 * a21;
         const absBSquare = a12 * a12 + a22 * a22;
 
-        if (solution) {
-            solution[0] = s;
-            solution[1] = t;
-        }
-
-        return 0 <= s && s * s < absASquare && 0 <= t && t * t < absBSquare;
+        
+        solution[0] = s;
+        solution[1] = t;
+        return 0 <= s && s * s <= absASquare && 0 <= t && t * t <= absBSquare;
     }
+}
+
+/**
+ * Solve A1 + s * (A2 - A1) + u * dr = B1 + t * (B2 - B1)
+ * equiv. s * (A2 - A1) + t * (B1 - B2) + u * dr = B1 - A1
+ * [ a11 a12 a13 |   [ s |   [ y1 |
+ * | a21 a22 a23 ] * | t | = | y2 ]
+ *                   | u ]
+ * Where:
+ *    a11 = A2
+ * 
+ * @param segmentA: number[]
+ * @param dr: number[] 
+ * @param segmentB: number[]
+ */
+export function intersectsMovingSegmentSegment(segmentA: number[], dr: number[], segmentB: number[]) {
+    const a11 = segmentA[2] - segmentA[0];
+    const a12 = segmentB[0] - segmentB[2];
+    const a13 = dr[0];
+    const a21 = segmentA[3] - segmentA[1];
+    const a22 = segmentB[1] - segmentB[3];
+    const a23 = dr[1];
+    const y1 = segmentB[0] - segmentA[0];
+    const y2 = segmentB[1] - segmentA[1];
 }
