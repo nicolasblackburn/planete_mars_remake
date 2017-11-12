@@ -1,5 +1,5 @@
-import {State} from 'statemachine/State';
-import {InputHandler} from 'input/topdownaction/InputHandler';
+import { InputHandler } from './InputHandler';
+import { State } from '../../statemachine/State';
 
 const sqrt1_2 = Math.SQRT1_2;
 const abs = Math.abs;

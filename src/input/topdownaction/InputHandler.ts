@@ -1,11 +1,11 @@
-import { Game } from 'core/Game';
-import { Sprite } from 'core/Sprite';
-import { IdleState } from 'input/topdownaction/IdleState';
-import { MoveShootState } from 'input/topdownaction/MoveShootState';
-import { MoveState } from 'input/topdownaction/MoveState';
-import { ShootState } from 'input/topdownaction/ShootState';
-import { StateMachine } from 'statemachine/StateMachine';
-import { State } from 'statemachine/State';
+import { MoveShootState } from './MoveShootState';
+import { ShootState } from './ShootState';
+import { MoveState } from './MoveState';
+import { IdleState } from './IdleState';
+import { Game } from '../../core/Game';
+import { Sprite } from '../../core/Sprite';
+import { State } from '../../statemachine/State';
+import { StateMachine } from '../../statemachine/StateMachine';
 
 const pi_8 = Math.PI / 8;
 const tan_pi_8 = Math.tan(pi_8);

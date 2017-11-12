@@ -1,7 +1,7 @@
-import { applyTransform, rectangleToNumberArray } from 'geom';
-import { Game } from "core/Game";
-import { Room } from "core/Room";
-import { Main } from 'states/Main';
+import { applyTransform, rectangleToNumberArray } from '../geom';
+import { Main } from '../states/Main';
+import { Game } from './Game';
+
 export class MapParser {
     public game: Game;
 

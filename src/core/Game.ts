@@ -1,13 +1,11 @@
-// States
-import {animations} from 'animations';
-import {Boot} from 'states/Boot';
-import {Loading} from 'states/Loading';
-import {Main} from 'states/Main';
-import {Menu} from 'states/Menu';
-import {Debug} from 'core/Debug';
+import { Debug } from './Debug';
+import { Main } from '../states/Main';
+import { Menu } from '../states/Menu';
+import { Loading } from '../states/Loading';
+import { Boot } from '../states/Boot';
+import { animations } from '../animations';
+import { Factory } from './Factory';
 
-// Factories
-import {Factory} from './Factory';
 
 export class Game extends Phaser.Game {
   public animations: {[key: string]: (string | number | string[])[][]};

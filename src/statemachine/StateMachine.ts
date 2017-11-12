@@ -1,4 +1,4 @@
-import {State} from 'statemachine/State';
+import { State } from './State';
 
 export class StateMachine<T extends State> {
   public onEnter: Phaser.Signal;

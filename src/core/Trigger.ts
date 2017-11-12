@@ -1,6 +1,5 @@
-import { Game } from 'core/Game';
-import { Sprite } from 'core/Sprite';
-import { Shape } from 'geom';
+import { Sprite } from './Sprite';
+import { Shape } from '../geom';
 
 export class Trigger {
     public shape: Shape;

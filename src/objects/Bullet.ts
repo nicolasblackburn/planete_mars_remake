@@ -1,5 +1,5 @@
-import {Game} from 'core/Game';
-import {Sprite} from 'core/Sprite';
+import { Game } from '../core/Game';
+import { Sprite } from '../core/Sprite';
 
 const pi = Math.PI;
 const pi_2 = Math.PI / 2;
