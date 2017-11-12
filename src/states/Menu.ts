@@ -1,4 +1,4 @@
-import {fontStyles} from 'fontStyles';
+import { fontStyles } from '../fontStyles';
 
 export class Menu extends Phaser.State {
   protected group: Phaser.Group;

@@ -1,20 +1,10 @@
-import { MapParser } from "core/MapParser";
-import { Sprite } from "core/Sprite";
-import { Enemy } from "core/Enemy";
-import { Bullet } from "objects/Bullet";
-import { Game } from "core/Game";
-import { Group } from "core/Group";
-import { fontStyles } from "fontStyles";
-import { Player } from "objects/player/Player";
-import {
-    applyTransform,
-    Shape,
-    intersects,
-    rectangleToPolygon,
-    rectangleToNumberArray
-} from "geom";
-import { Room } from "core/Room";
-
+import { Player } from '../objects/player/Player';
+import { Enemy } from '../core/Enemy';
+import { Bullet } from '../objects/Bullet';
+import { fontStyles } from '../fontStyles';
+import { Game } from '../core/Game';
+import { applyTransform, intersects, Shape } from '../geom';
+import { Room } from '../core/Room';
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
 
