@@ -1,4 +1,4 @@
-import { PlayerState } from 'objects/player/PlayerState';
+import { PlayerState } from './PlayerState';
 
 export class HurtState extends PlayerState {
   public hurtVelocity: number = 100;

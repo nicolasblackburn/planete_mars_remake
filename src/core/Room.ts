@@ -1,8 +1,6 @@
-import { Group } from "core/Group";
-import { Bullet } from "objects/Bullet";
-import { Enemy } from "core/Enemy";
-import { Player } from "objects/player/Player";
-import { Game } from "core/Game";
+import { Player } from '../objects/player/Player';
+import { Group } from './Group';
+import { Game } from './Game';
 
 export class Room {
     public game: Game;

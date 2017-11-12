@@ -1,4 +1,4 @@
-import { Game } from 'core/Game';
+import { Game } from '../core/Game';
 
 export class Boot extends Phaser.State {
   public init() {

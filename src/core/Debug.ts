@@ -1,4 +1,5 @@
-import { Shape } from 'geom/index';
+import { Shape } from '../geom';
+
 export class Debug {
   private game: Phaser.Game;
   private objects: PIXI.DisplayObject[] = [];

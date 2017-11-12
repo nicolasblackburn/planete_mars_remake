@@ -1,4 +1,4 @@
-import { Game } from "core/Game";
+import { Game } from './Game';
 
 export class Sprite extends Phaser.Sprite {
   public collisionRectangle: Phaser.Rectangle;

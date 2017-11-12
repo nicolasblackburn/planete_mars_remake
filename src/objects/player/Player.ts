@@ -1,13 +1,14 @@
-import { BlinkingTimer } from 'objects/player/BlinkingTimer';
-import { NormalState } from 'objects/player/NormalState';
-import {Game} from 'core/Game';
-import {Sprite} from 'core/Sprite';
-import {InputHandler} from 'input/topdownaction/InputHandler';
-import {Main} from 'states/Main';
-import { StateMachine } from 'statemachine/StateMachine';
-import { PlayerState } from 'objects/player/PlayerState';
-import { HurtState } from 'objects/player/HurtState';
-import { ControlledState } from 'objects/player/ControlledState';
+import { ControlledState } from './ControlledState';
+import { HurtState } from './HurtState';
+import { NormalState } from './NormalState';
+import { Game } from '../../core/Game';
+import { Main } from '../../states/Main';
+import { BlinkingTimer } from './BlinkingTimer';
+import { StateMachine } from '../../statemachine/StateMachine';
+import { PlayerState } from './PlayerState';
+import { InputHandler } from '../../input/topdownaction/InputHandler';
+import { Sprite } from '../../core/Sprite';
+
 
 export class Player extends Sprite {
   public health: number = 100;

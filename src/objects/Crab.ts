@@ -1,5 +1,5 @@
-import { Game } from 'core/Game';
-import { Enemy } from 'core/Enemy';
+import { Enemy } from '../core/Enemy';
+import { Game } from '../core/Game';
 
 export class Crab extends Enemy {
   public damagePoints: number = 40;

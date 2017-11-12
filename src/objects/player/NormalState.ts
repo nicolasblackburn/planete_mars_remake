@@ -1,4 +1,4 @@
-import { PlayerState } from 'objects/player/PlayerState';
+import { PlayerState } from './PlayerState';
 
 export class NormalState extends PlayerState {
   public walkVelocity: number = 40;

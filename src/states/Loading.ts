@@ -1,4 +1,4 @@
-import {fontStyles} from 'fontStyles';
+import { fontStyles } from '../fontStyles';
 
 export class Loading extends Phaser.State {
   protected title: Phaser.Text;

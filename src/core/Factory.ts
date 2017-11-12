@@ -1,9 +1,8 @@
-import { Room } from "core/Room";
-import { Group } from "core/Group";
-import { Game } from "core/Game";
-import { Bullet } from "objects/Bullet";
-import { Crab } from "objects/Crab";
-import { Player } from "objects/player/Player";
+import { Player } from '../objects/player/Player';
+import { Group } from './Group';
+import { Bullet } from '../objects/Bullet';
+import { Crab } from '../objects/Crab';
+import { Game } from './Game';
 
 export class Factory {
     protected game: Game;

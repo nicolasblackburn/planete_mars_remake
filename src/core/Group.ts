@@ -1,5 +1,5 @@
-import { Sprite } from 'core/Sprite';
-import { Game } from 'core/Game';
+import { Sprite } from './Sprite';
+import { Game } from './Game';
 
 export class Group extends Phaser.Group {
   public updateOnlyAwakeChildren: boolean;
