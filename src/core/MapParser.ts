@@ -1,3 +1,4 @@
+import { Passage } from '../objects/Passage';
 import { applyTransform, rectangleToNumberArray } from '../geom';
 import { Main } from '../states/Main';
 import { Game } from './Game';
@@ -132,14 +133,25 @@ export class MapParser {
 
                             case "triggers":
                                 for (const data of layerData.objects) {
-                                    console.log(data);
-                                    const shape = applyTransform(
-                                        new Phaser.Matrix().scale(
-                                            pixelScale,
-                                            pixelScale
-                                        ),
-                                        this.parseShape(data)
-                                    );
+                                    switch (data.type) {
+                                        case 'Passage':
+                                            const shape = applyTransform(
+                                                new Phaser.Matrix().scale(
+                                                    pixelScale,
+                                                    pixelScale
+                                                ),
+                                                this.parseShape(data)
+                                            );
+                                            if (shape instanceof Phaser.Rectangle) {
+                                                const axis = JSON.parse(data.properties.axis);
+                                                mainState.triggers.push(new Passage(shape, new Phaser.Point(axis[0], axis[1])));
+                                            }
+
+                                            break;
+                                        
+                                        case 'Pit':
+                                            break;
+                                    }
                                     /*
                                     mainState.addTrigger(shape, data.action);
                                     mainState.triggers.push([

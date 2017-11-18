@@ -8,11 +8,7 @@
     "allowJs": true,
     "downlevelIteration": true,
     "lib": ["dom", "es6", "es2016", "dom.iterable", "scripthost"],
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "paths": {
-      "*": ["*"]
-    }
+    "moduleResolution": "node"
   },
   "files": [
     "node_modules/phaser-ce/typescript/phaser.d.ts"

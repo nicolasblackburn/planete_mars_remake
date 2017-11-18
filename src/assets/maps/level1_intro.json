@@ -496,7 +496,7 @@
                      "action":"string"
                     },
                  "rotation":0,
-                 "type":"Trigger",
+                 "type":"Pit",
                  "visible":true,
                  "width":0,
                  "x":326.4,

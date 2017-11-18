@@ -1,12 +1,12 @@
-import { MapParser } from '../core/MapParser';
-import { Trigger } from '../core/Trigger';
-import { Player } from '../objects/player/Player';
 import { Enemy } from '../core/Enemy';
-import { Bullet } from '../objects/Bullet';
-import { fontStyles } from '../fontStyles';
 import { Game } from '../core/Game';
-import { applyTransform, intersects, Shape } from '../geom';
+import { MapParser } from '../core/MapParser';
 import { Room } from '../core/Room';
+import { Trigger } from '../core/Trigger';
+import { fontStyles } from '../fontStyles';
+import { applyTransform, intersects, Shape } from '../geom';
+import { Bullet } from '../objects/Bullet';
+import { Player } from '../objects/player/Player';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
@@ -148,21 +148,17 @@ export class Main extends Phaser.State {
             new Phaser.Matrix()
                 .scale(pixelScale, pixelScale)
                 .translate(
-                    player.x - player.anchor.x * player.width,
-                    player.y - player.anchor.y * player.height
+                    player.body.x - player.anchor.x * player.width,
+                    player.body.y - player.anchor.y * player.height
                 ),
             Phaser.Rectangle.clone(player.collisionRectangle)
         ) as Phaser.Rectangle;
 
-        (window as any).debug.clear().draw(bounds);
-
-        for (const {shape, action, context} of this.triggers) {
-            (window as any).debug.draw(shape);
-
+        for (const trigger of this.triggers) {
             if (
-                intersects(bounds, shape)
+                intersects(bounds, trigger.bounds)
             ) {
-                console.log("Intersects!");
+                trigger.action(player, bounds);
             }
         }
 

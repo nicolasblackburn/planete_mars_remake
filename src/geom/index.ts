@@ -1,5 +1,14 @@
-type SimpleShape = Phaser.Rectangle | Phaser.Polygon;
-export type Shape = SimpleShape | SimpleShape[];
+export type Shape = Phaser.Rectangle | Phaser.Polygon;
+
+export function getBounds(shape: Shape) {
+    if (shape instanceof Phaser.Rectangle) {
+        const bounds = new Phaser.Rectangle(0, 0, 0, 0);
+        shape.clone(bounds);
+        return bounds;
+    } else if (shape instanceof Phaser.Polygon) {
+        return getPolygonBounds(shape);
+    }
+}
 
 export function intersects(shapeA: Shape, shapeB: Shape): boolean {
     if (shapeA instanceof Phaser.Rectangle) {
@@ -7,19 +16,20 @@ export function intersects(shapeA: Shape, shapeB: Shape): boolean {
     } else if (shapeB instanceof Phaser.Rectangle) {
         return intersects(shapeA, rectangleToPolygon(shapeB));
     } else if (shapeA instanceof Phaser.Polygon && shapeB instanceof Phaser.Polygon) {
-        return intersectsPolygonPolygon(shapeA, shapeB);
+        return intersectsSAT(shapeA, shapeB);
     }
 }
 
-export function intersectsPolygonPolygon(polygonA: Phaser.Polygon, polygonB: Phaser.Polygon) {
+export function intersectsSAT(polygonA: Phaser.Polygon, polygonB: Phaser.Polygon) {
     const pointsA = polygonA.toNumberArray();
     const pointsB = polygonB.toNumberArray();
     for (let i = 0; i < 2; i++) {
         const points = i ? pointsB : pointsA;
+        const m = points.length;
 
-        for (let j = 0; j < points.length - 3; j += 4) {
-            const normX = points[j + 3] - points[j + 1];
-            const normY = points[j] - points[j + 2];
+        for (let j = 0; j < m - 1; j += 2) {
+            const normX = points[(j + 3) % m] - points[(j + 1) % m];
+            const normY = points[j] - points[(j + 2) % m];
 
             const intervalA = new Phaser.Point(Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
             const intervalB = new Phaser.Point(Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
@@ -62,6 +72,14 @@ export function rectangleToNumberArray(rect: Phaser.Rectangle) {
     ];
 }
 
+export function numberArrayToPoint(vec: number[]) {
+    return new Phaser.Point(vec[0], vec[1]);
+}
+
+export function p2ToPoint(vec: number[]) {
+    return new Phaser.Point(vec[0], vec[1]);
+}
+
 export function getPolygonBounds(polygon: Phaser.Polygon) {
     const bounds = new Phaser.Rectangle(
         Number.POSITIVE_INFINITY, 
@@ -86,7 +104,7 @@ export function getPolygonBounds(polygon: Phaser.Polygon) {
     return bounds;
 }
 
-export function applyTransform(transform: Phaser.Matrix, shape: Shape): Shape {
+export function applyTransform(transform: Phaser.Matrix, shape: Shape | Shape[]): Shape | Shape[] {
     if (shape instanceof Phaser.Rectangle) {
         const p1 = new Phaser.Point(shape.x, shape.y);
         const p2 = new Phaser.Point(shape.x + shape.width, shape.y + shape.height); 
@@ -107,7 +125,7 @@ export function applyTransform(transform: Phaser.Matrix, shape: Shape): Shape {
         for (const simpleShape of shape) {
             shapes.push(applyTransform(transform, simpleShape));
         }
-        return shapes as Shape;
+        return shapes as Shape[];
     }
 }
 
@@ -135,12 +153,20 @@ export function scale(scalar: number, points: number[]) {
     return result;
 }
 
-export function dot(pointsA: number[], pointsB: number[]) {
-    let result = 0;
-    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
-        result += pointsA[i] * pointsB[i];
+export function dot(pointsA: Phaser.Point, pointsB: Phaser.Point): number;
+export function dot(pointsA: number[], pointsB: number[]): number;
+export function dot(pointsA: Phaser.Point | number[], pointsB: Phaser.Point | number[]): number {
+    if (pointsA instanceof Phaser.Point && pointsB instanceof Phaser.Point) {
+        return pointsA.x * pointsB.x + pointsA.y * pointsB.y;
+
+    } else if ((pointsA instanceof Array) && (pointsB instanceof Array)) {
+        let result = 0;
+        for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+            result += pointsA[i] * pointsB[i];
+        }
+        return result;
+
     }
-    return result;
 }
 
 /**
