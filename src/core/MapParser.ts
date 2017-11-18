@@ -1,4 +1,4 @@
-import { Passage } from '../objects/Passage';
+import { Gate } from '../objects/Gate';
 import { applyTransform, rectangleToNumberArray } from '../geom';
 import { Main } from '../states/Main';
 import { Game } from './Game';
@@ -134,7 +134,7 @@ export class MapParser {
                             case "triggers":
                                 for (const data of layerData.objects) {
                                     switch (data.type) {
-                                        case 'Passage':
+                                        case 'Gate':
                                             const shape = applyTransform(
                                                 new Phaser.Matrix().scale(
                                                     pixelScale,
@@ -144,7 +144,7 @@ export class MapParser {
                                             );
                                             if (shape instanceof Phaser.Rectangle) {
                                                 const axis = JSON.parse(data.properties.axis);
-                                                mainState.triggers.push(new Passage(shape, new Phaser.Point(axis[0], axis[1])));
+                                                mainState.triggers.push(new Gate(shape, new Phaser.Point(axis[0], axis[1])));
                                             }
 
                                             break;

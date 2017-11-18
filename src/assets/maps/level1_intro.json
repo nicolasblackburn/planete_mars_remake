@@ -433,7 +433,7 @@
                      "axis":"string"
                     },
                  "rotation":0,
-                 "type":"Passage",
+                 "type":"Gate",
                  "visible":true,
                  "width":64,
                  "x":112,
@@ -452,7 +452,7 @@
                      "axis":"string"
                     },
                  "rotation":0,
-                 "type":"Passage",
+                 "type":"Gate",
                  "visible":true,
                  "width":16,
                  "x":264,
