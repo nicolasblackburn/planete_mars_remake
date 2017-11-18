@@ -1,7 +1,7 @@
 import { PlayerState } from './PlayerState';
 
 export class NormalState extends PlayerState {
-  public walkVelocity: number = 40;
+  public walkVelocity: number = 15;
   protected bulletCount: number = 0;
   
   public hurt(damage: number) {
@@ -28,7 +28,8 @@ export class NormalState extends PlayerState {
 
   public update() {
     const input = this.player.inputHandler;
-    const maxVelocity = this.walkVelocity;
+    const pixelScale = this.game.pixelScale;
+    const maxVelocity = this.walkVelocity * pixelScale;
     const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
 
     input.update();
