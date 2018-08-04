@@ -1,7 +1,7 @@
 import { PlayerState } from './PlayerState';
 
 export class NormalState extends PlayerState {
-  public walkVelocity: number = 15;
+  public walkVelocity: number = 10;
   protected bulletCount: number = 0;
   
   public hurt(damage: number) {
