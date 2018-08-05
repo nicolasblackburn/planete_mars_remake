@@ -1,4 +1,4 @@
-import { Player } from 'objects/player/Player';
+import { Player } from "./Player";
 
 export class BlinkingTimer extends Phaser.Timer {
   protected player: Player;

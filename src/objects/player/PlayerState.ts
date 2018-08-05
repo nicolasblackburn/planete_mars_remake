@@ -1,7 +1,7 @@
-import { State } from 'statemachine/State';
-import { Player } from 'objects/player/Player';
-import {Main} from 'states/Main';
-import { Game } from 'core/Game';
+import { State } from "../../statemachine/State";
+import { Player } from "./Player";
+import { Main } from "../../states/Main";
+import { Game } from "../../core/Game";
 
 export class PlayerState extends State {
   protected player: Player;
