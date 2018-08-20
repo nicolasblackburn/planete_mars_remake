@@ -1,6 +1,6 @@
 import { State } from "../../statemachine/State";
 import { Player } from "./Player";
-import { Main } from "../../states/Main";
+import { Main } from "../../scenes/Main";
 import { Game } from "../../core/Game";
 
 export class PlayerState extends State {

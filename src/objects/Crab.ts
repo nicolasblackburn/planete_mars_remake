@@ -1,5 +1,6 @@
 import { Enemy } from "../core/Enemy";
 import { Game } from "../core/Game";
+import { Sprite } from '../core/Sprite';
 
 enum CrabState {
     sentry,
@@ -15,6 +16,7 @@ export class Crab extends Enemy {
     public sentryDuration: number = 2000;
     public directionsCache: Phaser.Point[];
     protected baseVelocity: number = 6;
+    protected target: Sprite;
 
     constructor(game: Game, x: number, y: number) {
         super(game, x, y, "sprites", "crab_00");
@@ -71,9 +73,13 @@ export class Crab extends Enemy {
 
         this.body.velocity.x = baseVelocity * elapsedMS * this.sentryDirection.x;
         this.body.velocity.y = baseVelocity * elapsedMS * this.sentryDirection.y;
+
     }
     
     public updateSeek() {
         //this.animations.play("idle", null, true);
+    }
+
+    public canSee(target: Sprite) {
     }
 }

@@ -29,6 +29,7 @@ export class InputHandler {
   public onDelayedPointerUp: Phaser.Signal;
   public onPointerDown: Phaser.Signal;
   public onPointerUp: Phaser.Signal;
+  public directionScale: number;
   protected shootStateTimer: Phaser.Timer;
   protected shootStateDelay: number = 300;
   protected pointerDownStartTime: number;
@@ -39,6 +40,7 @@ export class InputHandler {
     this.game = game;
     this.target = target;
     this.direction = new Phaser.Point(0, 1);
+    this.directionScale = 0
 
     this.keys = {
       up: this.game.input.keyboard.addKey(Phaser.Keyboard.I),
@@ -89,6 +91,18 @@ export class InputHandler {
     this.onPointerUp.removeAll();
   }
 
+  protected isPointerInSmallRange() {
+    const point = this.getRelativePointerCoordinates();
+    const dx = point.x;
+    const dy = point.y;
+
+    if (abs(dx) < 8 && abs(dy) < 8) {
+        return true;
+    } else {
+        return false;
+    }
+  }
+
   public getDirection() {
     const keys = this.keys;
     const pointer = this.pointer;
@@ -102,7 +116,6 @@ export class InputHandler {
 
       if (abs(dx) < 8 && abs(dy) < 8) {
         return defaultDirection;
-
       }
 
       if (dx === 0 && dy < 0) {
@@ -209,18 +222,12 @@ export class InputHandler {
   public update() {
     this.updateDirection();
 
-    /*
-    if (this.pointer.isDown && ! this.moveStartDispatched) {
-      const timeElapsed = this.game.time.totalElapsedSeconds() - this.pointerDownStartTime;
-      if (timeElapsed >= 0.05) {
-        this.moveStartDispatched = true;
-        this.moveEndDispatched = false;
-        this.moveStarted = true;
-        this.onMoveStart.dispatch();
-      }
+    if (this.isPointerInSmallRange()) {
+        this.directionScale = 0;
+    } else {
+        this.directionScale = 1;
     }
-    */
-    //*
+
     if (this.pointer.isUp && !this.delayedPointerUp) {
       const timeElapsed = this.game.time.totalElapsedSeconds() - this.pointerUpStartTime;
       if (timeElapsed >= 0.2) {
@@ -228,7 +235,7 @@ export class InputHandler {
         this.onDelayedPointerUp.dispatch();
       }
     }
-    //*/
+    
     this.state.current().update();
   }
 
