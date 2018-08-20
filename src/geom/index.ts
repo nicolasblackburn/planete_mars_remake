@@ -38,19 +38,19 @@ export function intersectsSAT(polygonA: Phaser.Polygon, polygonB: Phaser.Polygon
             for (let i = 0; i < n - 1; i += 2) {
                 if (i < pointsA.length - 1) {
                     const m = pointsA[i] * normX + pointsA[i + 1] * normY;
-                    intervalA.x = Math.min(m , intervalA.x);
+                    intervalA.x = Math.min(m, intervalA.x);
                     intervalA.y = Math.max(m, intervalA.y);
                 }
                 if (i < pointsB.length - 1) {
                     const m = pointsB[i] * normX + pointsB[i + 1] * normY;
-                    intervalB.x = Math.min(m , intervalB.x);
+                    intervalB.x = Math.min(m, intervalB.x);
                     intervalB.y = Math.max(m, intervalB.y);
                 }
             }
-            
+
             const a = intervalB.x - intervalA.y;
-            const b = intervalB.y - intervalA.x; 
-            if ( (a > 0 || b < 0 ) && (a < 0 || b > 0) ) {
+            const b = intervalB.y - intervalA.x;
+            if ((a > 0 || b < 0) && (a < 0 || b > 0)) {
                 return false;
             }
         }
@@ -82,9 +82,9 @@ export function p2ToPoint(vec: number[]) {
 
 export function getPolygonBounds(polygon: Phaser.Polygon) {
     const bounds = new Phaser.Rectangle(
-        Number.POSITIVE_INFINITY, 
-        Number.POSITIVE_INFINITY, 
-        Number.NEGATIVE_INFINITY,  
+        Number.POSITIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        Number.NEGATIVE_INFINITY,
         Number.NEGATIVE_INFINITY);
 
     const points = polygon.toNumberArray();
@@ -107,8 +107,8 @@ export function getPolygonBounds(polygon: Phaser.Polygon) {
 export function applyTransform(transform: Phaser.Matrix, shape: Shape | Shape[]): Shape | Shape[] {
     if (shape instanceof Phaser.Rectangle) {
         const p1 = new Phaser.Point(shape.x, shape.y);
-        const p2 = new Phaser.Point(shape.x + shape.width, shape.y + shape.height); 
-        const [q1, q2] = [p1, p2].map(p => transform.apply(p)); 
+        const p2 = new Phaser.Point(shape.x + shape.width, shape.y + shape.height);
+        const [q1, q2] = [p1, p2].map(p => transform.apply(p));
         return new Phaser.Rectangle(q1.x, q1.y, q2.x - q1.x, q2.y - q1.y);
 
     } else if (shape instanceof Phaser.Polygon) {
@@ -117,9 +117,9 @@ export function applyTransform(transform: Phaser.Matrix, shape: Shape | Shape[])
         for (let i = 0; i < flatPoints.length / 2; i++) {
             points.push(new Phaser.Point(flatPoints[2 * i], flatPoints[2 * i + 1]));
         }
-        const pointsImage = points.map(p => transform.apply(p)); 
+        const pointsImage = points.map(p => transform.apply(p));
         return new Phaser.Polygon(pointsImage);
-        
+
     } else if (shape instanceof Array) {
         const shapes = [];
         for (const simpleShape of shape) {
@@ -131,7 +131,7 @@ export function applyTransform(transform: Phaser.Matrix, shape: Shape | Shape[])
 
 export function add(pointsA: number[], pointsB: number[]) {
     const result = [];
-    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+    for (let i = 0; i < pointsA.length && i < pointsB.length; i++) {
         result.push(pointsA[i] + pointsB[i]);
     }
     return result;
@@ -139,7 +139,7 @@ export function add(pointsA: number[], pointsB: number[]) {
 
 export function sub(pointsA: number[], pointsB: number[]) {
     const result = [];
-    for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+    for (let i = 0; i < pointsA.length && i < pointsB.length; i++) {
         result.push(pointsA[i] - pointsB[i]);
     }
     return result;
@@ -147,7 +147,7 @@ export function sub(pointsA: number[], pointsB: number[]) {
 
 export function scale(scalar: number, points: number[]) {
     const result = [];
-    for (let i = 0; i < points.length; i ++) {
+    for (let i = 0; i < points.length; i++) {
         result.push(scalar * points[i]);
     }
     return result;
@@ -161,7 +161,7 @@ export function dot(pointsA: Phaser.Point | number[], pointsB: Phaser.Point | nu
 
     } else if ((pointsA instanceof Array) && (pointsB instanceof Array)) {
         let result = 0;
-        for (let i = 0; i < pointsA.length && i < pointsB.length; i ++) {
+        for (let i = 0; i < pointsA.length && i < pointsB.length; i++) {
             result += pointsA[i] * pointsB[i];
         }
         return result;
@@ -192,7 +192,7 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
     const y2 = segmentB[1] - segmentA[1];
 
     const detA = a11 * a22 - a12 * a21;
-    let solution = solutionRef ? solutionRef: [];
+    let solution = solutionRef ? solutionRef : [];
 
     if (detA === 0) {
         // The segments are parallel which means [a21 a22] is a scalar multiple of [a11 a12]
@@ -225,11 +225,11 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
                 solution[0] = s;
                 solution[1] = t;
                 return true;
-                
+
             } else {
                 // Point is not on segment B
                 return false;
-                
+
             }
 
         } else if (a12 === 0) {
@@ -242,13 +242,13 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
                 solution[0] = s;
                 solution[1] = t;
                 return true;
-                
+
             } else {
                 // Point is not on segment A
                 return false;
-                
+
             }
-        
+
         } else {
             // Find the solution interval:
             // We have 
@@ -273,9 +273,9 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
                 // Segments don't overlap
                 return false;
 
-            } else  {
+            } else {
                 // Segments overlap
-                const s = b; 
+                const s = b;
                 const t = y1 / a12 - a11 / a12 * s;
 
                 solution[0] = b;
@@ -293,7 +293,7 @@ export function intersectsSegmentSegment(segmentA: number[], segmentB: number[],
         const absASquare = a11 * a11 + a21 * a21;
         const absBSquare = a12 * a12 + a22 * a22;
 
-        
+
         solution[0] = s;
         solution[1] = t;
         return 0 <= s && s * s <= absASquare && 0 <= t && t * t <= absBSquare;
