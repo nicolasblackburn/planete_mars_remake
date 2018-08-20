@@ -28,6 +28,7 @@ export class NormalState extends PlayerState {
         }
     }
 
+
     public update() {
         const input = this.player.inputHandler;
         const maxVelocity = this.walkVelocity;

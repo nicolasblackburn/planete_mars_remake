@@ -1,6 +1,6 @@
 import { Gate } from '../objects/Gate';
 import { applyTransform, rectangleToNumberArray } from '../geom';
-import { Main } from '../states/Main';
+import { Main } from '../scenes/Main';
 import { Game } from './Game';
 
 export class MapParser {

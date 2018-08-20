@@ -2,7 +2,7 @@ import { ControlledState } from './ControlledState';
 import { HurtState } from './HurtState';
 import { NormalState } from './NormalState';
 import { Game } from '../../core/Game';
-import { Main } from '../../states/Main';
+import { Main } from '../../scenes/Main';
 import { BlinkingTimer } from './BlinkingTimer';
 import { StateMachine } from '../../statemachine/StateMachine';
 import { PlayerState } from './PlayerState';
