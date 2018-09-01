@@ -1,24 +1,27 @@
 import { Enemy } from "../core/Enemy";
 import { Game } from "../core/Game";
 import { Sprite } from '../core/Sprite';
+import { Room } from "../core/Room";
+import { Player } from "./player/Player";
 
 enum CrabState {
-    sentry,
-    seek
+    Sentry,
+    Seek
 }
 
 export class Crab extends Enemy {
     public damagePoints: number = 40;
     public spawnPoint: Phaser.Point;
-    public state: CrabState = CrabState.sentry;
+    public state: CrabState = CrabState.Sentry;
     public sentryTimer: Phaser.Timer;
     public sentryDirection: Phaser.Point;
     public sentryDuration: number = 2000;
     public directionsCache: Phaser.Point[];
     protected baseVelocity: number = 6;
     protected target: Sprite;
+    protected room: Room;
 
-    constructor(game: Game, x: number, y: number) {
+    constructor(game: Game, x: number, y: number, room: Room) {
         super(game, x, y, "sprites", "crab_00");
 
         this.body.fixedRotation = true;
@@ -40,21 +43,23 @@ export class Crab extends Enemy {
         }
 
         this.setSentryState();
+
+        this.room = room;
     }
 
     public update() {
         switch (this.state) {
-            case CrabState.sentry:
+            case CrabState.Sentry:
                 this.updateSentry();
                 break;
-            case CrabState.seek:
+            case CrabState.Seek:
                 this.updateSeek();
                 break;
         }
     }
 
     public setSentryState() {
-        this.state = CrabState.sentry;
+        this.state = CrabState.Sentry;
         this.sentryDirection = this.directionsCache[Math.floor(Math.random() * this.directionsCache.length)];
         this.sentryTimer = this.game.time.create(false);
         this.sentryTimer.loop(this.sentryDuration, () => {
@@ -74,12 +79,16 @@ export class Crab extends Enemy {
         this.body.velocity.x = baseVelocity * elapsedMS * this.sentryDirection.x;
         this.body.velocity.y = baseVelocity * elapsedMS * this.sentryDirection.y;
 
+        if (this.canSee(this.room.player, this.room.walls)) {
+            this.state = CrabState.Seek;
+        }
     }
     
     public updateSeek() {
         //this.animations.play("idle", null, true);
     }
 
-    public canSee(target: Sprite) {
+    protected canSee(sprite: Player, walls: Phaser.Physics.P2.Body[]) {
+        return false;
     }
 }

@@ -10,6 +10,7 @@ export class Room {
     public player: Player;
     public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
     public map: Phaser.Tilemap;
+    public walls: Phaser.Physics.P2.Body[];
 
     constructor(game: Game) {
         this.game = game;
@@ -42,6 +43,7 @@ export class Room {
         this.enemies = this.game.factory.group();
         this.addPlayer(0, 0, "player");
         this.bullets = this.game.factory.group();
+        this.walls = [];
     }
 
     public addBullet(x: number, y: number, direction: Phaser.Point) {

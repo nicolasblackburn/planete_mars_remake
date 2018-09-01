@@ -63,7 +63,8 @@ export class Game extends Phaser.Game {
     public init() {
 
         Object.assign(window, {
-            debug: new Debug(this)
+            debug: new Debug(this),
+            game: this
         });
 
         this.time.advancedTiming = true;

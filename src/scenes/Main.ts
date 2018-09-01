@@ -7,13 +7,14 @@ import { fontStyles } from '../fontStyles';
 import { applyTransform, intersects, Shape } from '../geom';
 import { Bullet } from '../objects/Bullet';
 import { Player } from '../objects/player/Player';
+import { implementsCanSee } from '../core/CanSee';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
 
 export class Main extends Phaser.State {
     public topRoom: Room;
-    public rooms: Map<string, Phaser.Rectangle>;
+    public rooms: {[name: string]: Phaser.Rectangle};
     public currentRoom: string;
     public triggers: Trigger[];
     protected cameraPadding: number;
@@ -27,7 +28,7 @@ export class Main extends Phaser.State {
         this.triggers = [];
         this.cameraPadding = CAMERA_PADDING;
         this.lastScale = 1;
-        this.rooms = new Map();
+        this.rooms = {};
     }
 
     public create() {
@@ -54,7 +55,7 @@ export class Main extends Phaser.State {
     }
 
     public getCurrentRoom() {
-        return this.rooms.get(this.currentRoom);
+        return this.rooms[this.currentRoom];
     }
 
     public collideBulletEnemy(bullet: Bullet, enemy: Enemy) {
@@ -162,7 +163,7 @@ export class Main extends Phaser.State {
             }
         }
 
-        for (const [key, room] of this.rooms.entries()) {
+        for (const [key, room] of Object.entries(this.rooms)) {
             if (key !== this.currentRoom) {
                 if (room.contains(player.x, player.y)) {
                     this.setCurrentRoom(key);
