@@ -4,6 +4,7 @@ export class Sprite extends Phaser.Sprite {
     public collisionRectangle: Phaser.Rectangle;
     public collisionRectangleOffset: Phaser.Point;
     public awake: boolean;
+    public game: Game;
 
     constructor(
         game: Game,

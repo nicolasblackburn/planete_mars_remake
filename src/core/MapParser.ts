@@ -81,7 +81,7 @@ export class MapParser {
                                         mainState.topRoom.collisions.get("player"),
                                         mainState.topRoom.collisions.get("enemies")
                                     ]);
-                                    //body.debug = true;
+                                    mainState.topRoom.walls.push(body);
                                 }
                                 break;
 
@@ -118,15 +118,13 @@ export class MapParser {
                                         const width = data.width * pixelScale;
                                         const height = data.height * pixelScale;
 
-                                        mainState.rooms.set(
-                                            data.name,
+                                        mainState.rooms[data.name] =
                                             new Phaser.Rectangle(
                                                 x,
                                                 y,
                                                 width,
                                                 height
-                                            )
-                                        );
+                                            );
                                     }
                                 }
                                 break;
