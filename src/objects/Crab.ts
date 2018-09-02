@@ -9,15 +9,20 @@ enum CrabState {
     Seek
 }
 
+enum Velocity {
+    Sentry = 6,
+    Seek = 12
+}
+
 export class Crab extends Enemy {
     public damagePoints: number = 40;
     public spawnPoint: Phaser.Point;
     public state: CrabState = CrabState.Sentry;
-    public sentryTimer: Phaser.Timer;
-    public sentryDirection: Phaser.Point;
-    public sentryDuration: number = 2000;
+    public stateTimer: Phaser.Timer;
+    public direction: Phaser.Point;
+    public duration: number = 2000;
     public directionsCache: Phaser.Point[];
-    protected baseVelocity: number = 6;
+    protected velocity: number = Velocity.Sentry;
     protected target: Sprite;
     protected room: Room;
 
@@ -60,35 +65,66 @@ export class Crab extends Enemy {
 
     public setSentryState() {
         this.state = CrabState.Sentry;
-        this.sentryDirection = this.directionsCache[Math.floor(Math.random() * this.directionsCache.length)];
-        this.sentryTimer = this.game.time.create(false);
-        this.sentryTimer.loop(this.sentryDuration, () => {
-            this.sentryDirection = this.directionsCache[Math.floor(Math.random() * this.directionsCache.length)];
+        this.direction = this.directionsCache[Math.floor(Math.random() * this.directionsCache.length)];
+        this.velocity = Velocity.Sentry;
+        this.stateTimer = this.game.time.create(false);
+        this.stateTimer.loop(2000, () => {
+            this.direction = this.directionsCache[Math.floor(Math.random() * this.directionsCache.length)];
         });
-        this.sentryTimer.start();
+        this.stateTimer.start();
+    }
+
+    public setSeekState() {
+        this.state = CrabState.Seek;
+        this.stateTimer.stop();
+        this.direction = new Phaser.Point(this.room.player.x - this.x, this.room.player.y - this.y);
+        this.direction.normalize();
+        this.velocity = Velocity.Seek;
+        this.stateTimer = this.game.time.create(false);
+        this.stateTimer.add(1500, () => {
+            this.animations.getAnimation("idle").speed /= 1.5;
+            this.setSentryState();
+        });
+        this.stateTimer.start();
+        this.animations.getAnimation("idle").speed *= 1.5;
     }
         
     public updateSentry() {
-        const game = this.game as Game;
-        const pixelScale = game.pixelScale;
-        const baseVelocity = this.baseVelocity * pixelScale;
-        const elapsedMS = game.time.elapsedMS * game.timeScale;
+        const velocity = this.velocity * this.game.pixelScale;
+        const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
 
         this.animations.play("idle", null, true);
 
-        this.body.velocity.x = baseVelocity * elapsedMS * this.sentryDirection.x;
-        this.body.velocity.y = baseVelocity * elapsedMS * this.sentryDirection.y;
+        this.body.velocity.x = velocity * elapsedMS * this.direction.x;
+        this.body.velocity.y = velocity * elapsedMS * this.direction.y;
 
         if (this.canSee(this.room.player, this.room.walls)) {
-            this.state = CrabState.Seek;
+            this.setSeekState();
         }
     }
     
     public updateSeek() {
-        //this.animations.play("idle", null, true);
+        const velocity = this.velocity * this.game.pixelScale;
+        const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
+
+        this.animations.play("idle", null, true);
+
+        this.direction = new Phaser.Point(this.room.player.x - this.x, this.room.player.y - this.y);
+        this.direction.normalize();
+
+        this.body.velocity.x = velocity * elapsedMS * this.direction.x;
+        this.body.velocity.y = velocity * elapsedMS * this.direction.y;
     }
 
     protected canSee(sprite: Player, walls: Phaser.Physics.P2.Body[]) {
-        return false;
+        const distanceSquared = 
+              Math.pow((sprite.x - this.x) * this.game.pixelScale, 2) 
+            + Math.pow((sprite.y - this.y) * this.game.pixelScale, 2);
+
+        if (distanceSquared < Math.pow(96 * this.game.pixelScale, 2)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

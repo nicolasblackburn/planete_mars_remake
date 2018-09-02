@@ -4,10 +4,9 @@ import { MapParser } from '../core/MapParser';
 import { Room } from '../core/Room';
 import { Trigger } from '../core/Trigger';
 import { fontStyles } from '../fontStyles';
-import { applyTransform, intersects, Shape } from '../geom';
+import { applyTransform, intersects } from '../geom';
 import { Bullet } from '../objects/Bullet';
 import { Player } from '../objects/player/Player';
-import { implementsCanSee } from '../core/CanSee';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
