@@ -67,11 +67,11 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin(
             [
-                { from: "src/assets/www/*", to: "./" },
+                { from: "src/assets/html", to: "./" },
                 {
                     from: "src/assets",
                     to: "assets",
-                    ignore: ["src/assets/www/*"]
+                    ignore: ["src/assets/html/*"]
                 }
             ],
             {}
