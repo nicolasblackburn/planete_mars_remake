@@ -1,12 +1,11 @@
-import { Game } from '../core/Game';
+import { GameState } from '../core/GameState';
 
 /**
  * This state preloads the initial game assets.
  */
-export class Boot extends Phaser.State {
+export class Boot extends GameState{
     public init() {
-        const game = this.game as Game;
-        game.init();
+        this.game.init();
     }
 
     public preload() {
@@ -15,7 +14,6 @@ export class Boot extends Phaser.State {
     }
 
     public create() {
-        const game = this.game as Game;
-        game.state.start('loading');
+        this.game.state.start('loading');
     }
 }

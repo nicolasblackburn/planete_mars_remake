@@ -11,10 +11,7 @@ export class MapParser {
     }
 
     public loadMapData(key: string, mainState: Main) {
-        const game = this.game as Game;
-        const pixelScale = game.pixelScale;
-        const factory = game.factory;
-        const mapData = game.cache.getTilemapData(key).data;
+        const mapData = this.game.cache.getTilemapData(key).data;
 
         for (const tileset of mapData.tilesets) {
             mainState.topRoom.map.addTilesetImage(tileset.name);
@@ -33,7 +30,7 @@ export class MapParser {
                         );
 
                         layer.smoothed = false;
-                        layer.setScale(pixelScale);
+                        layer.setScale(this.game.pixelScale);
                         layer.resizeWorld();
                         break;
 
@@ -41,19 +38,19 @@ export class MapParser {
                         switch (layerData.name) {
                             case "collisions":
                                 for (const data of layerData.objects) {
-                                    const x = data.x * pixelScale;
-                                    const y = data.y * pixelScale;
+                                    const x = data.x * this.game.pixelScale;
+                                    const y = data.y * this.game.pixelScale;
                                     const shape = applyTransform(
                                         new Phaser.Matrix().scale(
-                                            pixelScale,
-                                            pixelScale
+                                            this.game.pixelScale,
+                                            this.game.pixelScale
                                         ),
                                         this.parseShape({ ...data, x: 0, y: 0 })
                                     );
                                     let body;
 
                                     if (shape instanceof Phaser.Polygon) {
-                                        body = game.physics.p2.createBody(
+                                        body = this.game.physics.p2.createBody(
                                             x,
                                             y,
                                             0,
@@ -64,7 +61,7 @@ export class MapParser {
                                     } else if (
                                         shape instanceof Phaser.Rectangle
                                     ) {
-                                        body = game.physics.p2.createBody(
+                                        body = this.game.physics.p2.createBody(
                                             x,
                                             y,
                                             0,
@@ -89,8 +86,8 @@ export class MapParser {
                                 for (const data of layerData.objects) {
                                     mainState.topRoom.addEnemy(
                                         data.type,
-                                        data.x * pixelScale,
-                                        data.y * pixelScale,
+                                        data.x * this.game.pixelScale,
+                                        data.y * this.game.pixelScale,
                                         data.name
                                     );
                                 }
@@ -99,9 +96,9 @@ export class MapParser {
                             case "player":
                                 const data = layerData.objects[0];
                                 mainState.topRoom.player.body.x =
-                                    data.x * pixelScale;
+                                    data.x * this.game.pixelScale;
                                     mainState.topRoom.player.body.y =
-                                    data.y * pixelScale;
+                                    data.y * this.game.pixelScale;
                                     mainState.topRoom.player.name = data.name;
                                 break;
 
@@ -113,10 +110,10 @@ export class MapParser {
                                         data.hasOwnProperty("width") &&
                                         data.hasOwnProperty("height")
                                     ) {
-                                        const x = data.x * pixelScale;
-                                        const y = data.y * pixelScale;
-                                        const width = data.width * pixelScale;
-                                        const height = data.height * pixelScale;
+                                        const x = data.x * this.game.pixelScale;
+                                        const y = data.y * this.game.pixelScale;
+                                        const width = data.width * this.game.pixelScale;
+                                        const height = data.height * this.game.pixelScale;
 
                                         mainState.rooms[data.name] =
                                             new Phaser.Rectangle(
@@ -135,8 +132,8 @@ export class MapParser {
                                         case 'Gate':
                                             const shape = applyTransform(
                                                 new Phaser.Matrix().scale(
-                                                    pixelScale,
-                                                    pixelScale
+                                                    this.game.pixelScale,
+                                                    this.game.pixelScale
                                                 ),
                                                 this.parseShape(data)
                                             );

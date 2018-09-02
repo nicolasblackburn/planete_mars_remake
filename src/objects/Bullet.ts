@@ -66,8 +66,7 @@ export class Bullet extends Sprite {
     }
 
     public update() {
-        const game = this.game as Game;
-        this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * game.timeScale;
-        this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * game.timeScale;
+        this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * this.game.timeScale;
+        this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * this.game.timeScale;
     }
 }

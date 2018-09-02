@@ -56,12 +56,10 @@ export class Sprite extends Phaser.Sprite {
 
     public updateBody() {
         if (this.body) {
-            const game = this.game as Game;
-            const pixelScale = game.pixelScale
-            const x = this.collisionRectangle.x * pixelScale;
-            const y = this.collisionRectangle.y * pixelScale;
-            const width = this.collisionRectangle.width * pixelScale;
-            const height = this.collisionRectangle.height * pixelScale;
+            const x = this.collisionRectangle.x * this.game.pixelScale;
+            const y = this.collisionRectangle.y * this.game.pixelScale;
+            const width = this.collisionRectangle.width * this.game.pixelScale;
+            const height = this.collisionRectangle.height * this.game.pixelScale;
 
             // The physics body offset coordinates are relative to the center of mass
             // so we apply a transform to the top/left rectangle coordinates
@@ -78,8 +76,7 @@ export class Sprite extends Phaser.Sprite {
     }
 
     protected addAnimations(groupKey: string) {
-        const game = this.game as Game;
-        for (const animation of game.animations[groupKey]) {
+        for (const animation of this.game.animations[groupKey]) {
             const [key, frames, rate] = animation;
             this.animations.add(key as string, frames as string[], rate as number);
         }

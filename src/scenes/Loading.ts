@@ -1,9 +1,10 @@
 import { fontStyles } from '../fontStyles';
+import { GameState } from '../core/GameState';
 
 /**
  * Loading scene.
  */
-export class Loading extends Phaser.State {
+export class Loading extends GameState {
     protected title: Phaser.Text;
 
     public preload() {
