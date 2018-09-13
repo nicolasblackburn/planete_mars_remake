@@ -17,7 +17,7 @@ export class Menu extends Phaser.State {
         this.resize();
 
         this.input.onDown.addOnce(() => {
-            this.game.state.start('main');
+            this.game.state.start('loadmenu');
         });
 
     }

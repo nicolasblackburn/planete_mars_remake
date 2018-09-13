@@ -5,6 +5,8 @@ import { Loading } from '../scenes/Loading';
 import { Boot } from '../scenes/Boot';
 import { animations } from '../animations';
 import { Factory } from './Factory';
+import { LoadMenu } from '../scenes/LoadMenu';
+import { NewGame } from '../scenes/NewGame';
 
 
 export class Game extends Phaser.Game {
@@ -51,7 +53,8 @@ export class Game extends Phaser.Game {
         this.state.add('loading', Loading);
         this.state.add('menu', Menu);
         this.state.add('main', Main);
-
+        this.state.add('loadmenu', LoadMenu);
+        this.state.add('newgame', NewGame);
         this.state.start('boot');
 
     }
