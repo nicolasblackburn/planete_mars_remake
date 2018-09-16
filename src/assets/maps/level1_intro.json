@@ -384,31 +384,13 @@
          "name":"rooms",
          "objects":[
                 {
-                 "height":144,
+                 "height":240,
                  "id":80,
                  "name":"room1",
                  "tid":1,
-                 "width":256,
-                 "x":16,
-                 "y":16
-                }, 
-                {
-                 "height":144,
-                 "id":82,
-                 "name":"room2",
-                 "tid":1,
-                 "width":256,
-                 "x":16,
-                 "y":160
-                }, 
-                {
-                 "height":288,
-                 "id":83,
-                 "name":"room3",
-                 "tid":1,
-                 "width":256,
-                 "x":272,
-                 "y":16
+                 "width":432,
+                 "x":24,
+                 "y":24
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -420,44 +402,6 @@
          "draworder":"topdown",
          "name":"triggers",
          "objects":[
-                {
-                 "height":16,
-                 "id":86,
-                 "name":"",
-                 "properties":
-                    {
-                     "axis":"[0,1]"
-                    },
-                 "propertytypes":
-                    {
-                     "axis":"string"
-                    },
-                 "rotation":0,
-                 "type":"Gate",
-                 "visible":true,
-                 "width":64,
-                 "x":112,
-                 "y":152
-                }, 
-                {
-                 "height":32,
-                 "id":90,
-                 "name":"",
-                 "properties":
-                    {
-                     "axis":"[1,0]"
-                    },
-                 "propertytypes":
-                    {
-                     "axis":"string"
-                    },
-                 "rotation":0,
-                 "type":"Gate",
-                 "visible":true,
-                 "width":16,
-                 "x":264,
-                 "y":208
-                }, 
                 {
                  "height":0,
                  "id":93,

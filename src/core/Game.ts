@@ -6,6 +6,8 @@ import { Boot } from '../scenes/Boot';
 import { animations } from '../animations';
 import { Factory } from './Factory';
 
+const BASE_WIDTH = 192;
+const BASE_HEIGHT = 108;
 
 export class Game extends Phaser.Game {
     public animations: { [key: string]: (string | number | string[])[][] };
@@ -14,25 +16,13 @@ export class Game extends Phaser.Game {
     public timeScale: number;
 
     constructor() {
-        const baseWidth = 256;
-        const baseHeight = 144;
-        //const baseWidth = 192;
-        //const baseHeight = 108;
-        const ratio = 16 / 9;
-
         let scale;
         let width;
         let height;
 
-        scale = Math.floor(window.innerWidth / baseWidth) || 1;
-        width = baseWidth * scale;
-        height = width / ratio;
-
-        if (height > window.innerHeight) {
-            scale = Math.floor(window.innerHeight / baseHeight) || 1;
-            height = baseHeight * scale;
-            width = height * ratio;
-        }
+        scale = 6;
+        width = BASE_WIDTH * scale;
+        height = BASE_HEIGHT * scale;
 
         super({
             width: width,
@@ -41,7 +31,7 @@ export class Game extends Phaser.Game {
         });
 
         this.pixelScale = scale;
-        this.timeScale = this.pixelScale * 0.06;
+        this.timeScale = 1 //this.pixelScale * 0.06;
 
         this.animations = animations;
 
@@ -78,9 +68,8 @@ export class Game extends Phaser.Game {
         this.physics.p2.setImpactEvents(true);
     }
 
-    /*
+    //*
     public resize() {
-      //*
       const baseWidth = 240;
       const baseHeight = 135;
       const ratio  = baseWidth / baseHeight;
@@ -100,5 +89,5 @@ export class Game extends Phaser.Game {
   
       this.scale.setUserScale(width / this.width, height / this.height);
     }
-    */
+    //*/
 }

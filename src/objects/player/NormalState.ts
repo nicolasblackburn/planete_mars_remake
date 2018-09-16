@@ -1,10 +1,11 @@
 import { PlayerState } from './PlayerState';
 
 export class NormalState extends PlayerState {
-    public walkVelocity: number = 40;
+    public walkVelocity: number = 3;
     protected bulletCount: number = 0;
     protected previousMovementAnimationKey: string;
-    protected lastAnimationKeyChangeElapsedTime: number = -1
+    protected lastAnimationKeyChangeElapsedTime: number = -1;
+    protected counter: number = 0;
 
     public hurt(damage: number) {
         if (this.player.blinking) {
@@ -31,7 +32,7 @@ export class NormalState extends PlayerState {
 
     public update() {
         const input = this.player.inputHandler;
-        const maxVelocity = this.walkVelocity;
+        const velocity = this.walkVelocity * this.game.pixelScale;
         const elapsedMS = this.game.time.elapsedMS * this.game.timeScale;
 
         input.update();
@@ -55,8 +56,8 @@ export class NormalState extends PlayerState {
                 }
             }
 
-            this.player.body.velocity.x = input.direction.x * maxVelocity * elapsedMS * input.directionScale;
-            this.player.body.velocity.y = input.direction.y * maxVelocity * elapsedMS * input.directionScale;
+            this.player.body.velocity.x = input.direction.x * velocity * elapsedMS * input.directionScale;
+            this.player.body.velocity.y = input.direction.y * velocity * elapsedMS * input.directionScale;
 
         } else {
             this.lastAnimationKeyChangeElapsedTime = -1;
@@ -65,6 +66,15 @@ export class NormalState extends PlayerState {
             this.player.body.velocity.x = 0;
             this.player.body.velocity.y = 0;
 
+        }
+        if (this.counter < 10) {
+            console.log(`Player velocity: (${this.player.body.velocity.x}, ${this.player.body.velocity.y})
+            velocity = ${velocity}
+            elapsedMS = ${elapsedMS} = ${this.game.time.elapsedMS} * ${this.game.timeScale}
+            input.direction = (${input.direction.x}, ${input.direction.y})
+            input.directionScale = (${input.directionScale})
+            `);
+            this.counter++;
         }
     }
 

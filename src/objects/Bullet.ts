@@ -7,7 +7,7 @@ const pi_4 = Math.PI / 4;
 const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
-    protected maxVelocity: number = 100;
+    protected maxVelocity: number = 8;
     protected baseVelocity: Phaser.Point;
     protected aliveTimer: Phaser.Timer;
     protected killDelay: number = 600;
@@ -66,7 +66,7 @@ export class Bullet extends Sprite {
     }
 
     public update() {
-        this.body.velocity.x = this.baseVelocity.x * this.game.time.elapsedMS * this.game.timeScale;
-        this.body.velocity.y = this.baseVelocity.y * this.game.time.elapsedMS * this.game.timeScale;
+        this.body.velocity.x = this.baseVelocity.x * this.game.pixelScale * this.game.time.elapsedMS * this.game.timeScale;
+        this.body.velocity.y = this.baseVelocity.y * this.game.pixelScale * this.game.time.elapsedMS * this.game.timeScale;
     }
 }
