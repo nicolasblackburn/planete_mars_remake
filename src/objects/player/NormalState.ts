@@ -1,11 +1,10 @@
 import { PlayerState } from './PlayerState';
 
 export class NormalState extends PlayerState {
-    public walkVelocity: number = 3;
+    public walkVelocity: number = 2.5;
     protected bulletCount: number = 0;
     protected previousMovementAnimationKey: string;
     protected lastAnimationKeyChangeElapsedTime: number = -1;
-    protected counter: number = 0;
 
     public hurt(damage: number) {
         if (this.player.blinking) {
@@ -66,15 +65,6 @@ export class NormalState extends PlayerState {
             this.player.body.velocity.x = 0;
             this.player.body.velocity.y = 0;
 
-        }
-        if (this.counter < 10) {
-            console.log(`Player velocity: (${this.player.body.velocity.x}, ${this.player.body.velocity.y})
-            velocity = ${velocity}
-            elapsedMS = ${elapsedMS} = ${this.game.time.elapsedMS} * ${this.game.timeScale}
-            input.direction = (${input.direction.x}, ${input.direction.y})
-            input.directionScale = (${input.directionScale})
-            `);
-            this.counter++;
         }
     }
 

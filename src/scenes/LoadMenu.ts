@@ -5,34 +5,38 @@ export class LoadMenu extends Phaser.State {
     protected title: Phaser.Text;
     protected entriesGroup: Phaser.Group;
     protected mainGroup: Phaser.Group;
-    protected savedGames: Phaser.Text[] = [];
-    protected loadedGames: GameData[] = [];
+    protected savedGameTexts: Phaser.Text[] = [];
+    protected gameData: GameData[] = [];
+    protected gameDataLoaded: boolean = false;
     
     public create() {
+        if (!this.gameDataLoaded) {
+            this.gameDataLoaded = true;
+            this.loadGames();
+        }
+
         this.title = this.game.add.text(0, 0, 'Charger une partie', fontStyles.title);
         this.mainGroup = this.game.add.group();
-        
-        this.loadGames();
 
-        for (let i = 0; i < 3; i++) {            
-            if(this.loadedGames[i]) {
-                let entryName = this.loadedGames[i].name;
-                this.savedGames[i] = this.game.add.text(0, 0, (i + 1) + '. ' + entryName, fontStyles.body);
-                this.savedGames[i].events.onInputDown.add(() => {
+        for (let i = 0; i < 3; i++) {     
+            if(this.gameData[i]) {
+                let entryName = this.gameData[i].name;
+                this.savedGameTexts[i] = this.game.add.text(0, 0, (i + 1) + '. ' + entryName, fontStyles.body);
+                this.savedGameTexts[i].events.onInputDown.add(() => {
                     this.game.state.start('main');
                 });    
             } else {
-                this.savedGames[i] = this.game.add.text(0, 0, (i + 1) + '. [Nouveau]', fontStyles.body);
-                this.savedGames[i].events.onInputDown.add(() => {
-                    this.game.state.start('newgame');
+                this.savedGameTexts[i] = this.game.add.text(0, 0, (i + 1) + '. [Nouveau]', fontStyles.body);
+                this.savedGameTexts[i].events.onInputDown.add(() => {
+                    this.game.state.start('newgame', true, false, this.gameData, i);
                 }); 
             }
-            this.savedGames[i].inputEnabled = true;
-            this.savedGames[i].input.useHandCursor = true;
+            this.savedGameTexts[i].inputEnabled = true;
+            this.savedGameTexts[i].input.useHandCursor = true;
         }
 
         this.entriesGroup = this.game.add.group();
-        this.entriesGroup.addMultiple(this.savedGames);
+        this.entriesGroup.addMultiple(this.savedGameTexts);
         
         this.mainGroup.add(this.title);
         this.mainGroup.add(this.entriesGroup);
@@ -41,9 +45,8 @@ export class LoadMenu extends Phaser.State {
     }
 
     protected loadGames() {
-        this.loadedGames.push({
-            name: "Laetitia"
-        });
+        const gameData = JSON.parse(localStorage.getItem('gameData'));
+        this.gameData = gameData ? gameData : [];
     }
 
     public resize() {
@@ -55,7 +58,7 @@ export class LoadMenu extends Phaser.State {
 
         this.title.fontSize = fontStyles.title.fontSize * scale;
         
-        this.savedGames.forEach((text, i) => {
+        this.savedGameTexts.forEach((text, i) => {
             text.fontSize = fontStyles.body.fontSize * scale; 
             text.y = i * lineHeight * 1.5;
         });

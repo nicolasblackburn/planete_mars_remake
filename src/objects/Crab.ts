@@ -11,7 +11,7 @@ enum CrabState {
 
 enum Velocity {
     Sentry = 1,
-    Seek = 3.2
+    Seek = 2.8
 }
 
 export class Crab extends Enemy {
@@ -25,7 +25,6 @@ export class Crab extends Enemy {
     protected velocity: number = Velocity.Sentry;
     protected target: Sprite;
     protected room: Room;
-    protected counter: number = 0;
 
     constructor(game: Game, x: number, y: number, room: Room) {
         super(game, x, y, "sprites", "crab_00");
@@ -98,15 +97,6 @@ export class Crab extends Enemy {
 
         this.body.velocity.x = velocity * elapsedMS * this.direction.x;
         this.body.velocity.y = velocity * elapsedMS * this.direction.y;
-
-        if (this.counter < 10) {
-            console.log(`Crab velocity: (${this.body.velocity.x}, ${this.body.velocity.y})
-            velocity = ${velocity} = ${this.velocity} * ${this.game.pixelScale}
-            elapsedMS = ${elapsedMS} = ${this.game.time.elapsedMS} * ${this.game.timeScale}
-            direction = (${this.direction.x}, ${this.direction.y})
-            `);
-            this.counter++;
-        }
 
         if (this.canSee(this.room.player, this.room.walls)) {
             this.setSeekState();
