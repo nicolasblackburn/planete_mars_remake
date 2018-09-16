@@ -7,7 +7,7 @@ const pi_4 = Math.PI / 4;
 const sqrt1_2 = Math.SQRT1_2;
 
 export class Bullet extends Sprite {
-    protected maxVelocity: number = 8;
+    protected maxVelocity: number = 7;
     protected baseVelocity: Phaser.Point;
     protected aliveTimer: Phaser.Timer;
     protected killDelay: number = 600;
