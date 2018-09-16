@@ -18,7 +18,7 @@ export class Menu extends GameState {
         this.resize();
 
         this.input.onDown.addOnce(() => {
-            this.game.state.start('main');
+            this.game.state.start('loadmenu');
         });
 
     }
