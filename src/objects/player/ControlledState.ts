@@ -1,7 +1,7 @@
 import { PlayerState } from './PlayerState';
 
 export class ControlledState extends PlayerState {
-    public walkVelocity: number = 40;
+    public walkVelocity: number = 1;
     protected direction: Phaser.Point;
     protected condition: () => void;
 

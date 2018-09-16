@@ -3,6 +3,7 @@ import { Group } from './Group';
 import { Bullet } from '../objects/Bullet';
 import { Crab } from '../objects/Crab';
 import { Game } from './Game';
+import { Room } from './Room';
 
 export class Factory {
     protected game: Game;
@@ -14,7 +15,7 @@ export class Factory {
     public create(type: string, x: number, y: number) {
         switch (type) {
             case "Crab":
-                return new Crab(this.game, x, y);
+                return new Crab(this.game, x, y, this.game.getMainState().topRoom);
         }
     }
 
@@ -23,8 +24,8 @@ export class Factory {
         return sprite;
     }
 
-    public crab(x: number, y: number) {
-        return new Crab(this.game, x, y);
+    public crab(x: number, y: number, room: Room) {
+        return new Crab(this.game, x, y, room);
     }
 
     public group() {

@@ -10,6 +10,7 @@ export class Room {
     public player: Player;
     public collisions: Map<string, Phaser.Physics.P2.CollisionGroup>;
     public map: Phaser.Tilemap;
+    public walls: Phaser.Physics.P2.Body[];
 
     constructor(game: Game) {
         this.game = game;
@@ -42,11 +43,11 @@ export class Room {
         this.enemies = this.game.factory.group();
         this.addPlayer(0, 0, "player");
         this.bullets = this.game.factory.group();
+        this.walls = [];
     }
 
     public addBullet(x: number, y: number, direction: Phaser.Point) {
-        const game = this.game as Game;
-        const bullet = game.factory.bullet(x, y);
+        const bullet = this.game.factory.bullet(x, y);
         bullet.name = "bullet";
         bullet.setDirection(direction);
         bullet.body.setCollisionGroup(this.collisions.get("bullets"));
@@ -56,8 +57,7 @@ export class Room {
     }
 
     public addEnemy(type: string, x: number, y: number, name?: string) {
-        const game = this.game as Game;
-        const enemy = game.factory.create(type, x, y);
+        const enemy = this.game.factory.create(type, x, y);
         this.enemies.add(enemy);
 
         if (name) {
@@ -69,10 +69,9 @@ export class Room {
     }
 
     public addPlayer(x: number, y: number, name?: string) {
-        const game = this.game as Game;
-        const player = game.factory.player(x, y);
+        const player = this.game.factory.player(x, y);
         this.player = player;
-        game.world.add(player);
+        this.game.world.add(player);
 
         if (name) {
             player.name = name;

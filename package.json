@@ -3,20 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "phaser-ce": "^2.11.0"
+  },
   "devDependencies": {
     "@types/node": "^10.5.6",
     "copy-webpack-plugin": "^4.5.2",
     "expose-loader": "^0.7.5",
-    "phaser-ce": "^2.11.0",
     "ts-loader": "^4.4.2",
     "typescript": "^3.0.1",
     "webpack": "^4.16.4",
+    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev-server": "webpack-dev-server"
+    "start": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC"

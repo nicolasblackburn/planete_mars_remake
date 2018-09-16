@@ -4,16 +4,17 @@ import { MapParser } from '../core/MapParser';
 import { Room } from '../core/Room';
 import { Trigger } from '../core/Trigger';
 import { fontStyles } from '../fontStyles';
-import { applyTransform, intersects, Shape } from '../geom';
+import { applyTransform, intersects } from '../geom';
 import { Bullet } from '../objects/Bullet';
 import { Player } from '../objects/player/Player';
+import { GameState } from '../core/GameState';
 
 const floor = Math.floor;
 const CAMERA_PADDING = 8;
 
-export class Main extends Phaser.State {
+export class Main extends GameState {
     public topRoom: Room;
-    public rooms: Map<string, Phaser.Rectangle>;
+    public rooms: {[name: string]: Phaser.Rectangle};
     public currentRoom: string;
     public triggers: Trigger[];
     protected cameraPadding: number;
@@ -27,21 +28,20 @@ export class Main extends Phaser.State {
         this.triggers = [];
         this.cameraPadding = CAMERA_PADDING;
         this.lastScale = 1;
-        this.rooms = new Map();
+        this.rooms = {};
     }
 
     public create() {
-        const game = this.game as Game;
-        this.mapParser = new MapParser(game);
+        this.mapParser = new MapParser(this.game);
 
-        this.topRoom = new Room(game);
+        this.topRoom = new Room(this.game);
         this.topRoom.create();
-        this.topRoom.setMap(new Phaser.Tilemap(game, "level1_intro"));
+        this.topRoom.setMap(new Phaser.Tilemap(this.game, "level1_intro"));
         this.mapParser.loadMapData("level1_intro", this);
 
         this.updateRoom();
 
-        this.hud = game.add.group();
+        this.hud = this.game.add.group();
         this.healthText = this.game.add.text(
             0,
             0,
@@ -54,7 +54,7 @@ export class Main extends Phaser.State {
     }
 
     public getCurrentRoom() {
-        return this.rooms.get(this.currentRoom);
+        return this.rooms[this.currentRoom];
     }
 
     public collideBulletEnemy(bullet: Bullet, enemy: Enemy) {
@@ -67,24 +67,23 @@ export class Main extends Phaser.State {
     }
 
     public resize() {
-        const game = this.game as Game;
-        const width = game.width;
-        const height = game.height;
+        const width = this.game.width;
+        const height = this.game.height;
         const scale =
             height === 0 || width / height >= 1 ? height / 360 : width / 360;
 
         this.healthText.fontSize = floor(fontStyles.body.fontSize * scale);
         this.cameraPadding = floor(8 * scale);
 
-        if (this.lastScale !== game.pixelScale) {
-            game.camera.x = floor(
-                game.camera.x / this.lastScale * game.pixelScale
+        if (this.lastScale !== this.game.pixelScale) {
+            this.game.camera.x = floor(
+                this.game.camera.x / this.lastScale * this.game.pixelScale
             );
-            game.camera.y = floor(
-                game.camera.y / this.lastScale * game.pixelScale
+            this.game.camera.y = floor(
+                this.game.camera.y / this.lastScale * this.game.pixelScale
             );
             this.constrainCamera();
-            this.lastScale = game.pixelScale;
+            this.lastScale = this.game.pixelScale;
         }
     }
 
@@ -96,12 +95,10 @@ export class Main extends Phaser.State {
         this.updateRoom();
         this.updateCollisions();
 
-        const game = this.game as Game;
-        const room = this.getCurrentRoom();
         const player = this.topRoom.player;
 
-        game.camera.x = floor(player.x - this.camera.width / 2);
-        game.camera.y = floor(player.y - this.camera.height / 2);
+        this.game.camera.x = floor(player.x - this.camera.width / 2);
+        this.game.camera.y = floor(player.y - this.camera.height / 2);
 
         this.constrainCamera();
 
@@ -109,8 +106,8 @@ export class Main extends Phaser.State {
         //this.healthText.text += "\nFPS: " + game.time.fps;
 
         this.hud.position.set(
-            game.camera.x + this.cameraPadding,
-            game.camera.y + this.cameraPadding
+            this.game.camera.x + this.cameraPadding,
+            this.game.camera.y + this.cameraPadding
         );
     }
 
@@ -140,13 +137,11 @@ export class Main extends Phaser.State {
     }
 
     protected updateRoom() {
-        const game = this.game as Game;
-        const pixelScale = game.pixelScale;
         const player = this.topRoom.player;
 
         const bounds = applyTransform(
             new Phaser.Matrix()
-                .scale(pixelScale, pixelScale)
+                .scale(this.game.pixelScale, this.game.pixelScale)
                 .translate(
                     player.body.x - player.anchor.x * player.width,
                     player.body.y - player.anchor.y * player.height
@@ -162,7 +157,7 @@ export class Main extends Phaser.State {
             }
         }
 
-        for (const [key, room] of this.rooms.entries()) {
+        for (const [key, room] of Object.entries(this.rooms)) {
             if (key !== this.currentRoom) {
                 if (room.contains(player.x, player.y)) {
                     this.setCurrentRoom(key);
@@ -173,11 +168,6 @@ export class Main extends Phaser.State {
     }
 
     protected constrainCamera() {
-        const game = this.game as Game;
-        const pixelScale = game.pixelScale;
-        const tileWidth = this.topRoom.map.tileWidth / 4 * pixelScale;
-        const tileHeight = this.topRoom.map.tileHeight / 4 * pixelScale;
-
         const room = this.getCurrentRoom();
 
         if (!room) {
@@ -187,16 +177,16 @@ export class Main extends Phaser.State {
         const maxX = room.x + room.width - this.camera.width;
         const maxY = room.y + room.height - this.camera.height;
 
-        if (game.camera.x < room.x) {
-            game.camera.x = room.x;
-        } else if (game.camera.x > maxX) {
-            game.camera.x = maxX;
+        if (this.game.camera.x < room.x) {
+            this.game.camera.x = room.x;
+        } else if (this.game.camera.x > maxX) {
+            this.game.camera.x = maxX;
         }
 
-        if (game.camera.y < room.y) {
-            game.camera.y = room.y;
-        } else if (game.camera.y > maxY) {
-            game.camera.y = maxY;
+        if (this.game.camera.y < room.y) {
+            this.game.camera.y = room.y;
+        } else if (this.game.camera.y > maxY) {
+            this.game.camera.y = maxY;
         }
     }
 }
