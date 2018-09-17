@@ -6,7 +6,7 @@ export class LoadMenu extends Phaser.State {
     protected entriesGroup: Phaser.Group;
     protected mainGroup: Phaser.Group;
     protected savedGameTexts: Phaser.Text[] = [];
-    protected gameData: GameData[] = [];
+    protected gameData: GameData[];
     protected gameDataLoaded: boolean = false;
     
     public create() {
@@ -28,7 +28,7 @@ export class LoadMenu extends Phaser.State {
             } else {
                 this.savedGameTexts[i] = this.game.add.text(0, 0, (i + 1) + '. [Nouveau]', fontStyles.body);
                 this.savedGameTexts[i].events.onInputDown.add(() => {
-                    this.game.state.start('newgame', true, false, this.gameData, i);
+                    this.game.state.start('newgamemenu', true, false, this.gameData, i);
                 }); 
             }
             this.savedGameTexts[i].inputEnabled = true;

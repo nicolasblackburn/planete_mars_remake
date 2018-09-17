@@ -2,7 +2,7 @@ import { fontStyles } from "../fontStyles";
 import { GameData } from "../objects/GameData";
 import { GameState } from "../core/GameState";
 
-export class NewGame extends GameState {
+export class NewGameMenu extends GameState {
     protected title: Phaser.Text;
     protected entriesGroup: Phaser.Group;
     protected mainGroup: Phaser.Group;
@@ -102,6 +102,5 @@ export class NewGame extends GameState {
 
         this.textInput.style.left = (this.mainGroup.x + this.textInputSprite.x) / canvasScale + canvasOffset.x + 'px';
         this.textInput.style.top = (this.mainGroup.y + this.textInputSprite.y) / canvasScale + canvasOffset.y + 'px';
-        console.log(this.mainGroup.y, this.textInputSprite.getBounds().y, this.textInputSprite.getLocalBounds().y, canvasScale, canvasOffset.y);
     }
 }

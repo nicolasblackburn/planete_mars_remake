@@ -2,23 +2,41 @@ import { fontStyles } from '../fontStyles';
 import { GameState } from '../core/GameState';
 
 export class Menu extends GameState {
-    protected group: Phaser.Group;
+    protected mainGroup: Phaser.Group;
     protected title: Phaser.Text;
-    protected textClick: Phaser.Text;
+    protected buttonContinue: Phaser.Text;
+    protected buttonOptions: Phaser.Text;
+    protected optionsGroup: Phaser.Group;
 
     public create() {
         this.title = this.game.add.text(0, 0, 'PLANÈTE MARS', fontStyles.header);
-        this.textClick = this.game.add.text(0, 0, 'Cliquer pour commencer', fontStyles.body);
 
-        this.group = this.game.add.group();
-        this.group.addMultiple([
+        this.buttonContinue = this.game.add.text(0, 0, 'Continuer', fontStyles.body);
+        this.buttonContinue.inputEnabled = true;
+        this.buttonContinue.input.useHandCursor = true;
+
+        this.buttonOptions = this.game.add.text(0, 0, 'Options', fontStyles.body);
+        this.buttonOptions.inputEnabled = true;
+        this.buttonOptions.input.useHandCursor = true;
+
+        this.optionsGroup = this.game.add.group();
+        this.mainGroup = this.game.add.group();
+
+        this.optionsGroup.addMultiple([this.buttonContinue, this.buttonOptions]);
+
+        this.mainGroup.addMultiple([
             this.title,
-            this.textClick]);
+            this.optionsGroup
+        ]);
 
         this.resize();
 
-        this.input.onDown.addOnce(() => {
+        this.buttonContinue.events.onInputDown.add(() => {
             this.game.state.start('loadmenu');
+        });
+
+        this.buttonOptions.events.onInputDown.add(() => {
+            this.game.state.start('optionsmenu');
         });
 
     }
@@ -27,19 +45,25 @@ export class Menu extends GameState {
         const width = this.game.width;
         const height = this.game.height;
         const scale = height === 0 || width / height >= 1 ? height / 360 : width / 360;
+        const lineHeight = fontStyles.body.lineHeight * scale;
 
         this.title.fontSize = fontStyles.header.fontSize * scale;
-        this.textClick.fontSize = fontStyles.body.fontSize * scale;
+        let i = 0;
+        this.optionsGroup.forEach((button: Phaser.Text) => {
+            button.fontSize = fontStyles.body.fontSize * scale;
+            button.y = i * lineHeight * 1.5;
+            i++;
+        });
 
         const titlePadding = fontStyles.header.lineHeight - fontStyles.header.fontSize;
 
-        this.textClick.position.set(
-            this.title.x + (this.title.width - this.textClick.width) / 2,
+        this.optionsGroup.position.set(
+            this.title.x + (this.title.width - this.optionsGroup.width) / 2,
             this.title.y + this.title.height + titlePadding
         );
 
-        this.group.position.set(
-            (width - this.group.width) / 2,
-            (height - this.group.height) / 2);
+        this.mainGroup.position.set(
+            (width - this.mainGroup.width) / 2,
+            (height - this.mainGroup.height) / 2);
     }
 }
