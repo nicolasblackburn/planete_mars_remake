@@ -67,10 +67,10 @@ export class NewGameMenu extends GameState {
         this.buttonsGroup.addMultiple([this.cancelButton, this.okButton]);
         this.mainGroup.addMultiple([this.title, this.textInputSprite, this.buttonsGroup]);
 
-        this.resize();
+        this.update();
     }
 
-    public resize() {
+    public update() {
         const width = this.game.width;
         const height = this.game.height;
         const canvasScale = this.game.canvas.height / this.game.canvas.clientHeight;
@@ -102,5 +102,9 @@ export class NewGameMenu extends GameState {
 
         this.textInput.style.left = (this.mainGroup.x + this.textInputSprite.x) / canvasScale + canvasOffset.x + 'px';
         this.textInput.style.top = (this.mainGroup.y + this.textInputSprite.y) / canvasScale + canvasOffset.y + 'px';
+    }
+
+    public resize() {
+        this.update();
     }
 }

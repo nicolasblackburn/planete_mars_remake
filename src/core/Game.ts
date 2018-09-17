@@ -67,6 +67,8 @@ export class Game extends Phaser.Game {
 
         this.physics.startSystem(Phaser.Physics.P2JS);
         this.physics.p2.setImpactEvents(true);
+        
+        this.stage.disableVisibilityChange = true;
     }
 
     public resize() {
